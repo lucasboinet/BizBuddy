@@ -1,25 +1,39 @@
-import { ModeToggle } from '@/components/ThemeModeToggle'
-import { Separator } from '@/components/ui/separator'
+import { AppSidebar } from '@/components/app-sidebar'
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
+import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { Separator } from '@radix-ui/react-separator'
 import React from 'react'
 
 function layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className='flex h-screen'>
-      <div className='flex flex-col flex-1 min-h-screen'>
-        <header className='flex items-center justify-between px-6 py-4 h-[50px]'>
-          <div className='gap-1 flex items-center'>
-            <ModeToggle />
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="mr-2 h-4" />
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem className="hidden md:block">
+                  <BreadcrumbPage>
+                    Building Your Application
+                  </BreadcrumbPage>
+                </BreadcrumbItem>
+                {/* <BreadcrumbSeparator className="hidden md:block" />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                </BreadcrumbItem> */}
+              </BreadcrumbList>
+            </Breadcrumb>
           </div>
         </header>
-        <Separator />
-        <div className='overflow-auto p-6 space-y-4'>
-          <h1 className='text-lg font-semibold md:text-2xl'>Dashboard</h1>
-          <div>
-            {children}
-          </div>
+
+        <div className='px-4 pb-4 overflow-auto'>
+          {children}
         </div>
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }
 
