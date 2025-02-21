@@ -111,6 +111,7 @@ function HomePage() {
                 <TableRow>
                   <TableHead>Client</TableHead>
                   <TableHead>Amount</TableHead>
+                  <TableHead>Link</TableHead>
                   <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
@@ -118,6 +119,7 @@ function HomePage() {
                 <TableRow>
                   <TableCell>Tech Corp</TableCell>
                   <TableCell>$2,400</TableCell>
+                  <TableCell>https://</TableCell>
                   <TableCell>
                     <Badge variant='danger'>Refused</Badge>
                   </TableCell>
@@ -125,6 +127,7 @@ function HomePage() {
                 <TableRow>
                   <TableCell>Tech Corp</TableCell>
                   <TableCell>$2,300</TableCell>
+                  <TableCell>https://</TableCell>
                   <TableCell>
                     <Badge variant='disabled'>Cancelled</Badge>
                   </TableCell>
@@ -132,6 +135,7 @@ function HomePage() {
                 <TableRow>
                   <TableCell>Design Studio</TableCell>
                   <TableCell>$1,800</TableCell>
+                  <TableCell>https://</TableCell>
                   <TableCell>
                     <Badge variant='warning'>Pending</Badge>
                   </TableCell>
@@ -139,6 +143,7 @@ function HomePage() {
                 <TableRow>
                   <TableCell>Marketing Inc</TableCell>
                   <TableCell>$3,200</TableCell>
+                  <TableCell>https://</TableCell>
                   <TableCell>
                     <Badge variant='success'>Paid</Badge>
                   </TableCell>
