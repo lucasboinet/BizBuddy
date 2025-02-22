@@ -1,17 +1,3 @@
-export type User = {
-  id: string;
-  email: string;
-  firstname: string;
-  lastname:  string;
+import { User } from "@prisma/client";
 
-  password: string;
-  refreshToken?: string;
-
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export type SessionPayload = {
-  sessionId: string;
-  expiresAt: Date;
-}
+export type AuthSafeUser = Omit<User, 'password' | 'refreshToken'>;

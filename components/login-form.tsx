@@ -16,7 +16,7 @@ import { useForm } from 'react-hook-form';
 import { userSignInSchema, UserSignInSchemaType } from "@/schema/auth"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from "@tanstack/react-query"
-import { UserSignIn } from "@/actions/auth/userSignIn"
+import { UserSignIn } from "@/actions/auth/UserSignIn"
 import { toast } from "sonner"
 import { useCallback } from "react"
 import { Loader2Icon } from "lucide-react"
@@ -38,8 +38,8 @@ export function LoginForm({
     onSuccess: () => {
       toast.success('Logged successfully', { id: "user-signin" });
     },
-    onError: () => {
-      toast.error('Failed to log in', { id: "user-signin" });
+    onError: (error: any) => {
+      toast.error(error.message, { id: "user-signin" });
     },
   });
 
@@ -110,6 +110,7 @@ export function LoginForm({
                       </FormItem>
                     )}
                   />
+
                   <Button type="submit" className="w-full" disabled={isPending}>
                     {!isPending && "Sign In"}
                     {isPending && <Loader2Icon className='animate-spin' />}

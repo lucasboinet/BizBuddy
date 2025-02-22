@@ -4,9 +4,8 @@ import prisma from "@/lib/primsa";
 import { userSignInSchema, UserSignInSchemaType } from "@/schema/auth";
 import { redirect } from "next/navigation";
 import bcrypt from 'bcrypt';
-import { createSession } from "../sessions/createSession";
-import { decrypt } from "@/lib/sessions";
-import { cookies } from "next/headers";
+import { createSession } from "../sessions/CreateSession";
+import { retrieveSession } from "@/lib/sessions";
 
 export async function UserSignIn(form: UserSignInSchemaType) {
   const { success, data } = userSignInSchema.safeParse(form);
@@ -31,10 +30,9 @@ export async function UserSignIn(form: UserSignInSchemaType) {
     throw new Error('Email or password is incorrect');
   }
 
-  const cookie = (await cookies()).get('session')?.value;
-  const existingSession = await decrypt(cookie);
+  const authSession = await retrieveSession();
 
-  if (existingSession && existingSession.sessionId) {
+  if (authSession && authSession.sessionId) {
     throw new Error('User already logged in');
   }
 

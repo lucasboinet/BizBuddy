@@ -1,6 +1,6 @@
 'use client';
 
-import { GetMe } from '@/actions/auth/getMe';
+import { GetMe } from '@/actions/auth/GetMe';
 import { User } from '@/types/auth';
 import { createContext, ReactNode, useState, useEffect, useContext } from 'react';
 

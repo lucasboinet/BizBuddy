@@ -1,24 +1,38 @@
 'use server'
 
-import { cookies } from "next/headers";
-import { decrypt } from "@/lib/sessions";
-import { getSession } from "../sessions/getSession";
-import { User } from "@/types/auth";
+import { retrieveSession } from "@/lib/sessions";
+import prisma from "@/lib/primsa";
+import { AuthSafeUser } from "@/types/auth";
 
-export async function GetMe(): Promise<User> {
-  const cookie = (await cookies()).get('session')?.value;
-  const localSession = await decrypt(cookie);
-  const sessionId = localSession?.sessionId as string;
+export async function GetMe(): Promise<AuthSafeUser> {
+  const authSession = await retrieveSession();
+  const sessionId = authSession?.sessionId as string;
 
   if (!sessionId) {
     throw new Error('Unauthorized');
   }
 
-  const session = await getSession(sessionId);
+  const user = await prisma.user.findUnique({
+    select: {
+      id: true,
+      firstname: true,
+      lastname: true,
+      email: true,
 
-  if (!session) {
-    throw new Error('Unauthorized');
+      password: false,
+      refreshToken: false,
+
+      createdAt: true,
+      updatedAt: true,
+    },
+    where: {
+      id: authSession.userId
+    }
+  })
+
+  if (!user) {
+    throw new Error('User do not exist');
   }
   
-  return session.user as User;
+  return user;
 }

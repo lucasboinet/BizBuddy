@@ -1,9 +1,12 @@
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { decrypt } from "./lib/sessions";
+import { retrieveSession } from "./lib/sessions";
 
 const protectedRoutes: string[] = [
-  "/"
+  "/",
+  "/customers",
+  "/invoices",
+  "/projects",
+  "/settings",
 ];
 
 const publicRoutes: string[] = ['/signin', '/signup']
@@ -18,8 +21,7 @@ function isPublicRoute(path: string): boolean {
 
 export async function middleware(request: NextRequest) {
   const currentPath = request.nextUrl.pathname;
-  const cookie = (await cookies()).get('session')?.value;
-  const session = await decrypt(cookie);
+  const session = await retrieveSession();
   const isLogged = !!session?.sessionId;
 
   if (isProtectedRoute(currentPath) && !isLogged) {

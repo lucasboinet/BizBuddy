@@ -12,7 +12,6 @@ import {
 import {
   Avatar,
   AvatarFallback,
-  AvatarImage,
 } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -30,6 +29,10 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { User } from "@/types/auth"
+import { UserLogout } from "@/actions/auth/UserLogout"
+import { useCallback } from "react"
+import { toast } from "sonner"
+import { useMutation } from "@tanstack/react-query"
 
 export function NavUser({
   user,
@@ -37,6 +40,23 @@ export function NavUser({
   user: User
 }) {
   const { isMobile } = useSidebar()
+
+  const userInitials = (user.firstname.charAt(0) + user.lastname.charAt(0)).toUpperCase();
+
+  const { mutate, isPending } = useMutation({ 
+    mutationFn: UserLogout,
+    onSuccess: () => {
+      toast.success('Logged out successfully', { id: "user-logout" });
+    },
+    onError: () => {
+      toast.error('Failed to log out', { id: "user-logout" });
+    },
+  });
+
+  const handleLogout = useCallback(() => {
+    toast.loading("Logging out...", { id: "user-logout" });
+    mutate();
+  }, [mutate])
 
   return (
     <SidebarMenu>
@@ -48,8 +68,7 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.firstname} alt={user.firstname} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-lg">{userInitials}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.firstname} {user.lastname}</span>
@@ -67,8 +86,7 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.firstname} alt={user.firstname} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">{userInitials}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.firstname} {user.lastname}</span>
@@ -99,9 +117,10 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer" disabled={isPending}>
               <LogOut />
-              Log out
+              {!isPending && "Log out"}
+              {isPending && "Logging out..."}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

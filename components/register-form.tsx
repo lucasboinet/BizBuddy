@@ -19,7 +19,7 @@ import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { useCallback } from "react"
 import { Loader2Icon } from "lucide-react"
-import { UserSignUp } from "@/actions/auth/userSignUp"
+import { UserSignUp } from "@/actions/auth/UserSignUp"
 
 export function RegisterForm({
   className,
@@ -41,8 +41,8 @@ export function RegisterForm({
     onSuccess: () => {
       toast.success('Registered successfully', { id: "user-signup" });
     },
-    onError: () => {
-      toast.error('Failed to register', { id: "user-signup" });
+    onError: (error: any) => {
+      toast.error(error.message, { id: "user-signup" });
     },
   });
 

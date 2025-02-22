@@ -4,7 +4,7 @@ import prisma from "@/lib/primsa";
 import { userSignUpSchema, UserSignUpSchemaType } from "@/schema/auth";
 import { redirect } from "next/navigation";
 import bcrypt from 'bcrypt';
-import { createSession } from "../sessions/createSession";
+import { createSession } from "../sessions/CreateSession";
 
 export async function UserSignUp(form: UserSignUpSchemaType) {
   const { success, data } = userSignUpSchema.safeParse(form);

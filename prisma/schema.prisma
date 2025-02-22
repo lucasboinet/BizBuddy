@@ -32,6 +32,7 @@ model Customer {
   address String
   siret   String
 
+  accountId String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   projects  Project[]
@@ -41,10 +42,11 @@ model Project {
   id   String @id @default(cuid())
   name String
 
-  customerId  String   @unique
+  accountId String
+  customerId  String
   status      String
-  startedAt   DateTime
-  completedAt DateTime
+  startedAt   DateTime?
+  completedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
