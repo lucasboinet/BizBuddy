@@ -1,0 +1,26 @@
+import prisma from "@/lib/primsa";
+import { encrypt } from "@/lib/sessions";
+import { cookies } from "next/headers";
+
+export async function createSession(id: string) {
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+ 
+  const session = await prisma.session.create({
+    data: {
+      userId: id,
+      expiresAt,
+    }
+  });
+ 
+  const sessionId = session.id;
+  const encryptedId = await encrypt({ sessionId, expiresAt });
+ 
+  const cookieStore = await cookies()
+  cookieStore.set('session', encryptedId, {
+    httpOnly: true,
+    secure: true,
+    expires: expiresAt,
+    sameSite: 'lax',
+    path: '/',
+  })
+}

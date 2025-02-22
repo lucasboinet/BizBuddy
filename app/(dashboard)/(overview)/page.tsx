@@ -1,3 +1,5 @@
+'use client'
+
 import { ProjectTypeChart } from '@/components/overview/ProjectTypeChart'
 import RevenueChart from '@/components/overview/RevenueChart'
 import { Badge } from '@/components/ui/badge'

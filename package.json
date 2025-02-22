@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.9.1",
+    "@hookform/resolvers": "^3.10.0",
     "@prisma/client": "^6.0.1",
     "@radix-ui/react-accordion": "^1.2.1",
     "@radix-ui/react-alert-dialog": "^1.1.2",
@@ -39,19 +39,18 @@
     "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.8",
     "@tanstack/react-query": "^5.62.2",
-    "@xyflow/react": "^12.3.5",
-    "cheerio": "^1.0.0",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.5.1",
     "input-otp": "^1.4.1",
+    "jose": "^5.10.0",
     "lucide-react": "^0.468.0",
     "next": "14.2.20",
     "next-themes": "^0.4.3",
     "nextjs-toploader": "^3.7.15",
-    "puppeteer": "^23.10.1",
     "react": "^18",
     "react-countup": "^6.5.3",
     "react-day-picker": "^8.10.1",
@@ -66,6 +65,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

@@ -13,38 +13,41 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
 import { useForm } from 'react-hook-form';
-import { userSignInSchema, UserSignInSchemaType } from "@/schema/auth"
+import { userSignUpSchema, UserSignUpSchemaType } from "@/schema/auth"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from "@tanstack/react-query"
-import { UserSignIn } from "@/actions/auth/userSignIn"
 import { toast } from "sonner"
 import { useCallback } from "react"
 import { Loader2Icon } from "lucide-react"
+import { UserSignUp } from "@/actions/auth/userSignUp"
 
-export function LoginForm({
+export function RegisterForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const form = useForm<UserSignInSchemaType>({
-    resolver: zodResolver(userSignInSchema),
+  const form = useForm<UserSignUpSchemaType>({
+    resolver: zodResolver(userSignUpSchema),
     defaultValues: {
+      firstname: '',
+      lastname: '',
       email: '',
-      password: ''
+      password: '',
+      confirmPassword: '',
     },
   });
 
   const { mutate, isPending } = useMutation({ 
-    mutationFn: UserSignIn,
+    mutationFn: UserSignUp,
     onSuccess: () => {
-      toast.success('Logged successfully', { id: "user-signin" });
+      toast.success('Registered successfully', { id: "user-signup" });
     },
     onError: () => {
-      toast.error('Failed to log in', { id: "user-signin" });
+      toast.error('Failed to register', { id: "user-signup" });
     },
   });
 
-  const onSubmit = useCallback((values: UserSignInSchemaType) => {
-    toast.loading("Logging in...", { id: "user-signin" });
+  const onSubmit = useCallback((values: UserSignUpSchemaType) => {
+    toast.loading("Registering...", { id: "user-signup" });
     mutate(values);
   }, [mutate])
 
@@ -55,7 +58,7 @@ export function LoginForm({
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
           <CardDescription>
-            Login with your Google account
+            Create your account with Google
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -78,7 +81,44 @@ export function LoginForm({
                     Or continue with
                   </span>
                 </div> */}
+
                 <div className="grid gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <FormField
+                      control={form.control}
+                      name='firstname'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className='flex gap-1 items-center'>
+                            Firstname
+                            <p className='text-xs text-primary'>*</p>
+                          </FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField 
+                      control={form.control}
+                      name='lastname'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className='flex gap-1 items-center'>
+                            Lastname
+                            <p className='text-xs text-primary'>*</p>
+                          </FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                    
+
                   <FormField 
                     control={form.control}
                     name='email'
@@ -86,6 +126,7 @@ export function LoginForm({
                       <FormItem>
                         <FormLabel className='flex gap-1 items-center'>
                           Email
+                          <p className='text-xs text-primary'>*</p>
                         </FormLabel>
                         <FormControl>
                           <Input {...field} />
@@ -102,6 +143,7 @@ export function LoginForm({
                       <FormItem>
                         <FormLabel className='flex gap-1 items-center'>
                           Password
+                          <p className='text-xs text-primary'>*</p>
                         </FormLabel>
                         <FormControl>
                           <Input {...field} type="password" />
@@ -110,15 +152,33 @@ export function LoginForm({
                       </FormItem>
                     )}
                   />
+
+                  <FormField 
+                    control={form.control}
+                    name='confirmPassword'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className='flex gap-1 items-center'>
+                          Password confirmation
+                          <p className='text-xs text-primary'>*</p>
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} type="password" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <Button type="submit" className="w-full" disabled={isPending}>
-                    {!isPending && "Sign In"}
+                    {!isPending && "Sign Up"}
                     {isPending && <Loader2Icon className='animate-spin' />}
                   </Button>
                 </div>
                 <div className="text-center text-sm">
-                  Don&apos;t have an account?{" "}
+                  Already have an account?{" "}
                   <Link href="/signup" className="underline underline-offset-4">
-                    Sign up
+                    Sign In
                   </Link>
                 </div>
               </div>

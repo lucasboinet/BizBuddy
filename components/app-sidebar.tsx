@@ -7,6 +7,7 @@ import {
   Command,
   Frame,
   LifeBuoy,
+  Loader2Icon,
   Map,
   PieChart,
   Send,
@@ -28,6 +29,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { useAuthSession } from "./context/AuthSessionContext"
 
 const data = {
   user: {
@@ -154,6 +156,8 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user, loading } = useAuthSession();
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -180,7 +184,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         <ModeToggle />
-        <NavUser user={data.user} />
+        {!loading && user && <NavUser user={user} />}
+        {loading && (
+          <div className="h-12 flex items-center justify-center">
+            <Loader2Icon className='animate-spin' />
+          </div>
+        )}
       </SidebarFooter>
     </Sidebar>
   )
