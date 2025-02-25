@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -21,7 +21,7 @@ model User {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  Session   Session?
+  sessions  Session[]
 }
 
 model Customer {
@@ -42,7 +42,7 @@ model Project {
   id   String @id @default(cuid())
   name String
 
-  accountId String
+  accountId   String
   customerId  String
   status      String
   startedAt   DateTime?
@@ -62,6 +62,7 @@ model Invoice {
   projectId String   @unique
   status    String
   amount    Float
+  items     Json     @default("[]")
   dueDate   DateTime
 
   createdAt DateTime @default(now())
@@ -80,7 +81,7 @@ model Tag {
 
 model Session {
   id        String   @id @default(cuid())
-  userId    String @unique
+  userId    String
   expiresAt DateTime
 
   createdAt DateTime @default(now())
