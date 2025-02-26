@@ -56,7 +56,7 @@ model Project {
 }
 
 model Invoice {
-  id   String @id @default(cuid())
+  id String @id
   name String
 
   projectId String   @unique
