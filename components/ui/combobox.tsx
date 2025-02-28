@@ -16,30 +16,49 @@ import { useDebounce } from "@/hooks/use-debounce";
 
 interface Props<T extends object> {
   title?: string;
-  value?: T;
+  value?: string;
   renderText: (value: T) => string;
   valueKey: keyof T;
+  labelKey: keyof T;
   disabled?: boolean;
-  onChange?: (value: T) => void;
-  searchFn: (search: string) => Promise<T[]>;
+  items?: T[];
+  onChange?: (value: T[keyof T]) => void;
+  searchFn?: (search: string) => Promise<T[]>;
 }
 const ComboBox = <T extends object>({
   title,
   value,
+  labelKey,
   valueKey,
   renderText,
   disabled = false,
   onChange,
   searchFn,
+  items = [],
 }: Props<T>) => {
+  const [selectedValue, setSelectedValue] = useState<T>();
   const [search, setSearch] = useState<string>("");
   const [options, setOptions] = useState<T[]>([]);
   const debouncedsearch = useDebounce<string>(search, 500);
 
+  const initDefaultValue = useCallback(() => {
+    if (value) {
+      const selected = options.find((option) => option[valueKey] === value);
+      setSelectedValue(selected)
+    }
+  }, [options, value, valueKey])
+
   const getOptions = useCallback(async () => {
-    const searchResult = await searchFn(debouncedsearch || "");
-    setOptions(searchResult);
-  }, [debouncedsearch, searchFn]);
+    if (searchFn) {
+      const searchResult = await searchFn(debouncedsearch || "");
+      setOptions(searchResult);
+      initDefaultValue();
+      return;
+    }
+
+    setOptions(items);
+    initDefaultValue();
+  }, [debouncedsearch, searchFn, initDefaultValue, items]);
 
   useEffect(() => {
     getOptions();
@@ -57,7 +76,7 @@ const ComboBox = <T extends object>({
           disabled={disabled}
         >
           <div className="truncate">
-            {value ? renderText(value) : `Pilih ${title}`}
+            {selectedValue ? renderText(selectedValue) : `Select ${title}`}
           </div>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -67,7 +86,7 @@ const ComboBox = <T extends object>({
           <CommandInput
             placeholder={`Search ${title}...`}
             value={typeof search === "string" ? search : ""}
-            onValueChange={(value) => setSearch(value)}
+            onValueChange={(v) => setSearch(v)}
           />
           <CommandList>
             <CommandEmpty>No item found.</CommandEmpty>
@@ -75,15 +94,20 @@ const ComboBox = <T extends object>({
               <CommandGroup className="max-h-60 overflow-y-auto">
                 {options.map((option) => (
                   <CommandItem
-                    value={option[valueKey] as string}
-                    key={option[valueKey] as string}
-                    onSelect={() => onChange?.(option)}
+                    value={option[labelKey] as string}
+                    key={option[labelKey] as string}
+                    onSelect={() => {
+                      if (option[valueKey] !== value) {
+                        setSelectedValue(option)
+                        onChange?.(option[valueKey])
+                      }
+                    }}
                   >
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        option[valueKey] ===
-                          value?.[valueKey]
+                        option[labelKey] ===
+                          selectedValue?.[labelKey]
                           ? "opacity-100"
                           : "opacity-0",
                       )}

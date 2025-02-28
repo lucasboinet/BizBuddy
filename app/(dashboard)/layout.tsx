@@ -31,7 +31,7 @@ function layout({ children }: { children: React.ReactNode }) {
             </div>
           </header>
 
-          <div className='px-4 pb-4 overflow-auto'>
+          <div className='px-4 pb-4 overflow-auto h-full'>
             {children}
           </div>
         </SidebarInset>

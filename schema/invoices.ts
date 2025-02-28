@@ -13,7 +13,7 @@ export const createInvoiceSchema = z.object({
   customerId: z.string(),
   status: z.nativeEnum(INVOICE_STATUS).default(INVOICE_STATUS.CREATED),
   amount: z.number().min(0),
-  items: z.array(invoiceItemsSchema).default([]),
+  items: z.array(invoiceItemsSchema).default([{ label: '', amount: 0, quantity: 1 }]),
   dueDate: z.date(),
 })
 

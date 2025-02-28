@@ -1,3 +1,5 @@
+'use server'
+
 import prisma from "@/lib/primsa";
 import { updateInvoiceSchema, UpdateInvoiceSchemaType } from "@/schema/invoices";
 import { INVOICE_STATUS } from "@/types/invoices";

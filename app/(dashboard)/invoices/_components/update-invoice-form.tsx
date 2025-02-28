@@ -10,20 +10,26 @@ import { useMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import CustomerSelect from "../[invoiceId]/_components/customer-select";
+import CustomerSelect from "./customer-select";
 import { Loader2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { capitalize } from "@/lib/helper/texts";
+import ItemSelect from "./items-select";
+import { Customer } from "@prisma/client";
+import { useAuthSession } from "@/components/context/AuthSessionContext";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export default function UpdateInvoiceForm({ invoice }: { invoice: AppInvoice }) {
+export default function UpdateInvoiceForm({ invoice, customers }: { invoice: AppInvoice, customers: Customer[] }) {
   const isDisabled = invoice.status === INVOICE_STATUS.PAID;
+  const { user, loading } = useAuthSession();
 
   const form = useForm<UpdateInvoiceSchemaType>({
     resolver: zodResolver(updateInvoiceSchema),
     defaultValues: {
-      customerId: invoice.project?.customerId as string,
+      customerId: invoice.project?.customer?.id as string,
       name: invoice.name,
+      invoiceId: invoice.id,
       projectId: invoice.projectId,
       status: invoice.status,
       amount: invoice.amount,
@@ -32,7 +38,7 @@ export default function UpdateInvoiceForm({ invoice }: { invoice: AppInvoice }) 
     },
   });
 
-  const { mutate, isPending, error } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: UpdateInvoice,
     onSuccess: () => {
       toast.success('Invoice updated', { id: "update-invoice" });
@@ -48,27 +54,47 @@ export default function UpdateInvoiceForm({ invoice }: { invoice: AppInvoice }) 
   }, [mutate])
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-9 gap-6">
-          <div className="grid gap-6 col-span-4">
-            <div className="grid grid-cols-2 gap-6">
-              <CustomerSelect form={form} />
-              <div>projectId selector based on customerId</div>
+    <div className="h-full">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-between h-full">
+          <div className="grid gap-6">
+            <div className="bg-primary-foreground p-4 rounded-md border">
+              <span className="text-sm mb-2 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex gap-1 items-center">
+                Bill from
+              </span>
+
+              <div>
+                {!loading && (
+                  <div className="flex flex-row items-center gap-1.5">
+                    <span>{user?.firstname}</span> <span>{user?.lastname}</span>
+                  </div>
+                )}
+
+                {loading && (
+                  <div className="flex flex-row items-center gap-1.5">
+                    <Skeleton className="max-w-20 w-full h-6" /> <Skeleton className="max-w-20 w-full h-6" />
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-12 gap-6">
-              <div className="col-span-9">
+              <div className="col-span-8">
                 <FormField
                   control={form.control}
-                  name='name'
+                  name='customerId'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className='flex gap-1 items-center'>
-                        Subject
+                        Bill to
                       </FormLabel>
                       <FormControl>
-                        <Input {...field} disabled={isDisabled} />
+                        <CustomerSelect
+                          onValueChange={field.onChange}
+                          value={field.value}
+                          items={customers}
+                          disabled={isDisabled}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -76,9 +102,7 @@ export default function UpdateInvoiceForm({ invoice }: { invoice: AppInvoice }) 
                 />
               </div>
 
-              {error && JSON.stringify(error)}
-
-              <div className="col-span-3">
+              <div className="col-span-4">
                 <FormField
                   control={form.control}
                   name='status'
@@ -112,16 +136,47 @@ export default function UpdateInvoiceForm({ invoice }: { invoice: AppInvoice }) 
               </div>
             </div>
 
-            <div>items list</div>
+            <FormField
+              control={form.control}
+              name='name'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className='flex gap-1 items-center'>
+                    Subject
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} disabled={isDisabled} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-
-            <Button type="submit" className="w-full" disabled={isPending}>
-              {!isPending && "Save"}
-              {isPending && <Loader2Icon className='animate-spin' />}
-            </Button>
+            <FormField
+              control={form.control}
+              name='items'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className='flex gap-1 items-center'>
+                    Items
+                  </FormLabel>
+                  <FormControl>
+                    <ItemSelect
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
-        </div>
-      </form>
-    </Form>
+          <Button type="submit" className="w-full" disabled={isPending}>
+            {!isPending && "Save"}
+            {isPending && <Loader2Icon className='animate-spin' />}
+          </Button>
+        </form>
+      </Form>
+    </div>
   )
 }
