@@ -1,9 +1,7 @@
 "use client"
 
-import { Invoice } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
-import { Checkbox } from "@/components/ui/checkbox"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -15,42 +13,50 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { DataTableColumnHeader } from "@/components/data-table-column-header"
+import { toast } from "sonner"
+import Link from "next/link"
+import { AppInvoice, InvoiceItem } from "@/types/invoices"
 
-export const columns: ColumnDef<Invoice>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+export const columns: ColumnDef<AppInvoice>[] = [
   {
     accessorKey: "id",
     enableHiding: false,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ID" />
     ),
-  },
+    cell: ({ row }) => (
+      <span className="font-medium">{row.getValue("id")}</span>
+    )
+  }, 
   {
     accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
+    cell: ({ row }) => {
+      return (
+        <span className="hover:underline">{row.getValue('name')}</span>
+      )
+    }
+  },
+  {
+    accessorKey: "project.customer.name",
+    filterFn: 'arrIncludesSome',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Customer" />
+    ),
+    cell: ({ row }) => {
+      const invoice = row.original;
+
+      return (
+        <Link 
+          href={`/customers/${invoice.project?.customer?.id}`} 
+          className="border rounded-md px-3 py-1 bg-gray-100 text-gray-700 hover:underline hover:cursor-pointer"
+        >
+          {row.getValue('project_customer_name')}
+        </Link>
+      )
+    }
   },
   {
     accessorKey: "amount",
@@ -64,7 +70,7 @@ export const columns: ColumnDef<Invoice>[] = [
         currency: "EUR",
       }).format(amount)
  
-      return <div className="text-right font-medium flex justify-start">{formatted}</div>
+      return <span>{formatted}</span>
     },
   },
   {
@@ -75,17 +81,10 @@ export const columns: ColumnDef<Invoice>[] = [
     ),
   },
   {
-    accessorKey: "projectId",
-    filterFn: 'arrIncludesSome',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Project" />
-    ),
-  },
-  {
     accessorKey: "items",
     header: "Items",
     cell: ({ row }) => {
-      const items: any[] = row.getValue('items');
+      const items: InvoiceItem[] = row.getValue('items');
       return <span className="border rounded-md px-2 bg-gray-100 text-gray-700">{items.length}</span>
     }
   },
@@ -129,15 +128,27 @@ export const columns: ColumnDef<Invoice>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(invoice.name)}
+              className="cursor-pointer"
+              onClick={() => {
+                navigator.clipboard.writeText(invoice.name)
+                toast.success("Copied to clipboard")
+              }}
             >
               Copy invoice name
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View project</DropdownMenuItem>
+            <DropdownMenuItem
+              className="cursor-pointer"
+            >
+              <Link href={`/customers/${invoice.project?.customer?.id}`}>View customer</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="cursor-pointer"
+            >
+              <Link href={`/projects/${invoice.projectId}`}>View project</Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-500">Archive invoice</DropdownMenuItem>
+            <DropdownMenuItem className="text-red-500" disabled>Archive invoice</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )

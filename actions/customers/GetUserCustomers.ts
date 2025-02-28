@@ -2,7 +2,7 @@ import prisma from "@/lib/primsa";
 import { retrieveSession } from "@/lib/sessions";
 import { Customer } from "@prisma/client";
 
-export async function GetUserCustomers(): Promise<Customer[]> {
+export async function GetCustomers(): Promise<Customer[]> {
   const session = await retrieveSession();
 
   if (!session?.sessionId) {

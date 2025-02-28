@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const createUserCustomerSchema = z.object({
+export const createCustomerSchema = z.object({
   name: z.string().max(50),
   email: z.string().email(),
   phone: z.string().length(10),
@@ -9,4 +9,10 @@ export const createUserCustomerSchema = z.object({
   accountId: z.string()
 })
 
-export type CreateUserCustomerSchemaType = z.infer<typeof createUserCustomerSchema>;
+export type CreateCustomerSchemaType = z.infer<typeof createCustomerSchema>;
+
+export const searchCustomersSchema = z.object({
+  search: z.string()
+})
+
+export type SearchCustomersSchemaType = z.infer<typeof searchCustomersSchema>;

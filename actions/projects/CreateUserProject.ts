@@ -1,17 +1,17 @@
 import prisma from "@/lib/primsa";
 import { retrieveSession } from "@/lib/sessions";
-import { createUserProjectSchema, CreateUserProjectSchemaType } from "@/schema/projects";
+import { createProjectSchema, CreateProjectSchemaType } from "@/schema/projects";
 import { PROJECT_STATUS } from "@/types/projects";
 import { redirect } from "next/navigation";
 
-export async function CreateUserProject(form: CreateUserProjectSchemaType) {
+export async function CreateProject(form: CreateProjectSchemaType) {
   const session = await retrieveSession();
 
   if (!session?.sessionId) {
     throw new Error("Unauthorized");
   }
 
-  const { success, data } = createUserProjectSchema.safeParse(form);
+  const { success, data } = createProjectSchema.safeParse(form);
 
   if (!success) {
     throw new Error('Invalid form data');

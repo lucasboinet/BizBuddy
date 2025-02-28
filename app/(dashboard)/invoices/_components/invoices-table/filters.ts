@@ -1,5 +1,5 @@
 import { capitalize } from "@/lib/helper/texts";
-import { INVOICE_STATUS } from "@/types/invoices"
+import { INVOICE_STATUS_KEYS } from "@/types/invoices";
 import { LucideIcon } from "lucide-react";
 
 export type FilterOption = {
@@ -14,17 +14,15 @@ export type Filter = {
   options: (values?: any[]) => FilterOption[],
 }
 
-const invoiceStatusKeys = Object.keys(INVOICE_STATUS) as Array<keyof typeof INVOICE_STATUS>;
-
 export const filters: Filter[] = [
   {
     column: 'status',
     label: 'Status',
-    options: () => invoiceStatusKeys.map((key) => ({ label: capitalize(key), value: key })),
+    options: () => INVOICE_STATUS_KEYS.map((key) => ({ label: capitalize(key), value: key })),
   },
   {
-    column: 'projectId',
-    label: 'Project',
+    column: 'project_customer_name',
+    label: 'Customer',
     options: (values) => {
       return values?.map((value) => ({ label: value, value, })) as FilterOption[];
     },

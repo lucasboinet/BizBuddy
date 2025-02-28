@@ -28,13 +28,14 @@ import { DataTablePagination } from "@/components/data-table-pagination"
 import { filters } from "./filters"
 import DataTableFilterOptions from "@/components/data-table-filter-options"
 import { Button } from "@/components/ui/button"
-import { CalendarDatePicker } from "../calendar-date-picker"
+import { CalendarDatePicker } from "../../../../../components/calendar-date-picker"
 import { startOfMonth } from "date-fns"
 import { Input } from "@/components/ui/input"
+import { useRouter } from "next/navigation"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  data: TData[],
 }
 
 export function InvoicesTable<TData, TValue>({
@@ -42,10 +43,10 @@ export function InvoicesTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
-  const [rowSelection, setRowSelection] = useState({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
+  const router = useRouter();
 
   const table = useReactTable({
     data,
@@ -56,11 +57,9 @@ export function InvoicesTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
-      rowSelection
     },
   })
 
@@ -142,6 +141,8 @@ export function InvoicesTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="cursor-pointer"
+                  onClick={() => router.push(`/invoices/${row.getValue('id')}`)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

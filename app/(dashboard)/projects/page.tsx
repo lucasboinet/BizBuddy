@@ -1,4 +1,4 @@
-import { GetUserProjects } from "@/actions/projects/GetUserProjects";
+import { GetProjects } from "@/actions/projects/GetProjects";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Project } from "@prisma/client";
@@ -10,15 +10,15 @@ export default function Projects() {
     <div className='flex-1 flex flex-col h-full'>
 
       <div className='h-full py-6'>
-        <Suspense fallback={<UserProjectsSkeleton />}>
-          <UserProjects />
+        <Suspense fallback={<ProjectsSkeleton />}>
+          <Projects />
         </Suspense>
       </div>
     </div>
   );
 }
 
-function UserProjectsSkeleton() {
+function ProjectsSkeleton() {
   return (
     <div className='space-y-2'>
       {[1, 2, 3, 4].map((i) => (
@@ -28,8 +28,8 @@ function UserProjectsSkeleton() {
   );
 }
 
-async function UserProjects() {
-  const projects = await GetUserProjects();
+async function Projects() {
+  const projects = await GetProjects();
 
   if (!projects) {
     return (

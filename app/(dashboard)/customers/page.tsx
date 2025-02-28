@@ -1,4 +1,4 @@
-import { GetUserCustomers } from "@/actions/customers/GetUserCustomers";
+import { GetCustomers } from "@/actions/customers/GetCustomers";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Customer } from "@prisma/client";
@@ -10,15 +10,15 @@ export default function Customers() {
     <div className='flex-1 flex flex-col h-full'>
 
       <div className='h-full py-6'>
-        <Suspense fallback={<UserCustomersSkeleton />}>
-          <UserCustomers />
+        <Suspense fallback={<CustomersSkeleton />}>
+          <Customers />
         </Suspense>
       </div>
     </div>
   );
 }
 
-function UserCustomersSkeleton() {
+function CustomersSkeleton() {
   return (
     <div className='space-y-2'>
       {[1, 2, 3, 4].map((i) => (
@@ -28,8 +28,8 @@ function UserCustomersSkeleton() {
   );
 }
 
-async function UserCustomers() {
-  const customers = await GetUserCustomers();
+async function Customers() {
+  const customers = await GetCustomers();
 
   if (!customers) {
     return (
