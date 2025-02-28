@@ -75,7 +75,7 @@ const ComboBox = <T extends object>({
           )}
           disabled={disabled}
         >
-          <div className="truncate">
+          <div className="truncate font-normal">
             {selectedValue ? renderText(selectedValue) : `Select ${title}`}
           </div>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
