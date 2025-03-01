@@ -1,6 +1,6 @@
 'use server'
 
-import prisma from "@/lib/primsa";
+import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
 import { AppInvoice } from "@/types/invoices";
 
@@ -16,18 +16,7 @@ export async function GetInvoice(invoiceId: string): Promise<AppInvoice | null> 
       id: invoiceId,
     },
     include: {
-      project: {
-        select: {
-          id: true,
-          name: true,
-          customer: {
-            select: {
-              id: true,
-              name: true,
-            },
-          }
-        }
-      }
+      customer: true,
     }
   }) as AppInvoice;
 

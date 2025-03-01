@@ -25,7 +25,7 @@ model User {
 }
 
 model Customer {
-  id      String @id @default(cuid())
+  id      String  @id @default(cuid())
   name    String
   email   String
   phone   String?
@@ -36,6 +36,7 @@ model Customer {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   projects  Project[]
+  Invoices  Invoice[]
 }
 
 model Project {
@@ -52,23 +53,22 @@ model Project {
   updatedAt DateTime @updatedAt
 
   customer Customer @relation(fields: [customerId], references: [id])
-  invoice  Invoice?
 }
 
 model Invoice {
-  id String @id
+  id   String @id
   name String
 
-  projectId String   @unique
-  status    String
-  amount    Float
-  items     Json     @default("[]")
-  dueDate   DateTime
+  customerId String   @unique
+  status     String
+  amount     Float
+  items      Json     @default("[]")
+  dueDate    DateTime
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  project Project @relation(fields: [projectId], references: [id])
+  customer Customer @relation(fields: [customerId], references: [id])
 }
 
 model Tag {

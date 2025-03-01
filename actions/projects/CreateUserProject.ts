@@ -1,4 +1,4 @@
-import prisma from "@/lib/primsa";
+import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
 import { createProjectSchema, CreateProjectSchemaType } from "@/schema/projects";
 import { PROJECT_STATUS } from "@/types/projects";

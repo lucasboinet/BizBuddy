@@ -1,4 +1,4 @@
-import prisma from "@/lib/primsa";
+import prisma from "@/lib/prisma";
 import { cookies } from "next/headers";
 
 export async function deleteSession(id: string) { 

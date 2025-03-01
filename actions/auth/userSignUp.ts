@@ -1,6 +1,6 @@
 'use server'
 
-import prisma from "@/lib/primsa";
+import prisma from "@/lib/prisma";
 import { userSignUpSchema, UserSignUpSchemaType } from "@/schema/auth";
 import { redirect } from "next/navigation";
 import bcrypt from 'bcrypt';

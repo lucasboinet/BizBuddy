@@ -1,4 +1,4 @@
-import prisma from "@/lib/primsa";
+import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
 
 export async function getSession(sessionId: string) {

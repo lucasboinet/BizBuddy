@@ -1,7 +1,7 @@
 'use server'
 
 import { retrieveSession } from "@/lib/sessions";
-import prisma from "@/lib/primsa";
+import prisma from "@/lib/prisma";
 import { AuthSafeUser } from "@/types/auth";
 
 export async function GetMe(): Promise<AuthSafeUser> {

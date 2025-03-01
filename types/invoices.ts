@@ -1,5 +1,4 @@
-import { Invoice } from "@prisma/client";
-import { AppProject } from "./projects";
+import { Customer, Invoice } from "@prisma/client";
 
 export enum INVOICE_STATUS {
   CREATED = 'CREATED',
@@ -17,7 +16,7 @@ export type InvoiceItem = {
 }
 
 export interface AppInvoice extends Invoice {
-  project?: AppProject;
+  customer: Customer;
   status: INVOICE_STATUS;
   items: InvoiceItem[];
 }

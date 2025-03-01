@@ -1,6 +1,6 @@
 'use server'
 
-import prisma from "@/lib/primsa";
+import prisma from "@/lib/prisma";
 import { updateInvoiceSchema, UpdateInvoiceSchemaType } from "@/schema/invoices";
 import { INVOICE_STATUS } from "@/types/invoices";
 import { redirect } from "next/navigation";
@@ -18,7 +18,7 @@ export async function UpdateInvoice(form: UpdateInvoiceSchemaType) {
     },
     data: {
       name: data.name,
-      projectId: data.projectId, 
+      customerId: data.customer.id, 
       status: INVOICE_STATUS.CREATED,
       amount: data.amount,
       items: data.items,

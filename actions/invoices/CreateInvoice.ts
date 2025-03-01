@@ -1,6 +1,6 @@
 'use server'
 
-import prisma from "@/lib/primsa";
+import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
 import { createInvoiceSchema, CreateInvoiceSchemaType } from "@/schema/invoices";
 import { INVOICE_STATUS } from "@/types/invoices";

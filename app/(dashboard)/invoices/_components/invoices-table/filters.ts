@@ -21,7 +21,7 @@ export const filters: Filter[] = [
     options: () => INVOICE_STATUS_KEYS.map((key) => ({ label: capitalize(key), value: key })),
   },
   {
-    column: 'project_customer_name',
+    column: 'customer_name',
     label: 'Customer',
     options: (values) => {
       return values?.map((value) => ({ label: value, value, })) as FilterOption[];

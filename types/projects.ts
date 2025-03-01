@@ -10,4 +10,5 @@ export enum PROJECT_STATUS {
 
 export interface AppProject extends Project {
   customer?: Customer,
+  status: PROJECT_STATUS,
 }

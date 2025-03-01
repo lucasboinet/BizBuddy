@@ -27,7 +27,7 @@ export const columns: ColumnDef<AppInvoice>[] = [
     cell: ({ row }) => (
       <span className="font-medium">{row.getValue("id")}</span>
     )
-  }, 
+  },
   {
     accessorKey: "name",
     header: ({ column }) => (
@@ -40,7 +40,7 @@ export const columns: ColumnDef<AppInvoice>[] = [
     }
   },
   {
-    accessorKey: "project.customer.name",
+    accessorKey: "customer.name",
     filterFn: 'arrIncludesSome',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Customer" />
@@ -49,11 +49,11 @@ export const columns: ColumnDef<AppInvoice>[] = [
       const invoice = row.original;
 
       return (
-        <Link 
-          href={`/customers/${invoice.project?.customer?.id}`} 
+        <Link
+          href={`/customers/${invoice.customer?.id}`}
           className="border rounded-md px-3 py-1 bg-gray-100 text-gray-700 hover:underline hover:cursor-pointer"
         >
-          {row.getValue('project_customer_name')}
+          {row.getValue('customer_name')}
         </Link>
       )
     }
@@ -69,7 +69,7 @@ export const columns: ColumnDef<AppInvoice>[] = [
         style: "currency",
         currency: "EUR",
       }).format(amount)
- 
+
       return <span>{formatted}</span>
     },
   },
@@ -116,7 +116,7 @@ export const columns: ColumnDef<AppInvoice>[] = [
     id: "actions",
     cell: ({ row }) => {
       const invoice = row.original
- 
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -140,12 +140,7 @@ export const columns: ColumnDef<AppInvoice>[] = [
             <DropdownMenuItem
               className="cursor-pointer"
             >
-              <Link href={`/customers/${invoice.project?.customer?.id}`}>View customer</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer"
-            >
-              <Link href={`/projects/${invoice.projectId}`}>View project</Link>
+              <Link href={`/customers/${invoice.customer?.id}`}>View customer</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-500" disabled>Archive invoice</DropdownMenuItem>

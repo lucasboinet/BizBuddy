@@ -7,14 +7,14 @@ export default function CustomerSelect(
   { onValueChange, value, disabled, items }:
     {
       onValueChange: (...event: any[]) => void,
-      value: string,
+      value: Customer,
       disabled: boolean,
       items: Customer[]
     }
 ) {
 
-  function handleOnChange(customerId: Customer[keyof Customer]) {
-    onValueChange('customerId', customerId)
+  function handleOnChange(value: Customer | Customer[keyof Customer]) {
+    onValueChange('customer', value)
   }
 
   return (
@@ -28,6 +28,7 @@ export default function CustomerSelect(
         renderText={(customer) => `${customer.name}`}
         onChange={handleOnChange}
         disabled={disabled}
+        complete
       />
     </div>
   )

@@ -16,14 +16,15 @@ import { useDebounce } from "@/hooks/use-debounce";
 
 interface Props<T extends object> {
   title?: string;
-  value?: string;
+  value?: any;
   renderText: (value: T) => string;
   valueKey: keyof T;
   labelKey: keyof T;
   disabled?: boolean;
   items?: T[];
-  onChange?: (value: T[keyof T]) => void;
+  onChange?: (value: T | T[keyof T]) => void;
   searchFn?: (search: string) => Promise<T[]>;
+  complete?: boolean
 }
 const ComboBox = <T extends object>({
   title,
@@ -32,6 +33,7 @@ const ComboBox = <T extends object>({
   valueKey,
   renderText,
   disabled = false,
+  complete = false,
   onChange,
   searchFn,
   items = [],
@@ -43,10 +45,11 @@ const ComboBox = <T extends object>({
 
   const initDefaultValue = useCallback(() => {
     if (value) {
-      const selected = options.find((option) => option[valueKey] === value);
+      const valueCompare = complete ? value[valueKey] : value;
+      const selected = options.find((option) => option[valueKey] === valueCompare);
       setSelectedValue(selected)
     }
-  }, [options, value, valueKey])
+  }, [options, value, valueKey, complete])
 
   const getOptions = useCallback(async () => {
     if (searchFn) {
@@ -97,9 +100,14 @@ const ComboBox = <T extends object>({
                     value={option[labelKey] as string}
                     key={option[labelKey] as string}
                     onSelect={() => {
-                      if (option[valueKey] !== value) {
+                      if (!complete && option[valueKey] !== value) {
                         setSelectedValue(option)
                         onChange?.(option[valueKey])
+                      }
+
+                      if (complete && option[valueKey] !== value[valueKey]) {
+                        setSelectedValue(option)
+                        onChange?.(option)
                       }
                     }}
                   >

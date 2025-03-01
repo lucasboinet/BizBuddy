@@ -20,6 +20,7 @@ import { Customer } from "@prisma/client";
 import { useAuthSession } from "@/components/context/AuthSessionContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import InvoicePdfViewer from "./invoice-pdf-viewer";
+import { useDebounce } from "@/hooks/use-debounce";
 
 export default function UpdateInvoiceForm({ invoice, customers }: { invoice: AppInvoice, customers: Customer[] }) {
   const isDisabled = invoice.status === INVOICE_STATUS.PAID;
@@ -28,16 +29,18 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
   const form = useForm<UpdateInvoiceSchemaType>({
     resolver: zodResolver(updateInvoiceSchema),
     defaultValues: {
-      customerId: invoice.project?.customer?.id as string,
-      name: invoice.name,
       invoiceId: invoice.id,
-      projectId: invoice.projectId,
+      customer: invoice.customer,
+      name: invoice.name,
       status: invoice.status,
       amount: invoice.amount,
       items: invoice.items as InvoiceItem[],
       dueDate: invoice.dueDate,
+      createdAt: invoice.createdAt,
     },
   });
+
+  const debounceFormValues = useDebounce(form.getValues(), 1000);
 
   const { mutate, isPending } = useMutation({
     mutationFn: UpdateInvoice,
@@ -85,7 +88,7 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
                 <div className="col-span-8">
                   <FormField
                     control={form.control}
-                    name='customerId'
+                    name='customer'
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className='flex gap-1 items-center'>
@@ -183,7 +186,7 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
       </div>
 
       <div className="w-full xl:w-3/5 flex justify-center bg-primary-foreground p-6">
-        <InvoicePdfViewer invoice={(form.getValues() as unknown) as AppInvoice} />
+        <InvoicePdfViewer invoice={debounceFormValues} />
       </div>
     </div>
   )

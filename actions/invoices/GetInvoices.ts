@@ -1,6 +1,6 @@
 'use server'
 
-import prisma from "@/lib/primsa";
+import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
 import { Invoice } from "@prisma/client";
 
@@ -13,16 +13,15 @@ export async function GetInvoices(): Promise<Invoice[]> {
 
   const invoices = await prisma.invoice.findMany({
     where: {
-      project: {
-        accountId: session.userId
+      customer: {
+        accountId: session.userId,
       }
     },
     include: {
-      project: {
+      customer: {
         select: {
           id: true,
           name: true,
-          customer: true,
         }
       }
     }
