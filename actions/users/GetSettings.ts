@@ -1,0 +1,19 @@
+import prisma from "@/lib/prisma";
+import { retrieveSession } from "@/lib/sessions";
+import { Project } from "@prisma/client";
+
+export async function GetSettings(): Promise<Project[]> {
+  const session = await retrieveSession();
+
+  if (!session?.sessionId) {
+    throw new Error("Unauthorized");
+  }
+
+  const projects = await prisma.project.findMany({
+    where: {
+      accountId: session.userId
+    }
+  });
+
+  return projects;
+}

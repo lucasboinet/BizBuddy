@@ -33,6 +33,7 @@ import { UserLogout } from "@/actions/auth/UserLogout"
 import { useCallback } from "react"
 import { toast } from "sonner"
 import { useMutation } from "@tanstack/react-query"
+import Link from "next/link"
 
 export function NavUser({
   user,
@@ -43,7 +44,7 @@ export function NavUser({
 
   const userInitials = (user.firstname.charAt(0) + user.lastname.charAt(0)).toUpperCase();
 
-  const { mutate, isPending } = useMutation({ 
+  const { mutate, isPending } = useMutation({
     mutationFn: UserLogout,
     onSuccess: () => {
       toast.success('Logged out successfully', { id: "user-logout" });
@@ -103,10 +104,12 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
+              <Link href="/settings/account">
+                <DropdownMenuItem className="cursor-pointer">
+                  <BadgeCheck />
+                  Account
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuItem>
                 <CreditCard />
                 Billing

@@ -1,11 +1,11 @@
-import { GetCustomers } from "@/actions/customers/GetCustomers";
+import { GetCustomers } from "@/actions/customers/GetUserCustomers";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Customer } from "@prisma/client";
 import { AlertCircle } from "lucide-react";
 import { Suspense } from "react";
 
-export default function Customers() {
+export default function CustomersPage() {
   return (
     <div className='flex-1 flex flex-col h-full'>
 
