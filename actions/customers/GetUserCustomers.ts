@@ -2,9 +2,9 @@
 
 import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
-import { Customer } from "@prisma/client";
+import { AppCustomer } from "@/types/customers";
 
-export async function GetCustomers(): Promise<Customer[]> {
+export async function GetCustomers(): Promise<AppCustomer[]> {
   const session = await retrieveSession();
 
   if (!session?.sessionId) {
@@ -15,7 +15,7 @@ export async function GetCustomers(): Promise<Customer[]> {
     where: {
       accountId: session.userId
     }
-  });
+  }) as AppCustomer[];
 
   return customers;
 }

@@ -28,7 +28,12 @@ export const updateInvoiceSchema = z.object({
     id: z.string(),
     email: z.string(),
     phone: z.string().nullable(),
-    address: z.string().nullable(),
+    address: z.object({
+      line1: z.string(),
+      line2: z.string().optional(),
+      postalCode: z.number(),
+      city: z.string(),
+    }),
     siret: z.string(),
     accountId: z.string(),
     createdAt: z.date(),
@@ -39,6 +44,7 @@ export const updateInvoiceSchema = z.object({
   items: z.array(invoiceItemsSchema),
   createdAt: z.date(),
   dueDate: z.date(),
+  note: z.string().nullable(),
 })
 
 export type UpdateInvoiceSchemaType = z.infer<typeof updateInvoiceSchema>;

@@ -61,14 +61,16 @@ export default function ItemSelect({ value, onValueChange }:
         </div>
       ))}
 
-      <Button
-        variant="link"
-        className="w-fit"
-        onClick={() => onValueChange([...value, { label: '', quantity: 1, amount: 0 }])}
-      >
-        <PlusIcon />
-        Add item
-      </Button>
+      {value.length < 9 && (
+        <Button
+          variant="link"
+          className="w-fit"
+          onClick={() => onValueChange([...value, { label: '', quantity: 1, amount: 0 }])}
+        >
+          <PlusIcon />
+          Add item
+        </Button>
+      )}
     </div>
   )
 }

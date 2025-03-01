@@ -29,7 +29,7 @@ model Customer {
   name    String
   email   String
   phone   String?
-  address String?
+  address Json    @default("{}")
   siret   String
 
   accountId String
@@ -64,6 +64,7 @@ model Invoice {
   amount     Float
   items      Json     @default("[]")
   dueDate    DateTime
+  note       String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

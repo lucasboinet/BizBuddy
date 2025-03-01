@@ -1,25 +1,25 @@
 'use client'
 
 import ComboBox from "@/components/ui/combobox";
-import { Customer } from "@prisma/client";
+import { AppCustomer } from "@/types/customers";
 
 export default function CustomerSelect(
   { onValueChange, value, disabled, items }:
     {
       onValueChange: (...event: any[]) => void,
-      value: Customer,
+      value: AppCustomer,
       disabled: boolean,
-      items: Customer[]
+      items: AppCustomer[]
     }
 ) {
 
-  function handleOnChange(value: Customer | Customer[keyof Customer]) {
+  function handleOnChange(value: AppCustomer | AppCustomer[keyof AppCustomer]) {
     onValueChange('customer', value)
   }
 
   return (
     <div>
-      <ComboBox<Customer>
+      <ComboBox<AppCustomer>
         title="Customer"
         valueKey="id"
         labelKey="name"

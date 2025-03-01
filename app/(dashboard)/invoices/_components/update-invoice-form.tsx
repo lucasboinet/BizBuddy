@@ -16,13 +16,13 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { capitalize } from "@/lib/helper/texts";
 import ItemSelect from "./items-select";
-import { Customer } from "@prisma/client";
 import { useAuthSession } from "@/components/context/AuthSessionContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import InvoicePdfViewer from "./invoice-pdf-viewer";
 import { useDebounce } from "@/hooks/use-debounce";
+import { AppCustomer } from "@/types/customers";
 
-export default function UpdateInvoiceForm({ invoice, customers }: { invoice: AppInvoice, customers: Customer[] }) {
+export default function UpdateInvoiceForm({ invoice, customers }: { invoice: AppInvoice, customers: AppCustomer[] }) {
   const isDisabled = invoice.status === INVOICE_STATUS.PAID;
   const { user, loading } = useAuthSession();
 
@@ -37,10 +37,11 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
       items: invoice.items as InvoiceItem[],
       dueDate: invoice.dueDate,
       createdAt: invoice.createdAt,
+      note: invoice.note,
     },
   });
 
-  const debounceFormValues = useDebounce(form.getValues(), 1000);
+  const debounceFormValues = useDebounce(form.getValues(), 2000);
 
   const { mutate, isPending } = useMutation({
     mutationFn: UpdateInvoice,
