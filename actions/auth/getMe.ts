@@ -24,11 +24,12 @@ export async function GetMe(): Promise<AuthSafeUser> {
 
       createdAt: true,
       updatedAt: true,
+      settings: true,
     },
     where: {
       id: authSession.userId
     }
-  })
+  }) as AuthSafeUser;
 
   if (!user) {
     throw new Error('User do not exist');

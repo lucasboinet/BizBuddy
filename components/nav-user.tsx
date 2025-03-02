@@ -28,7 +28,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { User } from "@/types/auth"
+import { AuthSafeUser } from "@/types/auth"
 import { UserLogout } from "@/actions/auth/UserLogout"
 import { useCallback } from "react"
 import { toast } from "sonner"
@@ -38,7 +38,7 @@ import Link from "next/link"
 export function NavUser({
   user,
 }: {
-  user: User
+  user: AuthSafeUser
 }) {
   const { isMobile } = useSidebar()
 
@@ -104,20 +104,24 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Link href="/settings/account">
+              <Link href="/settings">
                 <DropdownMenuItem className="cursor-pointer">
                   <BadgeCheck />
                   Account
                 </DropdownMenuItem>
               </Link>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
+              <Link href="/settings?tab=billing">
+                <DropdownMenuItem>
+                  <CreditCard />
+                  Billing
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/settings?tab=notifications">
+                <DropdownMenuItem>
+                  <Bell />
+                  Notifications
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout} className="cursor-pointer" disabled={isPending}>

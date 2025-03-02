@@ -1,11 +1,18 @@
 'use server'
 
 import prisma from "@/lib/prisma";
+import { retrieveSession } from "@/lib/sessions";
 import { updateInvoiceSchema, UpdateInvoiceSchemaType } from "@/schema/invoices";
 import { INVOICE_STATUS } from "@/types/invoices";
 import { redirect } from "next/navigation";
 
 export async function UpdateInvoice(form: UpdateInvoiceSchemaType) {
+  const session = await retrieveSession();
+    
+  if (!session?.sessionId) {
+    throw new Error("Unauthorized");
+  }
+
   const { success, data } = updateInvoiceSchema.safeParse(form);
 
   if (!success) {

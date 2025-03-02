@@ -97,10 +97,10 @@ model Setting {
   userId String @unique
 
   address Json?
-  siret   String
+  siret   String?
 
-  iban String
-  bic  String
+  iban String?
+  bic  String?
 
   user User @relation(fields: [userId], references: [id])
 }

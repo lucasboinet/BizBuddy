@@ -1,0 +1,14 @@
+import { z } from "zod";
+
+export const updateAccountSettingsSchema = z.object({
+  firstname: z.string(),
+  lastname: z.string(),
+  address: z.object({
+    line1: z.string(),
+    line2: z.string().optional(),
+    postalCode: z.string().regex(/^\d+$/),
+    city: z.string(),
+  }),
+})
+
+export type UpdateAccountSettingsSchemaType = z.infer<typeof updateAccountSettingsSchema>;

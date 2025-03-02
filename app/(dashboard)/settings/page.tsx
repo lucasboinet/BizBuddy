@@ -1,6 +1,8 @@
 import { GetSettings } from "@/actions/users/GetSettings";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
+import SettingsTabs from "./_components/settings-tabs";
+import { GetMe } from "@/actions/auth/GetMe";
 
 export default function AccountSettingsPage() {
   return (
@@ -25,10 +27,11 @@ function AccountSettingsSkeleton() {
 
 async function AccountSettings() {
   const settings = await GetSettings();
+  const user = await GetMe();
 
   return (
     <div>
-      {JSON.stringify(settings)}
+      <SettingsTabs user={user} settings={settings} />
     </div>
   )
 }

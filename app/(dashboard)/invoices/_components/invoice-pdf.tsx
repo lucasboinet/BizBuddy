@@ -96,7 +96,9 @@ export default function InvoicePdf({ invoice, user }: { invoice: UpdateInvoiceSc
               <Text style={{ ...styles.titleText, marginBottom: 6 }}>From</Text>
               <Text>{user?.firstname} {user?.lastname}</Text>
               <Text>{user?.email}</Text>
-              {/* <Text>{user?.settings.address}</Text> */}
+              <Text>{user?.settings?.address?.line1}</Text>
+              {user?.settings?.address?.line2 && <Text>{user?.settings?.address?.line2}</Text>}
+              <Text>{user?.settings?.address?.city}, {user?.settings?.address?.postalCode}</Text>
               <Text style={{ ...styles.titleText, marginBottom: 4, marginTop: 6 }}>Siret</Text>
               {/* <Text>{user?.settings.siret}</Text> */}
             </View>

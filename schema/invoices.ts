@@ -31,7 +31,7 @@ export const updateInvoiceSchema = z.object({
     address: z.object({
       line1: z.string(),
       line2: z.string().optional(),
-      postalCode: z.number(),
+      postalCode: z.string(),
       city: z.string(),
     }),
     siret: z.string(),

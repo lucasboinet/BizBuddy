@@ -1,3 +1,5 @@
+'use server'
+
 import prisma from "@/lib/prisma";
 import { encrypt } from "@/lib/sessions";
 import { cookies } from "next/headers";

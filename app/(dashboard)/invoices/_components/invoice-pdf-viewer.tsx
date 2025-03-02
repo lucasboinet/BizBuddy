@@ -36,7 +36,7 @@ export default function InvoicePdfViewer({ invoice }: { invoice: UpdateInvoiceSc
   useResizeObserver(containerRef, resizeObserverOptions, onResize);
 
   return (
-    <div className='border bg-white rounded-lg overflow-hidden w-4/5 h-full' ref={setContainerRef}>
+    <div className='border bg-white rounded-lg overflow-hidden w-4/5 aspect-[1/1.414]' ref={setContainerRef}>
       {!instance.loading && !loading && (
         <Document
           file={instance.url}

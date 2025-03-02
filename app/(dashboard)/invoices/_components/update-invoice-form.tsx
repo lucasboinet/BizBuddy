@@ -72,8 +72,13 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
 
                 <div>
                   {!loading && (
-                    <div className="flex flex-row items-center gap-1.5">
-                      <span>{user?.firstname}</span> <span>{user?.lastname}</span>
+                    <div className="flex flex-col text-sm">
+                      <span className="flex flex-row items-center gap-1.5">
+                        {user?.firstname} {user?.lastname}
+                      </span>
+                      <span>{user?.email}</span>
+                      <span>{user?.settings?.address?.line1}, {user?.settings?.address?.line2 && user?.settings?.address?.line2}</span>
+                      <span>{user?.settings?.address?.city}, {user?.settings?.address?.postalCode}</span>
                     </div>
                   )}
 
@@ -186,7 +191,7 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
         </Form>
       </div>
 
-      <div className="w-full xl:w-3/5 flex justify-center bg-primary-foreground p-6">
+      <div className="w-full xl:w-3/5 flex items-start justify-center bg-primary-foreground p-6">
         <InvoicePdfViewer invoice={debounceFormValues} />
       </div>
     </div>

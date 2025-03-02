@@ -1,12 +1,6 @@
 import { Customer } from "@prisma/client";
-
-export type CustomerAddress = {
-  line1: string,
-  line2?: string,
-  postalCode: number,
-  city: string,
-}
+import { UserAddress } from "./auth";
 
 export interface AppCustomer extends Customer {
-  address: CustomerAddress,
+  address: UserAddress,
 }

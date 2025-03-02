@@ -1,3 +1,5 @@
+'use server'
+
 import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
 import { Project } from "@prisma/client";
