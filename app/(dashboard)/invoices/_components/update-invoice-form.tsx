@@ -21,6 +21,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import InvoicePdfViewer from "./invoice-pdf-viewer";
 import { useDebounce } from "@/hooks/use-debounce";
 import { AppCustomer } from "@/types/customers";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function UpdateInvoiceForm({ invoice, customers }: { invoice: AppInvoice, customers: AppCustomer[] }) {
   const isDisabled = invoice.status === INVOICE_STATUS.PAID;
@@ -83,8 +84,12 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
                   )}
 
                   {loading && (
-                    <div className="flex flex-row items-center gap-1.5">
-                      <Skeleton className="max-w-20 w-full h-6" /> <Skeleton className="max-w-20 w-full h-6" />
+                    <div className="flex flex-col gap-1">
+                      <div className="flex flex-row items-center gap-1.5">
+                        <Skeleton className="max-w-20 w-full h-6" /> <Skeleton className="max-w-20 w-full h-6" />
+                      </div>
+                      <Skeleton className="max-w-60 w-full h-6" />
+                      <Skeleton className="max-w-72 w-full h-6" />
                     </div>
                   )}
                 </div>
@@ -176,6 +181,28 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
                       <ItemSelect
                         value={field.value}
                         onValueChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='note'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className='flex gap-1 items-center'>
+                      Note
+                      <span className="text-xs">(optional)</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        value={field.value || undefined}
+                        className="resize-none"
+                        disabled={isDisabled}
                       />
                     </FormControl>
                     <FormMessage />
