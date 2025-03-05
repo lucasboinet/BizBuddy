@@ -110,16 +110,16 @@ export function NavUser({
                   Account
                 </DropdownMenuItem>
               </Link>
-              <Link href="/settings?tab=billing">
-                <DropdownMenuItem>
-                  <CreditCard />
-                  Billing
+              <Link href="/settings?tab=company">
+                <DropdownMenuItem className="cursor-pointer">
+                  <Bell />
+                  Company
                 </DropdownMenuItem>
               </Link>
-              <Link href="/settings?tab=notifications">
-                <DropdownMenuItem>
-                  <Bell />
-                  Notifications
+              <Link href="/settings?tab=billing">
+                <DropdownMenuItem className="cursor-pointer">
+                  <CreditCard />
+                  Billing
                 </DropdownMenuItem>
               </Link>
             </DropdownMenuGroup>

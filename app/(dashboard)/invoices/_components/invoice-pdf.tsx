@@ -100,7 +100,7 @@ export default function InvoicePdf({ invoice, user }: { invoice: UpdateInvoiceSc
               {user?.settings?.address?.line2 && <Text>{user?.settings?.address?.line2}</Text>}
               <Text>{user?.settings?.address?.city}, {user?.settings?.address?.postalCode}</Text>
               <Text style={{ ...styles.titleText, marginBottom: 4, marginTop: 6 }}>Siret</Text>
-              {/* <Text>{user?.settings.siret}</Text> */}
+              <Text>{user?.settings?.siret}</Text>
             </View>
 
             <View style={{ flexDirection: 'column', gap: 4 }}>
@@ -180,8 +180,8 @@ export default function InvoicePdf({ invoice, user }: { invoice: UpdateInvoiceSc
         <View style={{ flexDirection: 'row', gap: 4, }}>
           <View style={{ flexDirection: 'column', width: '50%' }}>
             <Text style={{ ...styles.titleText, marginBottom: 8 }}>Payment details</Text>
-            <Text>IBAN: </Text>
-            <Text>BIC: </Text>
+            <Text>IBAN: {user?.settings?.iban}</Text>
+            <Text>BIC: {user?.settings?.bic}</Text>
           </View>
 
           <View style={{ flexDirection: 'column', width: '50%' }}>
