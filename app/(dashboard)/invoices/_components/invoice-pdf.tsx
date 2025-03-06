@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
 });
 
 export default function InvoicePdf({ invoice, user }: { invoice: AppInvoice, user: AuthSafeUser | undefined }) {
-  const invoiceSubtotal = invoice.items.reduce((acc, item) => acc + (item.quantity * item.amount), 0);
+  const invoiceSubtotal = roundNumber(invoice.items.reduce((acc, item) => acc + (item.quantity * item.amount), 0));
   const invoiceVAT = roundNumber(invoiceSubtotal * 1.10);
 
   return (
@@ -170,7 +170,7 @@ export default function InvoicePdf({ invoice, user }: { invoice: AppInvoice, use
                 }}
               >
                 <Text>VAT (10%)</Text>
-                <Text>€{invoiceVAT - invoiceSubtotal}</Text>
+                <Text>€{roundNumber(invoiceVAT - invoiceSubtotal)}</Text>
               </View>
 
               <View style={{ paddingVertical: 15, flexDirection: 'row', justifyContent: 'space-between' }}>

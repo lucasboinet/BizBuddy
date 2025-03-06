@@ -43,7 +43,7 @@ export async function CreateInvoice(form: CreateInvoiceSchemaType) {
   const month = getMonth(today);
   const invoiceId = `INV-${getYear(today)}${month > 9 ? month : `0${month}`}-${invoiceCountMonth + 1}`;
 
-  await prisma.invoice.create({
+  const invoice = await prisma.invoice.create({
     data: {
       id: invoiceId,
       name: data.name,
@@ -56,5 +56,5 @@ export async function CreateInvoice(form: CreateInvoiceSchemaType) {
     }
   });
 
-  redirect("/invoices");
+  redirect(`/invoices/${invoice.id}`);
 }

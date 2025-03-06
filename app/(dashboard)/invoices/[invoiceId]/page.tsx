@@ -28,8 +28,11 @@ function InvoiceSkeleton() {
 }
 
 async function InvoiceDetails({ invoiceId }: { invoiceId: string }) {
-  const invoice = await GetInvoice(invoiceId);
-  const customers = await GetCustomers();
+  const [invoice, customers] = await Promise.all([
+    GetInvoice(invoiceId),
+    GetCustomers()
+  ]);
+
 
   if (!invoice) {
     toast.error("Can't find the invoice you are searching for")

@@ -5,8 +5,8 @@ import { AlertCircle } from "lucide-react";
 import { Suspense } from "react";
 import { InvoicesTable } from "./_components/invoices-table/invoices-table";
 import { columns } from "./_components/invoices-table/columns";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { CreateInvoiceModal } from "./_components/create-invoice-modal";
+import { GetCustomers } from "@/actions/customers/GetUserCustomers";
 
 export default function InvoicesPage() {
   return (
@@ -32,7 +32,10 @@ function InvoicesSkeleton() {
 }
 
 async function Invoices() {
-  const invoices = await GetInvoices();
+  const [invoices, customers] = await Promise.all([
+    GetInvoices(),
+    GetCustomers()
+  ]);
 
   if (!invoices) {
     return (
@@ -55,9 +58,7 @@ async function Invoices() {
   return (
     <div>
       <div className="flex justify-end mb-2">
-        <Link href="/invoices/create">
-          <Button size="sm">Create invoice</Button>
-        </Link>
+        <CreateInvoiceModal customers={customers} />
       </div>
       <InvoicesTable
         data={invoices}
