@@ -43,7 +43,7 @@ const ComboBox = <T extends object>({
   const [options, setOptions] = useState<T[]>([]);
   const debouncedsearch = useDebounce<string>(search, 500);
 
-  const initDefaultValue = useCallback(() => {
+  useEffect(() => {
     if (value) {
       const valueCompare = complete ? value[valueKey] : value;
       const selected = options.find((option) => option[valueKey] === valueCompare);
@@ -55,13 +55,11 @@ const ComboBox = <T extends object>({
     if (searchFn) {
       const searchResult = await searchFn(debouncedsearch || "");
       setOptions(searchResult);
-      initDefaultValue();
       return;
     }
 
     setOptions(items);
-    initDefaultValue();
-  }, [debouncedsearch, searchFn, initDefaultValue, items]);
+  }, [debouncedsearch, searchFn, items]);
 
   useEffect(() => {
     getOptions();
@@ -102,10 +100,10 @@ const ComboBox = <T extends object>({
                     onSelect={() => {
                       if (!complete && option[valueKey] !== value) {
                         setSelectedValue(option)
-                        onChange?.(option[valueKey])
+                        onChange?.(option?.[valueKey])
                       }
 
-                      if (complete && option[valueKey] !== value[valueKey]) {
+                      if (complete && option[valueKey] !== value?.[valueKey]) {
                         setSelectedValue(option)
                         onChange?.(option)
                       }

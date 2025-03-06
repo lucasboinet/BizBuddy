@@ -1,20 +1,18 @@
 'use client'
 
-import { UpdateInvoice } from "@/actions/invoices/UpdateInvoice";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { updateInvoiceSchema, UpdateInvoiceSchemaType } from "@/schema/invoices";
-import { AppInvoice, INVOICE_STATUS, INVOICE_STATUS_KEYS, InvoiceItem } from "@/types/invoices";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { createInvoiceSchema, CreateInvoiceSchemaType } from "@/schema/invoices";
+import { CreateInvoice } from "@/actions/invoices/CreateInvoice";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { AppInvoice } from "@/types/invoices";
 import CustomerSelect from "./customer-select";
 import { CalendarIcon, Loader2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { capitalize } from "@/lib/helper/texts";
 import ItemSelect from "./items-select";
 import { useAuthSession } from "@/components/context/AuthSessionContext";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -23,41 +21,38 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { AppCustomer } from "@/types/customers";
 import { Textarea } from "@/components/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
-export default function UpdateInvoiceForm({ invoice, customers }: { invoice: AppInvoice, customers: AppCustomer[] }) {
-  const isDisabled = invoice.status === INVOICE_STATUS.PAID;
+export default function CreateInvoiceForm({ customers }: { customers: AppCustomer[] }) {
   const { user, loading } = useAuthSession();
 
-  const form = useForm<UpdateInvoiceSchemaType>({
-    resolver: zodResolver(updateInvoiceSchema),
+  const form = useForm<CreateInvoiceSchemaType>({
+    resolver: zodResolver(createInvoiceSchema),
     defaultValues: {
-      id: invoice.id,
-      customer: invoice.customer,
-      name: invoice.name,
-      status: invoice.status,
-      items: invoice.items as InvoiceItem[],
-      dueDate: invoice.dueDate,
-      note: invoice.note,
+      customer: undefined,
+      name: '',
+      items: [{ label: '', quantity: 1, amount: 0 }],
+      dueDate: new Date(),
+      note: '',
     },
   });
 
-  const debounceFormValues = useDebounce(form.getValues(), 2000);
+  const debounceFormValues: unknown = useDebounce(form.getValues(), 2000);
 
   const { mutate, isPending } = useMutation({
-    mutationFn: UpdateInvoice,
+    mutationFn: CreateInvoice,
     onSuccess: () => {
-      toast.success('Invoice updated', { id: "update-invoice" });
+      toast.success('Invoice created', { id: "create-invoice" });
     },
     onError: (error: any) => {
-      toast.error(error.message, { id: "update-invoice" });
+      toast.error(error.message, { id: "create-invoice" });
     },
   });
 
-  const onSubmit = useCallback((values: UpdateInvoiceSchemaType) => {
-    toast.loading("Updating invoice...", { id: "update-invoice" });
+  const onSubmit = useCallback((values: CreateInvoiceSchemaType) => {
+    toast.loading("Creating invoice...", { id: "create-invoice" });
     mutate(values);
   }, [mutate])
 
@@ -97,63 +92,25 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
                 </div>
               </div>
 
-              <div className="grid grid-cols-12 gap-6">
-                <div className="col-span-8">
-                  <FormField
-                    control={form.control}
-                    name='customer'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className='flex gap-1 items-center'>
-                          Bill to
-                        </FormLabel>
-                        <FormControl>
-                          <CustomerSelect
-                            onValueChange={field.onChange}
-                            value={field.value}
-                            items={customers}
-                            disabled={isDisabled}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="col-span-4">
-                  <FormField
-                    control={form.control}
-                    name='status'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className='flex gap-1 items-center'>
-                          Status
-                        </FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          disabled={isDisabled}
-                        >
-                          <FormControl>
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Set status" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectGroup>
-                              {INVOICE_STATUS_KEYS.map((status) => (
-                                <SelectItem key={status} value={status}>{capitalize(status)}</SelectItem>
-                              ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
+              <FormField
+                control={form.control}
+                name='customer'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className='flex gap-1 items-center'>
+                      Bill to
+                    </FormLabel>
+                    <FormControl>
+                      <CustomerSelect
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        items={customers}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}
@@ -208,7 +165,7 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
                       Subject
                     </FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={isDisabled} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -248,7 +205,6 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
                         {...field}
                         value={field.value || undefined}
                         className="resize-none"
-                        disabled={isDisabled}
                       />
                     </FormControl>
                     <FormMessage />

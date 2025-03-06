@@ -2,9 +2,9 @@
 
 import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
-import { Invoice } from "@prisma/client";
+import { AppInvoice } from "@/types/invoices";
 
-export async function GetInvoices(): Promise<Invoice[]> {
+export async function GetInvoices(): Promise<AppInvoice[]> {
   const session = await retrieveSession();
 
   if (!session?.sessionId) {
@@ -25,7 +25,7 @@ export async function GetInvoices(): Promise<Invoice[]> {
         }
       }
     }
-  });
+  }) as AppInvoice[];
 
   return invoices;
 }

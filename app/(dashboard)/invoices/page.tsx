@@ -5,6 +5,8 @@ import { AlertCircle } from "lucide-react";
 import { Suspense } from "react";
 import { InvoicesTable } from "./_components/invoices-table/invoices-table";
 import { columns } from "./_components/invoices-table/columns";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function InvoicesPage() {
   return (
@@ -52,8 +54,13 @@ async function Invoices() {
 
   return (
     <div>
+      <div className="flex justify-end mb-2">
+        <Link href="/invoices/create">
+          <Button size="sm">Create invoice</Button>
+        </Link>
+      </div>
       <InvoicesTable
-        data={invoices} 
+        data={invoices}
         columns={columns}
       />
     </div>

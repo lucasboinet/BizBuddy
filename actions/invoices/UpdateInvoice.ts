@@ -21,17 +21,18 @@ export async function UpdateInvoice(form: UpdateInvoiceSchemaType) {
 
   await prisma.invoice.update({
     where: {
-      id: data.invoiceId,
+      id: data.id,
     },
     data: {
       name: data.name,
       customerId: data.customer.id, 
       status: INVOICE_STATUS.CREATED,
-      amount: data.amount,
+      amount: data.items.reduce((acc, item) => acc + (item.quantity * item.amount), 0),
       items: data.items,
       dueDate: data.dueDate,
+      note: data.note,
     }
   });
 
-  redirect(`/invoices/${data.invoiceId}`);
+  redirect(`/invoices/${data.id}`);
 }

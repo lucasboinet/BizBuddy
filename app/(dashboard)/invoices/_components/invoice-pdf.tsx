@@ -4,11 +4,11 @@ import React from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer/lib/react-pdf.browser';
 import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
-import { UpdateInvoiceSchemaType } from '@/schema/invoices';
 import { format } from 'date-fns';
 import { AuthSafeUser } from '@/types/auth';
 import { roundNumber } from '@/lib/helper/number';
 import { capitalize } from '@/lib/helper/texts';
+import { AppInvoice } from '@/types/invoices';
 
 const styles = StyleSheet.create({
   page: {
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default function InvoicePdf({ invoice, user }: { invoice: UpdateInvoiceSchemaType, user: AuthSafeUser | undefined }) {
+export default function InvoicePdf({ invoice, user }: { invoice: AppInvoice, user: AuthSafeUser | undefined }) {
   const invoiceSubtotal = invoice.items.reduce((acc, item) => acc + (item.quantity * item.amount), 0);
   const invoiceVAT = roundNumber(invoiceSubtotal * 1.10);
 
@@ -78,17 +78,17 @@ export default function InvoicePdf({ invoice, user }: { invoice: UpdateInvoiceSc
           <Text style={styles.heading}>Invoice</Text>
           <View style={styles.section}>
             <Text style={styles.titleText}>Invoice N°:</Text>
-            <Text>{invoice.invoiceId}</Text>
+            <Text>{invoice.id}</Text>
           </View>
 
           <View style={styles.section}>
             <Text style={styles.titleText}>Issue date:</Text>
-            <Text>{format(invoice.createdAt, 'dd/MM/yyyy')}</Text>
+            <Text>{format(invoice.createdAt || new Date(), 'dd/MM/yyyy')}</Text>
           </View>
 
           <View style={styles.section}>
             <Text style={styles.titleText}>Due date:</Text>
-            <Text>{format(invoice.dueDate, 'dd/MM/yyyy')}</Text>
+            <Text>{invoice?.dueDate && format(invoice.dueDate, 'dd/MM/yyyy')}</Text>
           </View>
 
           <View style={styles.destination}>
@@ -105,13 +105,17 @@ export default function InvoicePdf({ invoice, user }: { invoice: UpdateInvoiceSc
 
             <View style={{ flexDirection: 'column', gap: 4 }}>
               <Text style={{ ...styles.titleText, marginBottom: 6 }}>To</Text>
-              <Text>{invoice.customer.name}</Text>
-              <Text>{invoice.customer.email}</Text>
-              <Text>{invoice.customer.address.line1}</Text>
-              {invoice.customer.address.line2 && <Text>{invoice.customer.address.line2}</Text>}
-              <Text>{invoice.customer.address.city}, {invoice.customer.address.postalCode}</Text>
-              <Text style={{ ...styles.titleText, marginBottom: 4, marginTop: 6 }}>Siret</Text>
-              <Text>{invoice.customer.siret}</Text>
+              {invoice?.customer && (
+                <>
+                  <Text>{invoice.customer.name}</Text>
+                  <Text>{invoice.customer.email}</Text>
+                  <Text>{invoice.customer.address.line1}</Text>
+                  {invoice.customer.address.line2 && <Text>{invoice.customer.address.line2}</Text>}
+                  <Text>{invoice.customer.address.city}, {invoice.customer.address.postalCode}</Text>
+                  <Text style={{ ...styles.titleText, marginBottom: 4, marginTop: 6 }}>Siret</Text>
+                  <Text>{invoice.customer.siret}</Text>
+                </>
+              )}
             </View>
           </View>
 

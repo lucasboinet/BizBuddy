@@ -5,13 +5,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { useResizeObserver } from '@wojtekmaj/react-hooks';
 import { Document, Page, pdfjs } from 'react-pdf';
 import InvoicePdf from './invoice-pdf';
-import { UpdateInvoiceSchemaType } from '@/schema/invoices';
 import { Loader2Icon } from 'lucide-react';
 import { useAuthSession } from '@/components/context/AuthSessionContext';
+import { AppInvoice } from '@/types/invoices';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
-export default function InvoicePdfViewer({ invoice }: { invoice: UpdateInvoiceSchemaType }) {
+export default function InvoicePdfViewer({ invoice }: { invoice: AppInvoice }) {
   const [containerRef, setContainerRef] = useState<HTMLElement | null>(null);
   const [containerWidth, setContainerWidth] = useState<number>();
   const { user, loading } = useAuthSession();

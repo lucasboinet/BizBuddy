@@ -32,16 +32,17 @@ import { CalendarDatePicker } from "../../../../../components/calendar-date-pick
 import { startOfMonth } from "date-fns"
 import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
+import { AppInvoice } from "@/types/invoices"
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[],
+interface DataTableProps {
+  columns: ColumnDef<AppInvoice>[],
+  data: AppInvoice[],
 }
 
-export function InvoicesTable<TData, TValue>({
+export function InvoicesTable({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []

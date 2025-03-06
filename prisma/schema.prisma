@@ -60,7 +60,7 @@ model Invoice {
   id   String @id
   name String
 
-  customerId String   @unique
+  customerId String
   status     String
   amount     Float
   items      Json     @default("[]")

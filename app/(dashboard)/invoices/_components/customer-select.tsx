@@ -8,13 +8,13 @@ export default function CustomerSelect(
     {
       onValueChange: (...event: any[]) => void,
       value: AppCustomer,
-      disabled: boolean,
+      disabled?: boolean,
       items: AppCustomer[]
     }
 ) {
 
   function handleOnChange(value: AppCustomer | AppCustomer[keyof AppCustomer]) {
-    onValueChange('customer', value)
+    onValueChange(value)
   }
 
   return (
