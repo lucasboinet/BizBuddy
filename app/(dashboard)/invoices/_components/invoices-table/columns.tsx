@@ -35,7 +35,7 @@ export const columns: ColumnDef<AppInvoice>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <span className="hover:underline">{row.getValue('name')}</span>
+        <Link href={`/invoices/${row.getValue('id')}`} className="hover:underline cursor-pointer">{row.getValue('name')}</Link>
       )
     }
   },

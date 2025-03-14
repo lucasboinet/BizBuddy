@@ -1,7 +1,7 @@
 import { GetProjects } from "@/actions/projects/GetUserProjects";
+import KanbanBoard from "@/components/kanban/kanban-board";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Project } from "@prisma/client";
 import { AlertCircle } from "lucide-react";
 import { Suspense } from "react";
 
@@ -51,9 +51,7 @@ async function Projects() {
 
   return (
     <div className="grid grid-cols 1 gap-4">
-      {projects.map((project: Project) => (
-        <p key={project.id}>{JSON.stringify(project)}</p>
-      ))}
+      <KanbanBoard />
     </div>
   )
 }

@@ -31,7 +31,6 @@ import { Button } from "@/components/ui/button"
 import { CalendarDatePicker } from "../../../../../components/calendar-date-picker"
 import { startOfMonth } from "date-fns"
 import { Input } from "@/components/ui/input"
-import { useRouter } from "next/navigation"
 import { AppInvoice } from "@/types/invoices"
 
 interface DataTableProps {
@@ -47,7 +46,6 @@ export function InvoicesTable({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
-  const router = useRouter();
 
   const table = useReactTable({
     data,
@@ -142,8 +140,6 @@ export function InvoicesTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="cursor-pointer"
-                  onClick={() => router.push(`/invoices/${row.getValue('id')}`)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
