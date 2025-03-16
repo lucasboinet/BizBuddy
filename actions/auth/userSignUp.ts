@@ -4,7 +4,8 @@ import prisma from "@/lib/prisma";
 import { userSignUpSchema, UserSignUpSchemaType } from "@/schema/auth";
 import { redirect } from "next/navigation";
 import bcrypt from 'bcrypt';
-import { createSession } from "../sessions/CreateSession";
+import { CreateSession } from "../sessions/CreateSession";
+import { CreateProjectsKanbanBoard } from "../boards/CreateProjectsKanbanBoard";
 
 export async function UserSignUp(form: UserSignUpSchemaType) {
   const { success, data } = userSignUpSchema.safeParse(form);
@@ -36,7 +37,9 @@ export async function UserSignUp(form: UserSignUpSchemaType) {
     }
   });
 
-  await createSession(user.id);
+  await CreateSession(user.id);
+
+  await CreateProjectsKanbanBoard(user.id);
 
   redirect(`/`);
 }

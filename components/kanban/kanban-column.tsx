@@ -62,7 +62,7 @@ export default function KanbanColumnContainer({ column, deleteColumn, updateColu
       >
         <div className="flex gap-2 items-center">
           <div className="flex justify-center items-center bg-primary-foreground rounded-full text-sm px-2 py-0.5">
-            0
+            {tasks.length}
           </div>
           {!editMode && column.title}
           {editMode && (

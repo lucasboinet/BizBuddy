@@ -19,10 +19,12 @@ model User {
   password     String
   refreshToken String?
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  sessions  Session[]
-  settings  Setting?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  sessions     Session[]
+  settings     Setting?
+  customers    Customer[]
+  projectBoard Board?
 }
 
 model Customer {
@@ -38,6 +40,8 @@ model Customer {
   updatedAt DateTime  @updatedAt
   projects  Project[]
   Invoices  Invoice[]
+
+  user User @relation(fields: [accountId], references: [id], onDelete: Cascade)
 }
 
 model Project {
@@ -53,7 +57,7 @@ model Project {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  customer Customer @relation(fields: [customerId], references: [id])
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 }
 
 model Invoice {
@@ -70,7 +74,7 @@ model Invoice {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  customer Customer @relation(fields: [customerId], references: [id])
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 }
 
 model Tag {
@@ -89,7 +93,7 @@ model Session {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Setting {
@@ -102,5 +106,14 @@ model Setting {
   iban String?
   bic  String?
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Board {
+  id     String @id @default(cuid())
+  userId String @unique
+
+  columns Json @default("[]")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

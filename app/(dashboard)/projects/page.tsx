@@ -1,3 +1,5 @@
+import { GetMe } from "@/actions/auth/GetMe";
+import { GetBoard } from "@/actions/boards/GetBoard";
 import { GetProjects } from "@/actions/projects/GetUserProjects";
 import KanbanBoard from "@/components/kanban/kanban-board";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -29,7 +31,12 @@ function ProjectsSkeleton() {
 }
 
 async function Projects() {
-  const projects = await GetProjects();
+  const user = await GetMe();
+
+  const [board, projects] = await Promise.all([
+    GetBoard(user.projectBoard.id),
+    GetProjects()
+  ]);
 
   if (!projects) {
     return (
@@ -41,17 +48,17 @@ async function Projects() {
     )
   }
 
-  if (projects.length === 0) {
-    return (
-      <div className='flex flex-col gap-4 h-full items-center'>
-        {JSON.stringify(projects)}
-      </div>
-    )
-  }
+  // if (projects.length === 0) {
+  //   return (
+  //     <div className='flex flex-col gap-4 h-full items-center'>
+  //       {JSON.stringify(projects)}
+  //     </div>
+  //   )
+  // }
 
   return (
-    <div className="grid grid-cols 1 gap-4">
-      <KanbanBoard />
+    <div className="grid gap-4 h-full">
+      <KanbanBoard className="h-full" board={board!} />
     </div>
   )
 }

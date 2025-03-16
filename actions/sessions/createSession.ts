@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { encrypt } from "@/lib/sessions";
 import { cookies } from "next/headers";
 
-export async function createSession(userId: string) {
+export async function CreateSession(userId: string) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
  
   const session = await prisma.session.create({

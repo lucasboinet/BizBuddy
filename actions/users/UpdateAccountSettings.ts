@@ -18,7 +18,6 @@ export async function UpdateAccountSettings(form: UpdateAccountSettingsSchemaTyp
     throw new Error('Invalid form data');
   }
 
-
   const userData = {
     firstname: data.firstname,
     lastname: data.lastname,

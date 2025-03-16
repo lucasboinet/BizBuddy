@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { userSignInSchema, UserSignInSchemaType } from "@/schema/auth";
 import { redirect } from "next/navigation";
 import bcrypt from 'bcrypt';
-import { createSession } from "../sessions/CreateSession";
+import { CreateSession } from "../sessions/CreateSession";
 import { retrieveSession } from "@/lib/sessions";
 
 export async function UserSignIn(form: UserSignInSchemaType) {
@@ -36,7 +36,7 @@ export async function UserSignIn(form: UserSignInSchemaType) {
     throw new Error('User already logged in');
   }
 
-  await createSession(user.id);
+  await CreateSession(user.id);
 
   redirect(`/`);
 }

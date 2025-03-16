@@ -1,8 +1,6 @@
 'use client'
 
-import { PlusIcon } from "lucide-react";
-import { Button } from "../ui/button";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { KanbanColumn, KanbanId, KanbanTask } from "@/types/kanban";
 import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
@@ -10,9 +8,15 @@ import { createPortal } from "react-dom";
 import KanbanColumnContainer from "./kanban-column";
 import { cn } from "@/lib/utils";
 import KanbanTaskCard from "./kanban-task-card";
+import KanbanToolbar from "./kanban-toolbar";
+import { generateId } from "@/lib/boards";
+import { CreateBoardColumn } from "@/actions/boards/CreateBoardColumn";
+import { AppBoard } from "@/types/board";
+import { DeleteBoardColumn } from "@/actions/boards/DeleteBoardColumn";
+import { UpdateBoardColumn } from "@/actions/boards/UpdateBoardColumn";
 
-export default function KanbanBoard({ className }: { className?: string }) {
-  const [columns, setColumns] = useState<KanbanColumn[]>([{ id: 'column-1', title: "Column 1" }, { id: 'column-2', title: "Column 2" }]);
+export default function KanbanBoard({ className, board }: { className?: string, board: AppBoard }) {
+  const [columns, setColumns] = useState<KanbanColumn[]>([]);
   const [activeColumn, setActiveColumn] = useState<KanbanColumn | undefined>(undefined);
   const [activeTask, setActiveTask] = useState<KanbanTask | undefined>(undefined);
   const columnsIds = useMemo(() => columns.map((col) => col.id), [columns]);
@@ -20,8 +24,9 @@ export default function KanbanBoard({ className }: { className?: string }) {
   const [tasks, setTasks] = useState<KanbanTask[]>([{ id: 'task-1', columnId: 'column-1', content: "Task 1" }, { id: 'task-2', columnId: 'column-1', content: "Task 2" }]);
 
   useEffect(() => {
+    setColumns(board.columns);
     setIsMounted(true);
-  }, [])
+  }, [board.columns])
 
   const sensors = useSensors(useSensor(
     PointerSensor,
@@ -32,19 +37,23 @@ export default function KanbanBoard({ className }: { className?: string }) {
     }
   ))
 
-  function createColumn() {
+  const createColumn = useCallback(() => {
     const columnToAdd: KanbanColumn = {
       id: generateId('column'),
       title: `Column ${columns.length + 1}`
     }
 
+    CreateBoardColumn(board.id, columnToAdd)
+
     setColumns([
       ...columns,
       columnToAdd,
     ])
-  }
+  }, [board.id, columns])
 
-  function deleteColumn(id: KanbanId) {
+  const deleteColumn = useCallback((id: KanbanId) => {
+    DeleteBoardColumn(board.id, id);
+
     setColumns([
       ...columns.filter((col) => col.id !== id),
     ])
@@ -52,16 +61,19 @@ export default function KanbanBoard({ className }: { className?: string }) {
     setTasks([
       ...tasks.filter((task) => task.columnId !== id)
     ])
-  }
+  }, [board.id, columns, tasks])
 
-  function updateColumn(id: KanbanId, title: string) {
+  const updateColumn = useCallback((id: KanbanId, title: string) => {
     const newColumns = columns.map((col) => {
       if (col.id !== id) return col;
       return { ...col, title }
     });
 
+    UpdateBoardColumn(board.id, id, title);
+
     setColumns(newColumns);
-  }
+  }, [board.id, columns])
+
 
   function createTask(id: KanbanId) {
     setTasks([
@@ -157,14 +169,17 @@ export default function KanbanBoard({ className }: { className?: string }) {
   }
 
   return (
-    <div className={cn("m-auto flex w-full items-center overflow-x-auto overflow-y-hidden px-10 flex-grow", className)}>
+    <div className={cn("flex flex-col w-full justify-start overflow-x-auto overflow-y-hidden flex-grow gap-4", className)}>
+      <KanbanToolbar
+        createColumn={createColumn}
+      />
       <DndContext
         sensors={sensors}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
       >
-        <div className="m-auto flex gap-4">
+        <div className="flex gap-4">
           <div className="flex gap-4">
             <SortableContext items={columnsIds}>
               {columns.map((col) => (
@@ -180,10 +195,6 @@ export default function KanbanBoard({ className }: { className?: string }) {
               ))}
             </SortableContext>
           </div>
-          <Button onClick={() => createColumn()}>
-            <PlusIcon />
-            Add column
-          </Button>
         </div>
         {isMounted && createPortal(
           <DragOverlay>
@@ -209,8 +220,4 @@ export default function KanbanBoard({ className }: { className?: string }) {
       </DndContext>
     </div>
   )
-}
-
-function generateId(prefix: string) {
-  return `${prefix}-${Math.floor(Math.random() * 10_001)}`
 }

@@ -26,8 +26,10 @@ function AccountSettingsSkeleton() {
 }
 
 async function AccountSettings() {
-  const settings = await GetSettings();
-  const user = await GetMe();
+  const [settings, user] = await Promise.all([
+    GetSettings(),
+    GetMe()
+  ]);
 
   return (
     <div>
