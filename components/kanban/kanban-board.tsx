@@ -14,6 +14,8 @@ import { CreateBoardColumn } from "@/actions/boards/CreateBoardColumn";
 import { AppBoard } from "@/types/board";
 import { DeleteBoardColumn } from "@/actions/boards/DeleteBoardColumn";
 import { UpdateBoardColumn } from "@/actions/boards/UpdateBoardColumn";
+import { UpdateBoardColumns } from "@/actions/boards/UpdateBoardColumns";
+import { PlusIcon } from "lucide-react";
 
 export default function KanbanBoard({ className, board }: { className?: string, board: AppBoard }) {
   const [columns, setColumns] = useState<KanbanColumn[]>([]);
@@ -74,17 +76,16 @@ export default function KanbanBoard({ className, board }: { className?: string, 
     setColumns(newColumns);
   }, [board.id, columns])
 
-
-  function createTask(id: KanbanId) {
-    setTasks([
-      ...tasks,
-      {
-        id: generateId('task'),
-        columnId: id,
-        content: `Tasks ${tasks.length + 1}`
-      }
-    ])
-  }
+  // function createTask(id: KanbanId) {
+  //   setTasks([
+  //     ...tasks,
+  //     {
+  //       id: generateId('task'),
+  //       columnId: id,
+  //       content: `Tasks ${tasks.length + 1}`
+  //     }
+  //   ])
+  // }
 
   function deleteTask(id: KanbanId) {
     setTasks([
@@ -104,7 +105,7 @@ export default function KanbanBoard({ className, board }: { className?: string, 
     }
   }
 
-  function onDragEnd(event: DragEndEvent) {
+  const onDragEnd = useCallback((event: DragEndEvent) => {
     setActiveColumn(undefined)
     setActiveTask(undefined)
 
@@ -121,13 +122,14 @@ export default function KanbanBoard({ className, board }: { className?: string, 
     const isOverAColumn = over.data.current?.type === 'Column';
 
     if (isActiveAColumn && isOverAColumn) {
-      setColumns((columns) => {
-        const activeColumnIndex = columns.findIndex((col) => col.id === activeColumnId);
-        const overColumnIndex = columns.findIndex((col) => col.id === overColumnId);
-        return arrayMove(columns, activeColumnIndex, overColumnIndex);
-      })
+      const activeColumnIndex = columns.findIndex((col) => col.id === activeColumnId);
+      const overColumnIndex = columns.findIndex((col) => col.id === overColumnId);
+      const newColumns = arrayMove(columns, activeColumnIndex, overColumnIndex);
+
+      UpdateBoardColumns(board.id, newColumns)
+      setColumns(newColumns);
     }
-  }
+  }, [columns, board.id])
 
   function onDragOver(event: DragOverEvent) {
     const { active, over } = event;
@@ -170,54 +172,60 @@ export default function KanbanBoard({ className, board }: { className?: string, 
 
   return (
     <div className={cn("flex flex-col w-full justify-start overflow-x-auto overflow-y-hidden flex-grow gap-4", className)}>
-      <KanbanToolbar
-        createColumn={createColumn}
-      />
-      <DndContext
-        sensors={sensors}
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
-        onDragOver={onDragOver}
-      >
-        <div className="flex gap-4">
+      <KanbanToolbar />
+      <div className="flex justify-start gap-4 flex-grow w-full">
+        <DndContext
+          sensors={sensors}
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+          onDragOver={onDragOver}
+        >
           <div className="flex gap-4">
-            <SortableContext items={columnsIds}>
-              {columns.map((col) => (
+            <div className="flex gap-4">
+              <SortableContext items={columnsIds}>
+                {columns.map((col) => (
+                  <KanbanColumnContainer
+                    key={col.id}
+                    column={col}
+                    deleteColumn={deleteColumn}
+                    updateColumn={updateColumn}
+                    deleteTask={deleteTask}
+                    tasks={tasks.filter((task) => task.columnId === col.id)}
+                  />
+                ))}
+              </SortableContext>
+            </div>
+          </div>
+          {isMounted && createPortal(
+            <DragOverlay>
+              {activeColumn && (
                 <KanbanColumnContainer
-                  key={col.id}
-                  column={col}
+                  column={activeColumn}
                   deleteColumn={deleteColumn}
                   updateColumn={updateColumn}
-                  createTask={createTask}
                   deleteTask={deleteTask}
-                  tasks={tasks.filter((task) => task.columnId === col.id)}
+                  tasks={tasks.filter((task) => task.columnId === activeColumn.id)}
                 />
-              ))}
-            </SortableContext>
-          </div>
-        </div>
-        {isMounted && createPortal(
-          <DragOverlay>
-            {activeColumn && (
-              <KanbanColumnContainer
-                column={activeColumn}
-                deleteColumn={deleteColumn}
-                updateColumn={updateColumn}
-                createTask={createTask}
-                deleteTask={deleteTask}
-                tasks={tasks.filter((task) => task.columnId === activeColumn.id)}
-              />
-            )}
-            {activeTask && (
-              <KanbanTaskCard
-                task={activeTask}
-                deleteTask={deleteTask}
-              />
-            )}
-          </DragOverlay>,
-          document.body
-        )}
-      </DndContext>
+              )}
+              {activeTask && (
+                <KanbanTaskCard
+                  task={activeTask}
+                  deleteTask={deleteTask}
+                />
+              )}
+            </DragOverlay>,
+            document.body
+          )}
+        </DndContext>
+        <button
+          type="button"
+          title="Add column"
+          className="min-w-[350px] max-w-[350px] h-[500px] max-h-[500px] flex justify-center items-center bg-primary-foreground rounded-lg opacity-40 border-2 border-primary/20"
+          onClick={() => createColumn()}
+        >
+          <PlusIcon />
+        </button>
+      </div>
     </div>
   )
 }

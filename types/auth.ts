@@ -4,7 +4,7 @@ import { AppBoard } from "./board";
 
 export interface AppUser extends User {
   settings: AppSettings,
-  projectBoard: AppBoard
+  boards: AppBoard[]
 }
 
 export type AuthSafeUser = Omit<AppUser, 'password' | 'refreshToken'>;

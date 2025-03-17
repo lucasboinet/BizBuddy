@@ -1,11 +1,10 @@
-import { GetMe } from "@/actions/auth/GetMe";
-import { GetBoard } from "@/actions/boards/GetBoard";
 import { GetProjects } from "@/actions/projects/GetUserProjects";
-import KanbanBoard from "@/components/kanban/kanban-board";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle } from "lucide-react";
 import { Suspense } from "react";
+import ProjectsList from "./_components/projects-list";
+import ProjectsTimeline from "./_components/projects-timeline/projects-timeline";
 
 export default function ProjectsPage() {
   return (
@@ -31,12 +30,7 @@ function ProjectsSkeleton() {
 }
 
 async function Projects() {
-  const user = await GetMe();
-
-  const [board, projects] = await Promise.all([
-    GetBoard(user.projectBoard.id),
-    GetProjects()
-  ]);
+  const projects = await GetProjects();
 
   if (!projects) {
     return (
@@ -57,8 +51,13 @@ async function Projects() {
   // }
 
   return (
-    <div className="grid gap-4 h-full">
-      <KanbanBoard className="h-full" board={board!} />
+    <div className="grid grid-cols-12 h-full">
+      <div className="col-span-4 pr-6 border-r">
+        <ProjectsList projects={projects} />
+      </div>
+      <div className="col-span-8 pl-6 flex flex-grow">
+        <ProjectsTimeline projects={projects} />
+      </div>
     </div>
   )
 }

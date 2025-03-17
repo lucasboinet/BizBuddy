@@ -25,7 +25,7 @@ export async function GetMe(): Promise<AuthSafeUser> {
       createdAt: true,
       updatedAt: true,
       settings: true,
-      projectBoard: true,
+      boards: true,
     },
     where: {
       id: authSession.userId

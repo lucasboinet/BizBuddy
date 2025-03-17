@@ -2,9 +2,9 @@
 
 import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
-import { Project } from "@prisma/client";
+import { AppProject } from "@/types/projects";
 
-export async function GetProjects(): Promise<Project[]> {
+export async function GetProjects(): Promise<AppProject[]> {
   const session = await retrieveSession();
 
   if (!session?.sessionId) {
@@ -13,9 +13,12 @@ export async function GetProjects(): Promise<Project[]> {
 
   const projects = await prisma.project.findMany({
     where: {
-      accountId: session.userId
+      userId: session.userId
+    },
+    orderBy: {
+      createdAt: 'asc'
     }
-  });
+  }) as AppProject[];
 
   return projects;
 }

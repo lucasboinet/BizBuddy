@@ -1,16 +1,12 @@
 import { PlusIcon } from "lucide-react";
 import { Button } from "../ui/button";
 
-interface Props {
-  createColumn: () => void,
-}
-
-export default function KanbanToolbar({ createColumn }: Props) {
+export default function KanbanToolbar() {
   return (
     <div className="flex flex-row items-center gap-4">
-      <Button className="w-fit" onClick={() => createColumn()}>
+      <Button className="w-fit" size="sm">
         <PlusIcon />
-        Add column
+        Create project
       </Button>
     </div>
   )

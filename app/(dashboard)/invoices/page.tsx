@@ -47,13 +47,13 @@ async function Invoices() {
     )
   }
 
-  if (invoices.length === 0) {
-    return (
-      <div className='flex flex-col gap-4 h-full items-center'>
-        {JSON.stringify(invoices)}
-      </div>
-    )
-  }
+  // if (invoices.length === 0) {
+  //   return (
+  //     <div className='flex flex-col gap-4 h-full items-center'>
+  //       {JSON.stringify(invoices)}
+  //     </div>
+  //   )
+  // }
 
   return (
     <div>

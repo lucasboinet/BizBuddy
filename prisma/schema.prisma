@@ -19,12 +19,11 @@ model User {
   password     String
   refreshToken String?
 
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  sessions     Session[]
-  settings     Setting?
-  customers    Customer[]
-  projectBoard Board?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  sessions  Session[]
+  settings  Setting?
+  boards    Board[]
 }
 
 model Customer {
@@ -40,19 +39,18 @@ model Customer {
   updatedAt DateTime  @updatedAt
   projects  Project[]
   Invoices  Invoice[]
-
-  user User @relation(fields: [accountId], references: [id], onDelete: Cascade)
 }
 
 model Project {
   id   String @id @default(cuid())
   name String
 
-  accountId   String
+  userId      String    @default("")
   customerId  String
   status      String
   startedAt   DateTime?
   completedAt DateTime?
+  dueAt       DateTime  @default(now())
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

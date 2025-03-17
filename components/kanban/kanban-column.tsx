@@ -2,7 +2,7 @@
 
 import { KanbanColumn, KanbanId, KanbanTask } from "@/types/kanban"
 import { Button } from "../ui/button"
-import { PlusCircleIcon, TrashIcon } from "lucide-react"
+import { TrashIcon } from "lucide-react"
 import { SortableContext, useSortable } from "@dnd-kit/sortable"
 import { CSS } from '@dnd-kit/utilities'
 import { useMemo, useState } from "react"
@@ -13,12 +13,11 @@ interface Props {
   column: KanbanColumn,
   deleteColumn: (id: KanbanId) => void,
   updateColumn: (id: KanbanId, title: string) => void,
-  createTask: (id: KanbanId) => void,
   deleteTask: (id: KanbanId) => void,
   tasks: KanbanTask[],
 }
 
-export default function KanbanColumnContainer({ column, deleteColumn, updateColumn, createTask, deleteTask, tasks = [] }: Props) {
+export default function KanbanColumnContainer({ column, deleteColumn, updateColumn, deleteTask, tasks = [] }: Props) {
   const [editMode, setEditMode] = useState<boolean>(false);
   const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
     id: column.id,
@@ -98,14 +97,14 @@ export default function KanbanColumnContainer({ column, deleteColumn, updateColu
         </SortableContext>
       </div>
 
-      <Button
+      {/* <Button
         variant="ghost"
         className="border-t-2 rounded-t-none"
         onClick={() => createTask(column.id)}
       >
         <PlusCircleIcon />
         Add task
-      </Button>
+      </Button> */}
     </div >
   )
 }
