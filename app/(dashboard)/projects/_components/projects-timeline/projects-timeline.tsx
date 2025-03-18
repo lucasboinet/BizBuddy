@@ -102,7 +102,7 @@ export default function ProjectsTimeline({ projects }: Props) {
 
       for (let i = 0; i < projectsCopy.length; i++) {
         const project = projectsCopy[i];
-        if (lastEnd === null || project.createdAt >= lastEnd) {
+        if (lastEnd === null || project.createdAt > lastEnd) {
           row.push(project);
           lastEnd = new Date(project.completedAt || project.dueAt);
           projectsCopy.splice(i, 1);
@@ -213,8 +213,6 @@ export default function ProjectsTimeline({ projects }: Props) {
   return (
     <div className="w-full">
       <div className="relative flex flex-col h-full">
-        <span>{earliest.toDateString()}</span>
-        <span>{latest.toDateString()}</span>
         <div className="sticky top-0 z-20 bg-white mb-2 overflow-hidden">
           <div
             className="flex"

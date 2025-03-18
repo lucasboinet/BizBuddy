@@ -38,7 +38,7 @@ export default function ProjectStatus({ status }: Props) {
   const color = colors[status];
 
   return (
-    <div className={cn("flex items-center gap-1 text-xs font-semibold border rounded-md w-fit px-2 py-1", color.text, color.background, color.border)}>
+    <div className={cn("flex items-center gap-1 text-xs font-semibold border rounded-full w-fit px-2 pt-1 pb-1.5 leading-none", color.text, color.background, color.border)}>
       {capitalize(status)}
     </div>
   )

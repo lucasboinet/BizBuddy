@@ -4,7 +4,6 @@ import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
 import { KanbanColumn, KanbanId } from "@/types/kanban";
 import { Prisma } from "@prisma/client";
-import { redirect } from "next/navigation";
 
 export async function DeleteBoardColumn(boardId: string, columnId: KanbanId) {
   const authSession = await retrieveSession();
@@ -32,6 +31,4 @@ export async function DeleteBoardColumn(boardId: string, columnId: KanbanId) {
       columns: newColumns as Prisma.InputJsonValue,
     }
   })
-
-  redirect('/projects')
 }

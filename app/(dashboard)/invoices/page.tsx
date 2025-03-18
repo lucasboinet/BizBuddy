@@ -56,14 +56,17 @@ async function Invoices() {
   // }
 
   return (
-    <div>
-      <div className="flex justify-end mb-2">
+    <div className="h-full space-y-6">
+      <div className="flex items-center justify-start gap-5">
+        <h1 className="text-3xl font-semibold">Invoices</h1>
         <CreateInvoiceModal customers={customers} />
       </div>
-      <InvoicesTable
-        data={invoices}
-        columns={columns}
-      />
+      <div className="h-full border-t pt-4">
+        <InvoicesTable
+          data={invoices}
+          columns={columns}
+        />
+      </div>
     </div>
   )
 }

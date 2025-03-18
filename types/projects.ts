@@ -1,4 +1,5 @@
 import { Customer, Project } from "@prisma/client";
+import { AppBoard } from "./board";
 
 export enum PROJECT_STATUS {
   CREATED = 'CREATED',
@@ -11,4 +12,5 @@ export enum PROJECT_STATUS {
 export interface AppProject extends Project {
   customer?: Customer,
   status: PROJECT_STATUS,
+  board?: AppBoard,
 }

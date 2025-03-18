@@ -19,14 +19,15 @@ export async function CreateProject(form: CreateProjectSchemaType) {
     throw new Error('Invalid form data');
   }
 
-  await prisma.project.create({
+  const project = await prisma.project.create({
     data: {
       name: data.name,
-      accountId: session.userId,
-      customerId: data.customerId,
+      userId: session.userId,
+      dueAt: data.dueAt,
+      customerId: data.customer.id,
       status: PROJECT_STATUS.CREATED,
     }
   });
 
-  redirect("/projects");
+  redirect(`/projects/${project.id}`);
 }

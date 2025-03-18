@@ -171,9 +171,9 @@ export default function KanbanBoard({ className, board }: { className?: string, 
   }
 
   return (
-    <div className={cn("flex flex-col w-full justify-start overflow-x-auto overflow-y-hidden flex-grow gap-4", className)}>
+    <div className={cn("flex flex-col w-full justify-start overflow-x-auto max-w-full overflow-y-hidden gap-4", className)}>
       <KanbanToolbar />
-      <div className="flex justify-start gap-4 flex-grow w-full">
+      <div className="flex justify-start gap-4 w-full">
         <DndContext
           sensors={sensors}
           onDragStart={onDragStart}

@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import CustomerSelect from "./customer-select";
+import CustomerSelect from "../../../../components/customer-select";
 import { CalendarIcon, Loader2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";

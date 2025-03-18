@@ -4,7 +4,6 @@ import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
 import { KanbanColumn, KanbanId } from "@/types/kanban";
 import { Prisma } from "@prisma/client";
-import { redirect } from "next/navigation";
 
 export async function UpdateBoardColumn(boardId: string, columnId: KanbanId, title: string) {
   const authSession = await retrieveSession();
@@ -33,6 +32,4 @@ export async function UpdateBoardColumn(boardId: string, columnId: KanbanId, tit
       columns: newColumns as Prisma.InputJsonValue,
     }
   })
-
-  redirect('/projects')
 }

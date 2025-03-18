@@ -2,7 +2,6 @@ import { GetInvoice } from "@/actions/invoices/GetInvoice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { toast } from "sonner";
 import UpdateInvoiceForm from "../_components/update-invoice-form";
 import { GetCustomers } from "@/actions/customers/GetUserCustomers";
 
@@ -35,7 +34,6 @@ async function InvoiceDetails({ invoiceId }: { invoiceId: string }) {
 
 
   if (!invoice) {
-    toast.error("Can't find the invoice you are searching for")
     redirect('/invoices');
   }
 

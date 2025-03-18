@@ -9,7 +9,7 @@ import { createInvoiceSchema, CreateInvoiceSchemaType } from "@/schema/invoices"
 import { CreateInvoice } from "@/actions/invoices/CreateInvoice";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import CustomerSelect from "./customer-select";
+import CustomerSelect from "@/components/customer-select";
 import { CalendarIcon, Loader2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ItemSelect from "./items-select";
@@ -55,8 +55,8 @@ export default function CreateInvoiceForm({ customers }: { customers: AppCustome
   return (
     <div className="w-full">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-between h-full">
-          <div className="grid gap-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-between overflow-hidden h-[70vh]">
+          <div className="space-y-8 overflow-y-auto p-4">
             <div className="bg-primary-foreground p-4 rounded-md border">
               <span className="text-sm mb-2 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex gap-1 items-center">
                 Bill from

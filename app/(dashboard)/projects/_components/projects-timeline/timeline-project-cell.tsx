@@ -1,4 +1,3 @@
-import { getContrastColor, setHexLuminance, stringToColor } from "@/lib/helper/colors";
 import { AppProject } from "@/types/projects";
 import { format } from "date-fns";
 import { MouseEventHandler } from "react";
@@ -37,14 +36,11 @@ export default function TimelineProjectCell({ project, dayWidth, handleWidth, ge
   const leftPosition = activeDragStartDayIndex * dayWidth;
   const width = (activeDragEndDayIndex - activeDragStartDayIndex + 1) * dayWidth;
 
-
-  const color = stringToColor(project.id);
-  const backgroundColor = setHexLuminance(color, 0.4);
   return (
     <div
       className="absolute rounded-md p-2 h-16 overflow-hidden transition-all hover:shadow-md"
       style={{
-        backgroundColor,
+        backgroundColor: '#000',
         left: `${leftPosition}px`,
         width: `${width}px`,
         top: 0,
@@ -56,14 +52,14 @@ export default function TimelineProjectCell({ project, dayWidth, handleWidth, ge
     >
       {/* Drag handle for start date */}
       <div
-        className="absolute left-0 top-0 bottom-0 w-3 cursor-ew-resize hover:bg-black hover:bg-opacity-10 flex items-center justify-center"
+        className="absolute left-0 top-0 bottom-0 w-3 cursor-ew-resize hover:bg-white hover:bg-opacity-30 flex items-center justify-center"
         style={{ width: `${handleWidth}px` }}
         onMouseDown={handleDragStart(project.id, 'start', new Date(project.createdAt))}
       >
-        <div className="h-8 w-1 rounded-full opacity-60" style={{ background: getContrastColor(backgroundColor) }} />
+        <div className="h-8 w-1 rounded-full opacity-60" style={{ background: '#fff' }} />
       </div>
 
-      <div className="flex-1 px-4 overflow-hidden whitespace-nowrap" style={{ color: getContrastColor(backgroundColor) }}>
+      <div className="flex-1 px-4 overflow-hidden whitespace-nowrap" style={{ color: '#fff' }}>
         <div className="text-sm font-medium truncate">{project.name}</div>
         <div className="text-xs mt-1">
           {formatDateRange(project.createdAt, project.completedAt || project.dueAt)}
@@ -72,11 +68,11 @@ export default function TimelineProjectCell({ project, dayWidth, handleWidth, ge
 
       {/* Drag handle for end date */}
       <div
-        className="absolute right-0 top-0 bottom-0 w-3 cursor-ew-resize hover:bg-black hover:bg-opacity-10 flex items-center justify-center"
+        className="absolute right-0 top-0 bottom-0 w-3 cursor-ew-resize hover:bg-white hover:bg-opacity-30 flex items-center justify-center"
         style={{ width: `${handleWidth}px` }}
         onMouseDown={handleDragStart(project.id, 'end', new Date(project.completedAt || project.dueAt))}
       >
-        <div className="h-8 w-1 rounded-full opacity-60" style={{ background: getContrastColor(color) }} />
+        <div className="h-8 w-1 rounded-full opacity-60" style={{ background: '#fff' }} />
       </div>
     </div>
   )

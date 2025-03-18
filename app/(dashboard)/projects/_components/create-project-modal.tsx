@@ -7,23 +7,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import CreateInvoiceForm from "./create-invoice-form"
+import CreateProjectForm from "./create-project-form"
 import { AppCustomer } from "@/types/customers"
 
-export function CreateInvoiceModal({ customers }: { customers: AppCustomer[] }) {
+export function CreateProjectModal({ customers }: { customers: AppCustomer[] }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="sm" className="text-xs">Create invoice</Button>
+        <Button size="sm" className="text-xs">Create project</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[50%]">
         <DialogHeader>
-          <DialogTitle>Create Invoice</DialogTitle>
+          <DialogTitle>Create Project</DialogTitle>
           <DialogDescription>
-            Start creating a new invoice. Click create when you&apos;re done.
+            Start creating a new project. Click create when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <CreateInvoiceForm customers={customers} />
+        <div className="p-4 overflow-auto">
+          <CreateProjectForm customers={customers} />
+        </div>
       </DialogContent>
     </Dialog>
   )

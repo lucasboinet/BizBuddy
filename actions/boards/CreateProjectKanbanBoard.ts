@@ -3,8 +3,9 @@
 import { generateId } from "@/lib/boards";
 import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
+import { redirect } from "next/navigation";
 
-export async function CreateProjectsKanbanBoard(userId: string) {
+export async function CreateProjectKanbanBoard(projectId: string) {
   const authSession = await retrieveSession();
   const sessionId = authSession?.sessionId as string;
 
@@ -12,13 +13,10 @@ export async function CreateProjectsKanbanBoard(userId: string) {
     throw new Error('Unauthorized');
   }
 
-  if (authSession?.userId !== userId) {
-    throw new Error('Unauthorized');
-  }
-
   await prisma.board.create({
     data: {
-      userId,
+      userId: authSession.userId,
+      projectId,
       columns: [
         { id: generateId('column'), title: "Not started" },
         { id: generateId('column'), title: "In progress" },
@@ -27,4 +25,6 @@ export async function CreateProjectsKanbanBoard(userId: string) {
       ]
     }
   })
+
+  redirect(`/projects/${projectId}`)
 }

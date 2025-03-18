@@ -14,6 +14,9 @@ export async function GetInvoice(invoiceId: string): Promise<AppInvoice | null> 
   const invoice = await prisma.invoice.findUnique({
     where: {
       id: invoiceId,
+      customer: {
+        accountId: session.userId
+      }
     },
     include: {
       customer: true,

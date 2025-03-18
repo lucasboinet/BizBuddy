@@ -5,7 +5,6 @@ import { userSignUpSchema, UserSignUpSchemaType } from "@/schema/auth";
 import { redirect } from "next/navigation";
 import bcrypt from 'bcrypt';
 import { CreateSession } from "../sessions/CreateSession";
-// import { CreateProjectsKanbanBoard } from "../boards/CreateProjectsKanbanBoard";
 
 export async function UserSignUp(form: UserSignUpSchemaType) {
   const { success, data } = userSignUpSchema.safeParse(form);
@@ -38,8 +37,6 @@ export async function UserSignUp(form: UserSignUpSchemaType) {
   });
 
   await CreateSession(user.id);
-
-  // await CreateProjectsKanbanBoard(user.id);
 
   redirect(`/`);
 }

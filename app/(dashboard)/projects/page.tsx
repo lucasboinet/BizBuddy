@@ -5,6 +5,8 @@ import { AlertCircle } from "lucide-react";
 import { Suspense } from "react";
 import ProjectsList from "./_components/projects-list";
 import ProjectsTimeline from "./_components/projects-timeline/projects-timeline";
+import { GetCustomers } from "@/actions/customers/GetUserCustomers";
+import { CreateProjectModal } from "./_components/create-project-modal";
 
 export default function ProjectsPage() {
   return (
@@ -30,7 +32,10 @@ function ProjectsSkeleton() {
 }
 
 async function Projects() {
-  const projects = await GetProjects();
+  const [projects, customers] = await Promise.all([
+    GetProjects(),
+    GetCustomers()
+  ]);
 
   if (!projects) {
     return (
@@ -42,21 +47,21 @@ async function Projects() {
     )
   }
 
-  // if (projects.length === 0) {
-  //   return (
-  //     <div className='flex flex-col gap-4 h-full items-center'>
-  //       {JSON.stringify(projects)}
-  //     </div>
-  //   )
-  // }
+  const timelineProjects = projects.filter((project) => !!project.completedAt || !!project.dueAt);
 
   return (
-    <div className="grid grid-cols-12 h-full">
-      <div className="col-span-4 pr-6 border-r">
-        <ProjectsList projects={projects} />
+    <div className="h-full space-y-6">
+      <div className="flex items-center justify-start gap-5">
+        <h1 className="text-3xl font-semibold">Projects</h1>
+        <CreateProjectModal customers={customers} />
       </div>
-      <div className="col-span-8 pl-6 flex flex-grow">
-        <ProjectsTimeline projects={projects} />
+      <div className="grid grid-cols-12 h-full border-t pt-4">
+        <div className="col-span-4 pr-6 border-r">
+          <ProjectsList projects={projects} />
+        </div>
+        <div className="col-span-8 pl-6 flex flex-grow">
+          <ProjectsTimeline projects={timelineProjects} />
+        </div>
       </div>
     </div>
   )

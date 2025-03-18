@@ -3,7 +3,6 @@
 import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
 import { KanbanColumn } from "@/types/kanban";
-import { redirect } from "next/navigation";
 
 export async function UpdateBoardColumns(boardId: string, columns: KanbanColumn[]) {
   const authSession = await retrieveSession();
@@ -21,6 +20,4 @@ export async function UpdateBoardColumns(boardId: string, columns: KanbanColumn[
       columns,
     }
   })
-
-  redirect('/projects')
 }
