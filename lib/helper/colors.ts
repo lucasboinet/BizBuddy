@@ -29,3 +29,14 @@ export function setHexLuminance(hex: string, lum: number = 0) {
 
 	return rgb;
 }
+
+export function getContrastColor(hexColor: string) {
+  hexColor = hexColor.replace('#', '');
+
+  const red = parseInt(hexColor.substring(0, 2), 16) / 255;
+  const green = parseInt(hexColor.substring(2, 4), 16) / 255;
+  const blue = parseInt(hexColor.substring(4, 6), 16) / 255;
+  const luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+
+  return luminance > 0.480 ? 'black' : 'white';
+}
