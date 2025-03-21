@@ -1,14 +1,13 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { KanbanColumn, KanbanId, KanbanTask } from "@/types/kanban";
+import { KanbanColumn } from "@/types/kanban";
 import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import { createPortal } from "react-dom";
 import KanbanColumnContainer from "./kanban-column";
 import { cn } from "@/lib/utils";
 import KanbanTaskCard from "./kanban-task-card";
-import KanbanToolbar from "./kanban-toolbar";
 import { generateId } from "@/lib/boards";
 import { CreateBoardColumn } from "@/actions/boards/CreateBoardColumn";
 import { AppBoard } from "@/types/board";
@@ -16,19 +15,22 @@ import { DeleteBoardColumn } from "@/actions/boards/DeleteBoardColumn";
 import { UpdateBoardColumn } from "@/actions/boards/UpdateBoardColumn";
 import { UpdateBoardColumns } from "@/actions/boards/UpdateBoardColumns";
 import { PlusIcon } from "lucide-react";
+import KanbanToolbar from "./kanban-toolbar";
+import { AppTask } from "@/types/tasks";
 
 export default function KanbanBoard({ className, board }: { className?: string, board: AppBoard }) {
   const [columns, setColumns] = useState<KanbanColumn[]>([]);
   const [activeColumn, setActiveColumn] = useState<KanbanColumn | undefined>(undefined);
-  const [activeTask, setActiveTask] = useState<KanbanTask | undefined>(undefined);
+  const [activeTask, setActiveTask] = useState<AppTask | undefined>(undefined);
   const columnsIds = useMemo(() => columns.map((col) => col.id), [columns]);
   const [isMounted, setIsMounted] = useState(false);
-  const [tasks, setTasks] = useState<KanbanTask[]>([{ id: 'task-1', columnId: 'column-1', content: "Task 1" }, { id: 'task-2', columnId: 'column-1', content: "Task 2" }]);
+  const [tasks, setTasks] = useState<AppTask[]>([]);
 
   useEffect(() => {
     setColumns(board.columns);
+    setTasks(board.tasks || []);
     setIsMounted(true);
-  }, [board.columns])
+  }, [board.columns, board.tasks])
 
   const sensors = useSensors(useSensor(
     PointerSensor,
@@ -53,7 +55,7 @@ export default function KanbanBoard({ className, board }: { className?: string, 
     ])
   }, [board.id, columns])
 
-  const deleteColumn = useCallback((id: KanbanId) => {
+  const deleteColumn = useCallback((id: string) => {
     DeleteBoardColumn(board.id, id);
 
     setColumns([
@@ -65,7 +67,7 @@ export default function KanbanBoard({ className, board }: { className?: string, 
     ])
   }, [board.id, columns, tasks])
 
-  const updateColumn = useCallback((id: KanbanId, title: string) => {
+  const updateColumn = useCallback((id: string, title: string) => {
     const newColumns = columns.map((col) => {
       if (col.id !== id) return col;
       return { ...col, title }
@@ -76,7 +78,7 @@ export default function KanbanBoard({ className, board }: { className?: string, 
     setColumns(newColumns);
   }, [board.id, columns])
 
-  // function createTask(id: KanbanId) {
+  // function createTask(id: string) {
   //   setTasks([
   //     ...tasks,
   //     {
@@ -87,10 +89,21 @@ export default function KanbanBoard({ className, board }: { className?: string, 
   //   ])
   // }
 
-  function deleteTask(id: KanbanId) {
+  function deleteTask(id: string) {
     setTasks([
       ...tasks.filter((task) => task.id !== id),
     ])
+  }
+
+  function updateTask(id: string, changes: Partial<AppTask>) {
+    const newTasks = tasks.map((task) => {
+      if (task.id !== id) return task;
+      return { ...task, ...changes }
+    });
+
+    UpdateBoardTask(id, changes);
+
+    setTasks(newTasks);
   }
 
   function onDragStart(event: DragStartEvent) {
@@ -163,7 +176,7 @@ export default function KanbanBoard({ className, board }: { className?: string, 
       setTasks((tasks) => {
         const activeTaskIndex = tasks.findIndex((task) => task.id === activeTaskId);
 
-        tasks[activeTaskIndex].columnId = overTaskId;
+        tasks[activeTaskIndex].columnId = overTaskId as string;
 
         return arrayMove(tasks, activeTaskIndex, activeTaskIndex);
       })
@@ -171,60 +184,64 @@ export default function KanbanBoard({ className, board }: { className?: string, 
   }
 
   return (
-    <div className={cn("flex flex-col w-full justify-start overflow-x-auto max-w-full overflow-y-hidden gap-4", className)}>
+    <div className={cn("flex flex-col w-full h-[550px] justify-start gap-4", className)}>
       <KanbanToolbar />
-      <div className="flex justify-start gap-4 w-full">
-        <DndContext
-          sensors={sensors}
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-          onDragOver={onDragOver}
-        >
-          <div className="flex gap-4">
-            <div className="flex gap-4">
-              <SortableContext items={columnsIds}>
-                {columns.map((col) => (
-                  <KanbanColumnContainer
-                    key={col.id}
-                    column={col}
-                    deleteColumn={deleteColumn}
-                    updateColumn={updateColumn}
-                    deleteTask={deleteTask}
-                    tasks={tasks.filter((task) => task.columnId === col.id)}
-                  />
-                ))}
-              </SortableContext>
-            </div>
+      <div className="flex-1 relative">
+        <div className="absolute inset-0 overflow-x-auto">
+          <div className="inline-flex gap-4 h-full pb-4">
+            <DndContext
+              sensors={sensors}
+              onDragStart={onDragStart}
+              onDragEnd={onDragEnd}
+              onDragOver={onDragOver}
+            >
+              <div className="inline-flex gap-4">
+                <SortableContext items={columnsIds}>
+                  {columns.map((col) => (
+                    <KanbanColumnContainer
+                      key={col.id}
+                      column={col}
+                      deleteColumn={deleteColumn}
+                      updateColumn={updateColumn}
+                      deleteTask={deleteTask}
+                      tasks={tasks.filter((task) => task.columnId === col.id)}
+                    />
+                  ))}
+                </SortableContext>
+              </div>
+
+              <button
+                type="button"
+                title="Add column"
+                className="min-w-[350px] max-w-[350px] h-[500px] max-h-[500px] flex justify-center items-center bg-primary-foreground rounded-lg opacity-40 border-2 border-primary/20"
+                onClick={() => createColumn()}
+              >
+                <PlusIcon />
+              </button>
+
+              {isMounted && createPortal(
+                <DragOverlay>
+                  {activeColumn && (
+                    <KanbanColumnContainer
+                      column={activeColumn}
+                      deleteColumn={deleteColumn}
+                      updateColumn={updateColumn}
+                      deleteTask={deleteTask}
+                      tasks={tasks.filter((task) => task.columnId === activeColumn.id)}
+                    />
+                  )}
+                  {activeTask && (
+                    <KanbanTaskCard
+                      task={activeTask}
+                      deleteTask={deleteTask}
+                    />
+                  )}
+                </DragOverlay>,
+                document.body
+              )}
+            </DndContext>
           </div>
-          {isMounted && createPortal(
-            <DragOverlay>
-              {activeColumn && (
-                <KanbanColumnContainer
-                  column={activeColumn}
-                  deleteColumn={deleteColumn}
-                  updateColumn={updateColumn}
-                  deleteTask={deleteTask}
-                  tasks={tasks.filter((task) => task.columnId === activeColumn.id)}
-                />
-              )}
-              {activeTask && (
-                <KanbanTaskCard
-                  task={activeTask}
-                  deleteTask={deleteTask}
-                />
-              )}
-            </DragOverlay>,
-            document.body
-          )}
-        </DndContext>
-        <button
-          type="button"
-          title="Add column"
-          className="min-w-[350px] max-w-[350px] h-[500px] max-h-[500px] flex justify-center items-center bg-primary-foreground rounded-lg opacity-40 border-2 border-primary/20"
-          onClick={() => createColumn()}
-        >
-          <PlusIcon />
-        </button>
+        </div>
       </div>
     </div>
   )

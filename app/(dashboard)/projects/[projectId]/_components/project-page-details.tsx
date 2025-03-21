@@ -11,18 +11,19 @@ import { Button } from "@/components/ui/button"
 import { Loader2Icon } from "lucide-react"
 import { CreateProjectKanbanBoard } from "@/actions/boards/CreateProjectKanbanBoard"
 import { toast } from "sonner"
+import ProjectDetailsActions from "./project-details-actions"
 
 interface Props {
   project: AppProject,
 }
 
 export default function ProjectPageDetails({ project }: Props) {
-  const [tab, setTab] = useState('tasks');
+  const [tab, setTab] = useState('infos');
   const [isPending, setIsPending] = useState(false);
 
   const tabs = [
     { name: 'Infos', key: 'infos' },
-    { name: 'Tasks', key: 'tasks', count: 3 },
+    { name: 'Tasks', key: 'tasks', count: project.board?.tasks?.length || 0 },
   ]
 
   async function handleCreateBoard() {
@@ -39,22 +40,26 @@ export default function ProjectPageDetails({ project }: Props) {
 
   return (
     <div className="h-full space-y-6">
-      <div className="flex gap-3 justify-start items-center">
-        <span className="size-20 bg-secondary border rounded-md"></span>
+      <div className="flex justify-between gap-1">
+        <div className="flex gap-3 justify-start items-center">
+          <span className="size-20 bg-secondary border rounded-md"></span>
 
-        <div className="flex flex-col gap-2 justify-between items-start">
-          <h1 className="text-3xl font-semibold">{project.name}</h1>
-          <div className="flex items-center gap-2">
-            <ProjectStatus status={project.status} />
-            <span className="text-sm">{project.customer?.name}</span>
+          <div className="flex flex-col gap-2 justify-between items-start">
+            <h1 className="text-3xl font-semibold">{project.name}</h1>
+            <div className="flex items-center gap-2">
+              <ProjectStatus status={project.status} />
+              <span className="text-sm">{project.customer?.name}</span>
+            </div>
           </div>
         </div>
+
+        <ProjectDetailsActions project={project} />
       </div>
 
       <Tabs
         value={tab}
         onValueChange={setTab}
-        className="w-full h-full"
+        className="h-full"
       >
         <TabsList className="w-full p-0 bg-background justify-start border-b rounded-none gap-1">
           {tabs.map((tab) => (

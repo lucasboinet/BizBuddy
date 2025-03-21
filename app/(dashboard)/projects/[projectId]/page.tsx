@@ -2,7 +2,6 @@ import { GetProject } from "@/actions/projects/GetProject";
 import { Skeleton } from "@/components/ui/skeleton";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { GetCustomers } from "@/actions/customers/GetUserCustomers";
 import ProjectPageDetails from "./_components/project-page-details";
 
 export default function ProjectPage({ params }: { params: { projectId: string } }) {
@@ -27,10 +26,7 @@ function ProjectSkeleton() {
 }
 
 async function ProjectDetails({ projectId }: { projectId: string }) {
-  const [project, customers] = await Promise.all([
-    GetProject(projectId),
-    GetCustomers()
-  ]);
+  const project = await GetProject(projectId);
 
   if (!project) {
     redirect('/projects');

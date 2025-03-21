@@ -1,36 +1,30 @@
-import { capitalize } from "@/lib/helper/texts"
 import { cn } from "@/lib/utils"
-import { PROJECT_STATUS } from "@/types/projects"
+import { PROJECT_STATUS, projectStatusLabels } from "@/types/projects"
 
 interface Props {
   status: PROJECT_STATUS
 }
 
-const colors: Record<PROJECT_STATUS, { text: string, border: string, background: string }> = {
+const colors: Record<PROJECT_STATUS, { text: string, background: string }> = {
   CREATED: {
-    text: 'text-red-600',
-    border: 'border-red-400',
-    background: 'bg-red-200'
+    text: 'text-red-800',
+    background: 'bg-red-100'
   },
   IN_PROGRESS: {
-    text: 'text-orange-600',
-    border: 'border-orange-400',
-    background: 'bg-orange-200'
+    text: 'text-orange-800',
+    background: 'bg-orange-100'
   },
   WAITING_FOR_APPROVAL: {
-    text: 'text-cyan-600',
-    border: 'border-cyan-400',
-    background: 'bg-cyan-200'
+    text: 'text-cyan-800',
+    background: 'bg-cyan-100'
   },
   WAITING_FOR_QUOTATION_SIGNATURE: {
-    text: 'text-violet-600',
-    border: 'border-violet-400',
-    background: 'bg-violet-200'
+    text: 'text-violet-800',
+    background: 'bg-violet-100'
   },
   COMPLETED: {
-    text: 'text-green-600',
-    border: 'border-green-400',
-    background: 'bg-green-200'
+    text: 'text-green-800',
+    background: 'bg-green-100'
   },
 }
 
@@ -38,8 +32,8 @@ export default function ProjectStatus({ status }: Props) {
   const color = colors[status];
 
   return (
-    <div className={cn("flex items-center gap-1 text-xs font-semibold border rounded-full w-fit px-2 pt-1 pb-1.5 leading-none", color.text, color.background, color.border)}>
-      {capitalize(status)}
-    </div>
+    <span className={cn("px-2 py-1 text-xs font-medium rounded-full", color.text, color.background)}>
+      {projectStatusLabels[status]}
+    </span>
   )
 }

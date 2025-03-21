@@ -2,10 +2,10 @@
 
 import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
-import { KanbanColumn, KanbanId } from "@/types/kanban";
+import { KanbanColumn } from "@/types/kanban";
 import { Prisma } from "@prisma/client";
 
-export async function DeleteBoardColumn(boardId: string, columnId: KanbanId) {
+export async function DeleteBoardColumn(boardId: string, columnId: string) {
   const authSession = await retrieveSession();
   const sessionId = authSession?.sessionId as string;
 

@@ -18,9 +18,13 @@ export async function GetProject(projectId: string): Promise<AppProject | null> 
     },
     include: {
       customer: true,
-      board: true,
+      board: {
+        include: {
+          tasks: true,
+        }
+      }
     }
-  }) as AppProject;
+  });
 
-  return project;
+  return (project as unknown) as AppProject;
 }

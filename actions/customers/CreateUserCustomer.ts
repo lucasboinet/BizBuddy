@@ -22,12 +22,12 @@ export async function CreateCustomer(form: CreateCustomerSchemaType) {
     data: {
       name: data.name,
       email: data.email,
-      phone: data.phone,
+      phone: data.phone?.replaceAll(' ', ''),
       address: data.address,
-      siret: data.siret,
-      accountId: data.accountId
+      siret: data.siret.replaceAll(' ', ''),
+      accountId: session.userId
     }
   });
 
-  redirect("/projects");
+  redirect("/customers");
 }

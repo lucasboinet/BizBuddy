@@ -1,11 +1,13 @@
 'use client'
 
-import { AppProject, PROJECT_STATUS } from "@/types/projects";
+import { AppProject, PROJECT_STATUS, projectStatusLabels } from "@/types/projects";
 import ProjectCard from "./project-card";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { useMemo, useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select } from "@/components/ui/select";
+import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Props {
   projects: AppProject[]
@@ -25,14 +27,22 @@ export default function ProjectsList({ projects }: Props) {
 
   return (
     <div className="space-y-5">
-      <Tabs value={status} onValueChange={setStatus}>
-        <TabsList className="grid w-full grid-cols-4 text-sm">
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value={PROJECT_STATUS.CREATED}>Created</TabsTrigger>
-          <TabsTrigger value={PROJECT_STATUS.IN_PROGRESS}>In progress</TabsTrigger>
-          <TabsTrigger value={PROJECT_STATUS.COMPLETED}>Completed</TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <Select value={status} onValueChange={setStatus}>
+        <SelectTrigger>
+          <SelectValue placeholder="Select a status" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All status</SelectItem>
+          {Object.keys(projectStatusLabels).map((statusKey) => (
+            <SelectItem
+              key={statusKey}
+              value={statusKey as string}>
+              {projectStatusLabels[statusKey as PROJECT_STATUS]}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
       <Input
         value={search}
         onChange={(e) => setSearch(e.target.value)}

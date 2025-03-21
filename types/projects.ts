@@ -14,3 +14,11 @@ export interface AppProject extends Project {
   status: PROJECT_STATUS,
   board?: AppBoard,
 }
+
+export const projectStatusLabels: Record<PROJECT_STATUS, string> = {
+  CREATED: 'Created',
+  IN_PROGRESS: 'In Progress',
+  WAITING_FOR_APPROVAL: 'Waiting for Approval',
+  WAITING_FOR_QUOTATION_SIGNATURE: 'Waiting for Quotation Signature',
+  COMPLETED: 'Completed',
+}

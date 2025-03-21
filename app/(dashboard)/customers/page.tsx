@@ -4,6 +4,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Customer } from "@prisma/client";
 import { AlertCircle } from "lucide-react";
 import { Suspense } from "react";
+import CreateCustomerModal from "./_components/create-customer-modal";
+import CustomerCard from "./_components/customer-card";
 
 export default function CustomersPage() {
   return (
@@ -50,10 +52,17 @@ async function Customers() {
   }
 
   return (
-    <div className="grid grid-cols 1 gap-4">
-      {customers.map((customer: Customer) => (
-        <p key={customer.id}>{JSON.stringify(customer)}</p>
-      ))}
+    <div className="h-full space-y-6">
+      <div className="flex items-center justify-start gap-5">
+        <h1 className="text-3xl font-semibold">Customers</h1>
+        <CreateCustomerModal />
+      </div>
+
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
+        {customers.map((customer) => (
+          <CustomerCard key={customer.id} customer={customer} />
+        ))}
+      </div>
     </div>
   )
 }

@@ -2,10 +2,10 @@
 
 import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
-import { KanbanColumn, KanbanId } from "@/types/kanban";
+import { KanbanColumn } from "@/types/kanban";
 import { Prisma } from "@prisma/client";
 
-export async function UpdateBoardColumn(boardId: string, columnId: KanbanId, title: string) {
+export async function UpdateBoardColumn(boardId: string, columnId: string, title: string) {
   const authSession = await retrieveSession();
   const sessionId = authSession?.sessionId as string;
 

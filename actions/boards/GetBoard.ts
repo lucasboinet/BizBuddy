@@ -15,12 +15,15 @@ export async function GetBoard(boardId: string): Promise<AppBoard | undefined> {
   const board = await prisma.board.findUnique({
     where: {
       id: boardId
+    },
+    include: {
+      tasks: true
     }
-  }) as AppBoard;
+  });
 
   if (authSession?.userId !== board?.userId) {
-    throw new Error('Unauthorized');
+    throw new Error('Not found');
   }
 
-  return board;
+  return (board as unknown) as AppBoard;
 }

@@ -1,45 +1,48 @@
 'use client'
 
 import { AppProject } from "@/types/projects"
-import { format } from "date-fns";
-import { Calendar } from "lucide-react";
+import { Calendar, CheckCircle, ChevronRight, Clock } from "lucide-react";
 import ProjectStatus from "./project-status";
-import { Separator } from "@/components/ui/separator";
-import CircularProgressBar from "@/components/ui/circular-progress-bar";
 
 interface Props {
   project: AppProject;
 }
 
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+};
+
 export default function ProjectCard({ project }: Props) {
   return (
-    <div className="flex w-full flex-col gap-3 border rounded-md p-3 hover:shadow transition-shadow">
-      <div className="flex flex-col gap-2">
-        <h4 className="font-semibold">{project.name}</h4>
-        <ProjectStatus status={project.status} />
+    <div key={project.id} className="border border-gray-200 rounded-lg p-5 hover:shadow-md transition-shadow">
+      <div className="flex justify-between items-start mb-3">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800">{project.name}</h3>
+          <p className="text-sm text-gray-600">Client: {project.customer?.name}</p>
+          <p className="text-xs text-gray-500 mt-1">{project.id}</p>
+        </div>
+        <div className="flex items-center space-x-3">
+          <ProjectStatus status={project.status} />
+          <ChevronRight className="w-5 h-5 text-gray-400" />
+        </div>
       </div>
-
-      <Separator />
-
-      <div className="flex flex-row justify-between items-center gap-1 text-sm">
-        <div className="flex items-center gap-3 text-gray-600 dark:text-gray-200">
-          <div className="flex items-center gap-1">
-            <Calendar size={15} />
-            {format(project.createdAt, 'dd.MM.yyy')}
-          </div>
+      <div className="mt-4 flex items-center text-sm text-gray-500">
+        <div className="flex items-center">
+          <Calendar className="w-4 h-4 mr-1 text-gray-400" />
+          <span>Created: {formatDate(project.createdAt)}</span>
         </div>
-
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1">
-            <CircularProgressBar
-              percentage={63}
-              size={16}
-              color="rgb(79 70 229)"
-              backgroundColor="rgba(0, 0, 0, 0.1)"
-            />
-            <span>3/4</span>
+        <div className="mx-3 text-gray-300">•</div>
+        {project.completedAt ? (
+          <div className="flex items-center">
+            <CheckCircle className="w-4 h-4 mr-1 text-green-500" />
+            <span>Completed: {formatDate(project.completedAt)}</span>
           </div>
-        </div>
+        ) : (
+          <div className="flex items-center">
+            <Clock className="w-4 h-4 mr-1 text-blue-500" />
+            <span>Due: {formatDate(project.dueAt)}</span>
+          </div>
+        )}
       </div>
     </div>
   )

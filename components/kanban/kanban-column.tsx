@@ -1,6 +1,6 @@
 'use client'
 
-import { KanbanColumn, KanbanId, KanbanTask } from "@/types/kanban"
+import { KanbanColumn } from "@/types/kanban"
 import { Button } from "../ui/button"
 import { TrashIcon } from "lucide-react"
 import { SortableContext, useSortable } from "@dnd-kit/sortable"
@@ -8,13 +8,14 @@ import { CSS } from '@dnd-kit/utilities'
 import { useMemo, useState } from "react"
 import { Input } from "../ui/input"
 import KanbanTaskCard from "./kanban-task-card"
+import { AppTask } from "@/types/tasks"
 
 interface Props {
   column: KanbanColumn,
-  deleteColumn: (id: KanbanId) => void,
-  updateColumn: (id: KanbanId, title: string) => void,
-  deleteTask: (id: KanbanId) => void,
-  tasks: KanbanTask[],
+  deleteColumn: (id: string) => void,
+  updateColumn: (id: string, title: string) => void,
+  deleteTask: (id: string) => void,
+  tasks: AppTask[],
 }
 
 export default function KanbanColumnContainer({ column, deleteColumn, updateColumn, deleteTask, tasks = [] }: Props) {
