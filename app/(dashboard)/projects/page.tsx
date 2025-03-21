@@ -5,7 +5,7 @@ import { AlertCircle } from "lucide-react";
 import { Suspense } from "react";
 import ProjectsList from "./_components/projects-list";
 import ProjectsTimeline from "./_components/projects-timeline/projects-timeline";
-import { GetCustomers } from "@/actions/customers/GetUserCustomers";
+import { GetCustomers } from "@/actions/customers/GetCustomers";
 import { CreateProjectModal } from "./_components/create-project-modal";
 
 export default function ProjectsPage() {

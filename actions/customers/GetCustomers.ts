@@ -14,7 +14,7 @@ export async function GetCustomers(): Promise<AppCustomer[]> {
   const customers = await prisma.customer.findMany({
     where: {
       accountId: session.userId
-    }
+    },
   }) as AppCustomer[];
 
   return customers;

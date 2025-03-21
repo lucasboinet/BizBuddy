@@ -1,7 +1,6 @@
-import { GetCustomers } from "@/actions/customers/GetUserCustomers";
+import { GetCustomers } from "@/actions/customers/GetCustomers";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Customer } from "@prisma/client";
 import { AlertCircle } from "lucide-react";
 import { Suspense } from "react";
 import CreateCustomerModal from "./_components/create-customer-modal";

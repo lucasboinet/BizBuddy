@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { InvoicesTable } from "./_components/invoices-table/invoices-table";
 import { columns } from "./_components/invoices-table/columns";
 import { CreateInvoiceModal } from "./_components/create-invoice-modal";
-import { GetCustomers } from "@/actions/customers/GetUserCustomers";
+import { GetCustomers } from "@/actions/customers/GetCustomers";
 import InvoicesStats from "./_components/invoices-stats";
 
 export default function InvoicesPage() {

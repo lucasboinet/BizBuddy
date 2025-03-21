@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import UpdateInvoiceForm from "../_components/update-invoice-form";
-import { GetCustomers } from "@/actions/customers/GetUserCustomers";
+import { GetCustomers } from "@/actions/customers/GetCustomers";
 
 export default function InvoicePage({ params }: { params: { invoiceId: string } }) {
   return (
