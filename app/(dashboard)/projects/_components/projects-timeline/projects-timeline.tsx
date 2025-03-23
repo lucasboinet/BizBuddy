@@ -4,7 +4,7 @@ import { useRef, useCallback, useState, useEffect } from 'react';
 import { AppProject } from '@/types/projects';
 import { addDays, differenceInDays, format, subDays } from 'date-fns';
 import TimelineProjectCell from './timeline-project-cell';
-import { UpdateTimelineProject } from '@/actions/projects/UpdateTimelineProject';
+import { UpdateProject } from '@/actions/projects/UpdateProject';
 
 interface Props {
   projects: AppProject[]
@@ -198,7 +198,7 @@ export default function ProjectsTimeline({ projects }: Props) {
       const projectIndex = internalProjects.findIndex((p) => p.id === project.id);
 
       try {
-        UpdateTimelineProject(project.id, changes);
+        UpdateProject(project.id, changes);
         internalProjects[projectIndex] = { ...project, ...changes };
       } catch {
         internalProjects[projectIndex] = { ...project };

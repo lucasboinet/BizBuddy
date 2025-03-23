@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { CreateCustomer } from "@/actions/customers/CreateUserCustomer";
+import { CreateCustomer } from "@/actions/customers/CreateCustomer";
 import { createCustomerSchema, CreateCustomerSchemaType } from "@/schema/customers";
 import { Loader2Icon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";

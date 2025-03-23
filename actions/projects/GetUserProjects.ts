@@ -15,6 +15,9 @@ export async function GetProjects(): Promise<AppProject[]> {
     where: {
       userId: session.userId
     },
+    include: {
+      customer: true,
+    },
     orderBy: {
       createdAt: 'asc'
     }

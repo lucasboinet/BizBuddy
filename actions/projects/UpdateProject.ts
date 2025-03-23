@@ -5,10 +5,20 @@ import { retrieveSession } from "@/lib/sessions";
 import { Project } from "@prisma/client";
 import { redirect } from "next/navigation";
 
-export async function UpdateTimelineProject(projectId: string, changes: Partial<Project>) {
+export async function UpdateProject(projectId: string, changes: Partial<Project>, path: string = "/projects") {
   const session = await retrieveSession();
 
   if (!session?.sessionId) {
+    throw new Error("Unauthorized");
+  }
+
+  const projet = await prisma.project.findUnique({ where: { id: projectId } });
+
+  if (!projet) {
+    throw new Error("Project not found");
+  }
+
+  if (projet.userId !== session.userId) {
     throw new Error("Unauthorized");
   }
 
@@ -21,5 +31,5 @@ export async function UpdateTimelineProject(projectId: string, changes: Partial<
     }
   });
 
-  redirect("/projects");
+  redirect(path);
 }

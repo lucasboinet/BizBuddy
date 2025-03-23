@@ -2,6 +2,10 @@ import { GetCustomer } from "@/actions/customers/GetCustomer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import CustomerDetailPage from "./_components/customer-detail-page";
+import CustomerDetailsPage from "./_components/customer-details-page";
+import { endOfYear, getYear, startOfYear } from "date-fns";
+import { GetCustomerYearlyRevenue } from "@/actions/customers/GetCustomerYearlyRevenue";
 
 export default function CustomerPage({ params }: { params: { customerId: string } }) {
   return (
@@ -25,8 +29,11 @@ function CustomerSkeleton() {
 }
 
 async function CustomerDetails({ customerId }: { customerId: string }) {
-  const customer = await GetCustomer(customerId);
-
+  const currentYearRange = { start: startOfYear(new Date()), end: endOfYear(new Date()) };
+  const [customer, revenue] = await Promise.all([
+    GetCustomer(customerId),
+    GetCustomerYearlyRevenue(customerId, currentYearRange)
+  ]);
 
   if (!customer) {
     redirect('/customers');
@@ -34,11 +41,7 @@ async function CustomerDetails({ customerId }: { customerId: string }) {
 
   return (
     <div className="h-full">
-      <code>
-        <pre>
-          {JSON.stringify(customer, null, 2)}
-        </pre>
-      </code>
+      <CustomerDetailsPage customer={customer} revenue={revenue} />
     </div>
   )
 }

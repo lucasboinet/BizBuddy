@@ -18,7 +18,7 @@ export default function CreateCustomerModal() {
             Start creating a new customer. Click create when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <CreateCustomerForm />
+        {/* <CreateCustomerForm /> */}
       </DialogContent>
     </Dialog>
   )

@@ -19,7 +19,7 @@ export default function ProjectCard({ project }: Props) {
         <div>
           <h3 className="text-lg font-semibold text-gray-800">{project.name}</h3>
           <p className="text-sm text-gray-600">Client: {project.customer?.name}</p>
-          <p className="text-xs text-gray-500 mt-1">{project.id}</p>
+          <p className="text-xs text-gray-500 mt-1">type_de_projet</p>
         </div>
         <div className="flex items-center space-x-3">
           <ProjectStatus status={project.status} />
