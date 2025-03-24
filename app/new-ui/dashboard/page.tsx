@@ -149,12 +149,12 @@ const upcomingDeadlines = [
 ]
 
 // Status badge styling
-const statusStyles = {
-  paid: "bg-green-100 text-green-700 hover:bg-green-100",
-  pending: "bg-yellow-100 text-yellow-700 hover:bg-yellow-100",
-  overdue: "bg-red-100 text-red-700 hover:bg-red-100",
-  draft: "bg-gray-100 text-gray-700 hover:bg-gray-100",
-  completed: "bg-green-100 text-green-700 hover:bg-green-100",
+const statusStyles: Record<string, string> = {
+  "paid": "bg-green-100 text-green-700 hover:bg-green-100",
+  "pending": "bg-yellow-100 text-yellow-700 hover:bg-yellow-100",
+  "overdue": "bg-red-100 text-red-700 hover:bg-red-100",
+  "draft": "bg-gray-100 text-gray-700 hover:bg-gray-100",
+  "completed": "bg-green-100 text-green-700 hover:bg-green-100",
   "in-progress": "bg-blue-100 text-blue-700 hover:bg-blue-100",
   "not-started": "bg-yellow-100 text-yellow-700 hover:bg-yellow-100",
 }
@@ -166,7 +166,7 @@ export default function DashboardOverviewPage() {
   const totalRevenue = revenueData.reduce((sum, item) => sum + item.revenue, 0)
 
   // Calculate total invoices amount
-  const totalInvoicesAmount = recentInvoices.reduce((sum, invoice) => sum + invoice.amount, 0)
+  // const totalInvoicesAmount = recentInvoices.reduce((sum, invoice) => sum + invoice.amount, 0)
 
   // Calculate pending invoices amount
   const pendingInvoicesAmount = recentInvoices

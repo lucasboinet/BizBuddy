@@ -13,8 +13,6 @@ import {
   Globe,
   Laptop,
   Menu,
-  Moon,
-  Sun,
   X,
   Sparkles,
   Zap,
@@ -44,11 +42,6 @@ const staggerContainer = {
   },
 }
 
-const slideIn = {
-  hidden: { opacity: 0, x: -20 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
-}
-
 // Floating animation for decorative elements
 const floatingAnimation = {
   initial: { y: 0 },
@@ -56,20 +49,6 @@ const floatingAnimation = {
     y: [0, -10, 0],
     transition: {
       duration: 4,
-      repeat: Number.POSITIVE_INFINITY,
-      ease: "easeInOut",
-    },
-  },
-}
-
-// Pulse animation for accent elements
-const pulseAnimation = {
-  initial: { scale: 1, opacity: 0.7 },
-  animate: {
-    scale: [1, 1.05, 1],
-    opacity: [0.7, 0.9, 0.7],
-    transition: {
-      duration: 3,
       repeat: Number.POSITIVE_INFINITY,
       ease: "easeInOut",
     },
@@ -108,7 +87,7 @@ function CounterCard({
   const [count, setCount] = useState(0)
   const controls = useAnimation()
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, threshold: 0.3 })
+  const inView = useInView(ref, { once: true })
 
   useEffect(() => {
     if (inView) {
@@ -165,7 +144,7 @@ function CounterCard({
 function AnimatedSection({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const controls = useAnimation()
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, threshold: 0.2 })
+  const inView = useInView(ref, { once: true })
 
   useEffect(() => {
     if (inView) {

@@ -111,7 +111,7 @@ export default function OverviewTab({ customer, revenue, totalRevenue, pendingRe
 
             <div>
               <h3 className="text-sm font-medium mb-2">Notes</h3>
-              <div className="text-sm text-muted-foreground p-3 bg-muted/20 rounded-md">{customer.notes}</div>
+              {/* <div className="text-sm text-muted-foreground p-3 bg-muted/20 rounded-md">{customer.notes}</div> */}
             </div>
           </CardContent>
         </Card>

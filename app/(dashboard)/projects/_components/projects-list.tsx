@@ -5,7 +5,6 @@ import ProjectCard from "./project-card";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { useMemo, useState } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select } from "@/components/ui/select";
 import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 

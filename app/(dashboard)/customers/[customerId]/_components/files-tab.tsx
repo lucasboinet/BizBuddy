@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { AppCustomer } from "@/types/customers"
-import { format } from "date-fns"
-import { Download, Edit, FileIcon, Upload } from "lucide-react"
-import Link from "next/link"
+// import { Button } from "@/components/ui/button"
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+// import { AppCustomer } from "@/types/customers"
+// import { format } from "date-fns"
+// import { Download, Edit, FileIcon, Upload } from "lucide-react"
+// import Link from "next/link"
 
-interface Props {
-  customer: AppCustomer
-}
+// interface Props {
+//   customer: AppCustomer
+// }
 
 // const files = [
 //   {
@@ -57,10 +57,10 @@ interface Props {
 //   },
 // ]
 
-export default function FilesTab({ customer }: Props) {
+export default function FilesTab() {
   return (
     <>
-      <div className="flex justify-between items-center mb-6">
+      {/* <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-xl font-bold">Files</h2>
           <p className="text-sm text-muted-foreground">
@@ -73,7 +73,6 @@ export default function FilesTab({ customer }: Props) {
         </Button>
       </div>
 
-      {/* Group files by project */}
       {customer.projects.map((project) => {
         const projectFiles = files.filter((file) => file.project === project.id)
         if (projectFiles.length === 0) return null
@@ -120,7 +119,7 @@ export default function FilesTab({ customer }: Props) {
             </CardContent>
           </Card>
         )
-      })}
+      })} */}
     </>
   )
 }

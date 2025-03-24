@@ -95,16 +95,16 @@ export default function KanbanBoard({ className, board }: { className?: string, 
     ])
   }
 
-  function updateTask(id: string, changes: Partial<AppTask>) {
-    const newTasks = tasks.map((task) => {
-      if (task.id !== id) return task;
-      return { ...task, ...changes }
-    });
+  // function updateTask(id: string, changes: Partial<AppTask>) {
+  //   const newTasks = tasks.map((task) => {
+  //     if (task.id !== id) return task;
+  //     return { ...task, ...changes }
+  //   });
 
-    UpdateBoardTask(id, changes);
+  //   UpdateBoardTask(id, changes);
 
-    setTasks(newTasks);
-  }
+  //   setTasks(newTasks);
+  // }
 
   function onDragStart(event: DragStartEvent) {
     if (event.active.data.current?.type === 'Column') {

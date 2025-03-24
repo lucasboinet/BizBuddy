@@ -6,6 +6,6 @@ interface Props {
 
 export default function ProjectTabInfos({ project }: Props) {
   return (
-    <div>ok</div>
+    <div>{JSON.stringify(project, null, 2)}</div>
   )
 }

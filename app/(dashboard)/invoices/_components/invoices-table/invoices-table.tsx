@@ -76,7 +76,7 @@ export function InvoicesTable({
 
   useEffect(() => {
     table.getColumn("createdAt")?.setFilterValue([dateRange.from, dateRange.to]);
-  }, [])
+  });
 
   return (
     <div className="space-y-4">

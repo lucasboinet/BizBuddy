@@ -43,7 +43,7 @@ function DataTableFilterOption<TData>({ table, filter }: DataTableOptionProps<TD
   const uniqueValues = useMemo(() => {
     const values = table.getCoreRowModel().flatRows.map(row => row.getValue(filter.column)) as string[]
     return Array.from(new Set(values));
-  }, [filter.column]);
+  }, [filter.column, table]);
 
   const options = filter.options(uniqueValues);
 
