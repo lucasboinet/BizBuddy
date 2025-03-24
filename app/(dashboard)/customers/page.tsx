@@ -42,13 +42,13 @@ async function Customers() {
     )
   }
 
-  if (customers.length === 0) {
-    return (
-      <div className='flex flex-col gap-4 h-full items-center'>
-        {JSON.stringify(customers)}
-      </div>
-    )
-  }
+  // if (customers.length === 0) {
+  //   return (
+  //     <div className='flex flex-col gap-4 h-full items-center'>
+  //       {JSON.stringify(customers)}
+  //     </div>
+  //   )
+  // }
 
   return (
     <div className="h-full space-y-6">
