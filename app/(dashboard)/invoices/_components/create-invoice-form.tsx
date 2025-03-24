@@ -22,13 +22,13 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
-export default function CreateInvoiceForm({ customers }: { customers: AppCustomer[] }) {
+export default function CreateInvoiceForm({ customers, selectedCustomer }: { customers?: AppCustomer[], selectedCustomer?: AppCustomer }) {
   const { user, loading } = useAuthSession();
 
   const form = useForm<CreateInvoiceSchemaType>({
     resolver: zodResolver(createInvoiceSchema),
     defaultValues: {
-      customer: undefined,
+      customer: selectedCustomer ?? undefined,
       name: '',
       items: [{ label: '', quantity: 1, amount: 0 }],
       dueDate: new Date(),
@@ -86,7 +86,7 @@ export default function CreateInvoiceForm({ customers }: { customers: AppCustome
               </div>
             </div>
 
-            <FormField
+            {!selectedCustomer && <FormField
               control={form.control}
               name='customer'
               render={({ field }) => (
@@ -98,13 +98,13 @@ export default function CreateInvoiceForm({ customers }: { customers: AppCustome
                     <CustomerSelect
                       onValueChange={field.onChange}
                       value={field.value}
-                      items={customers}
+                      items={customers || []}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            />}
 
             <FormField
               control={form.control}

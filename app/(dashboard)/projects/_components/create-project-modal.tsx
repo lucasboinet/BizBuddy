@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -12,11 +11,11 @@ import {
 import CreateProjectForm from "./create-project-form"
 import { AppCustomer } from "@/types/customers"
 
-export function CreateProjectModal({ customers }: { customers: AppCustomer[] }) {
+export function CreateProjectModal({ customers, selectedCustomer, children }: { customers?: AppCustomer[], selectedCustomer?: AppCustomer, children: React.ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="sm" className="text-xs">Create project</Button>
+        {children}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[50%]">
         <DialogHeader>
@@ -26,7 +25,7 @@ export function CreateProjectModal({ customers }: { customers: AppCustomer[] }) 
           </DialogDescription>
         </DialogHeader>
         <div className="p-4 overflow-auto">
-          <CreateProjectForm customers={customers} />
+          <CreateProjectForm customers={customers} selectedCustomer={selectedCustomer} />
         </div>
       </DialogContent>
     </Dialog>

@@ -18,13 +18,12 @@ import { cn } from "@/lib/utils";
 import { createProjectSchema, CreateProjectSchemaType } from "@/schema/projects";
 import { CreateProject } from "@/actions/projects/CreateUserProject";
 
-export default function CreateInvoiceForm({ customers }: { customers: AppCustomer[] }) {
-
+export default function CreateInvoiceForm({ customers, selectedCustomer }: { customers?: AppCustomer[], selectedCustomer?: AppCustomer }) {
   const form = useForm<CreateProjectSchemaType>({
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
       name: '',
-      customer: undefined,
+      customer: selectedCustomer ?? undefined,
       dueAt: new Date(),
     },
   });
@@ -44,14 +43,13 @@ export default function CreateInvoiceForm({ customers }: { customers: AppCustome
     mutate(values);
   }, [mutate])
 
-
   return (
     <div className="w-full h-full">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-between h-full relative">
-          <div className="grid gap-8 overflow-y-auto flex-grow">
-            <div className="grid grid-cols-2 gap-8">
-              <FormField
+          <div className="grid gap-8 px-1 overflow-y-auto flex-grow">
+            <div className={cn("grid gap-8", !!selectedCustomer ? "grid-cols-1" : "grid-cols-2")}>
+              {!selectedCustomer && <FormField
                 control={form.control}
                 name='customer'
                 render={({ field }) => (
@@ -63,13 +61,13 @@ export default function CreateInvoiceForm({ customers }: { customers: AppCustome
                       <CustomerSelect
                         onValueChange={field.onChange}
                         value={field.value}
-                        items={customers}
+                        items={customers || []}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              />}
 
               <FormField
                 control={form.control}
@@ -96,7 +94,7 @@ export default function CreateInvoiceForm({ customers }: { customers: AppCustome
                   <FormLabel className='flex gap-1 items-center'>
                     Due date
                   </FormLabel>
-                  <Popover>
+                  <Popover modal>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
@@ -118,6 +116,7 @@ export default function CreateInvoiceForm({ customers }: { customers: AppCustome
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
+                        className="z-50"
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) =>

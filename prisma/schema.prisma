@@ -57,6 +57,7 @@ model Project {
 
   customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
   board    Board?
+  // files    File[]
 }
 
 model Invoice {
@@ -134,3 +135,13 @@ model Task {
 
   board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
 }
+
+// model File {
+//   id String @id @default(cuid())
+
+//   projectId String
+//   name      String
+//   url       String
+
+//   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+// }

@@ -14,6 +14,8 @@ export const createProjectSchema = z.object({
       postalCode: z.string(),
       city: z.string(),
     }),
+    projects: z.array(z.any()),
+    invoices: z.array(z.any()),
     siret: z.string(),
     accountId: z.string(),
     createdAt: z.date(),

@@ -7,6 +7,7 @@ import ProjectsList from "./_components/projects-list";
 import ProjectsTimeline from "./_components/projects-timeline/projects-timeline";
 import { GetCustomers } from "@/actions/customers/GetCustomers";
 import { CreateProjectModal } from "./_components/create-project-modal";
+import { Button } from "@/components/ui/button";
 
 export default function ProjectsPage() {
   return (
@@ -53,7 +54,9 @@ async function Projects() {
     <div className="h-full space-y-6">
       <div className="flex items-center justify-start gap-5">
         <h1 className="text-3xl font-semibold">Projects</h1>
-        <CreateProjectModal customers={customers} />
+        <CreateProjectModal customers={customers}>
+          <Button size="sm" className="text-xs">Create project</Button>
+        </CreateProjectModal>
       </div>
       <div className="grid grid-cols-12 h-full border-t pt-4">
         <div className="col-span-4 pr-6 border-r">

@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -10,11 +9,11 @@ import {
 import CreateInvoiceForm from "./create-invoice-form"
 import { AppCustomer } from "@/types/customers"
 
-export function CreateInvoiceModal({ customers }: { customers: AppCustomer[] }) {
+export function CreateInvoiceModal({ customers, selectedCustomer, children }: { customers?: AppCustomer[], selectedCustomer?: AppCustomer, children: React.ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="sm" className="text-xs">Create invoice</Button>
+        {children}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[50%]">
         <DialogHeader>
@@ -23,7 +22,7 @@ export function CreateInvoiceModal({ customers }: { customers: AppCustomer[] }) 
             Start creating a new invoice. Click create when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <CreateInvoiceForm customers={customers} />
+        <CreateInvoiceForm customers={customers} selectedCustomer={selectedCustomer} />
       </DialogContent>
     </Dialog>
   )

@@ -1,7 +1,7 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AppCustomer } from "@/types/customers";
 import { format } from "date-fns";
 import { CalendarIcon, MoreHorizontal } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 export default function CustomerCard({ customer }: { customer: AppCustomer }) {
@@ -14,15 +14,15 @@ export default function CustomerCard({ customer }: { customer: AppCustomer }) {
       </div>
 
       <div className="flex flex-col items-center mb-4">
-        <div className="w-16 h-16 rounded-full overflow-hidden mb-2 bg-gray-100">
-          <Image
-            src="/customer-placeholder.svg"
-            width={100}
-            height={100}
-            alt=""
-            className="w-full h-full object-cover"
-          />
-        </div>
+        <Avatar className="h-16 w-16 mb-2">
+          <AvatarImage src="" alt={customer.name} />
+          <AvatarFallback className="bg-primary text-secondary text-xl">
+            {customer.name
+              .split(" ")
+              .map((n) => n[0])
+              .join("")}
+          </AvatarFallback>
+        </Avatar>
 
         <Link href={`/customers/${customer.id}`}>
           <h3 className="hover:underline font-medium text-gray-800">{customer.name}</h3>

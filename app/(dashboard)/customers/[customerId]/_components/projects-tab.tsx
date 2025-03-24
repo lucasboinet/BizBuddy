@@ -1,3 +1,4 @@
+import { CreateProjectModal } from "@/app/(dashboard)/projects/_components/create-project-modal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
@@ -23,10 +24,12 @@ export default function ProjectsTab({ customer, activeProjects, completedProject
             {customer.projects.length} projects ({activeProjects} active, {completedProjects} completed)
           </p>
         </div>
-        <Button className="bg-green-300 hover:bg-green-400 text-green-900">
-          <Plus className="mr-2 h-4 w-4" />
-          New Project
-        </Button>
+        <CreateProjectModal selectedCustomer={customer}>
+          <Button size="sm">
+            <Plus className="mr-2 h-4 w-4" />
+            New Project
+          </Button>
+        </CreateProjectModal>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

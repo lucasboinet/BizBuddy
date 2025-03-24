@@ -8,6 +8,7 @@ import { columns } from "./_components/invoices-table/columns";
 import { CreateInvoiceModal } from "./_components/create-invoice-modal";
 import { GetCustomers } from "@/actions/customers/GetCustomers";
 import InvoicesStats from "./_components/invoices-stats";
+import { Button } from "@/components/ui/button";
 
 export default function InvoicesPage() {
   return (
@@ -60,7 +61,9 @@ async function Invoices() {
     <div className="h-full space-y-6">
       <div className="flex items-center justify-start gap-5">
         <h1 className="text-3xl font-semibold">Invoices</h1>
-        <CreateInvoiceModal customers={customers} />
+        <CreateInvoiceModal customers={customers}>
+          <Button size="sm" className="text-xs">Create invoice</Button>
+        </CreateInvoiceModal>
       </div>
       <div>
         <InvoicesStats invoices={invoices} />

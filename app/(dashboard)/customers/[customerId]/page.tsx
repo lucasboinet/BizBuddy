@@ -2,9 +2,8 @@ import { GetCustomer } from "@/actions/customers/GetCustomer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import CustomerDetailPage from "./_components/customer-detail-page";
 import CustomerDetailsPage from "./_components/customer-details-page";
-import { endOfYear, getYear, startOfYear } from "date-fns";
+import { endOfYear, startOfYear } from "date-fns";
 import { GetCustomerYearlyRevenue } from "@/actions/customers/GetCustomerYearlyRevenue";
 
 export default function CustomerPage({ params }: { params: { customerId: string } }) {

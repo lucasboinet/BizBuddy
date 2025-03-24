@@ -1,3 +1,5 @@
+import { CreateInvoiceModal } from "@/app/(dashboard)/invoices/_components/create-invoice-modal";
+import { CreateProjectModal } from "@/app/(dashboard)/projects/_components/create-project-modal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -180,14 +182,18 @@ export default function OverviewTab({ customer, revenue, totalRevenue, pendingRe
             <div>
               <h3 className="text-sm font-medium mb-2">Quick Actions</h3>
               <div className="grid grid-cols-1 gap-2">
-                <Button className="w-full">
-                  <Plus className="h-4 w-4" />
-                  New Project
-                </Button>
-                <Button className="w-full">
-                  <FileText className="h-4 w-4" />
-                  Create Invoice
-                </Button>
+                <CreateProjectModal selectedCustomer={customer}>
+                  <Button className="w-full">
+                    <Plus className="h-4 w-4" />
+                    New Project
+                  </Button>
+                </CreateProjectModal>
+                <CreateInvoiceModal selectedCustomer={customer}>
+                  <Button className="w-full">
+                    <FileText className="h-4 w-4" />
+                    Create Invoice
+                  </Button>
+                </CreateInvoiceModal>
                 {/* <Button variant="outline" className="border-green-200 w-full">
                         <MessageSquare className="mr-2 h-4 w-4" />
                         Send Message

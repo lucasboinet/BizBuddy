@@ -15,6 +15,8 @@ interface Props {
 }
 
 export default function InvoicesTab({ customer, totalRevenue, paidRevenue, pendingRevenue }: Props) {
+  const paidInvoicesCount = customer.invoices.filter((i) => i.status === INVOICE_STATUS.PAID).length;
+
   return (
     <>
       <div className="flex justify-between items-center mb-6">
@@ -24,47 +26,47 @@ export default function InvoicesTab({ customer, totalRevenue, paidRevenue, pendi
             {customer.invoices.length} invoices ({customer.invoices.filter((i) => i.status === INVOICE_STATUS.PAID).length} paid)
           </p>
         </div>
-        <Button className="bg-green-300 hover:bg-green-400 text-green-900">
+        <Button>
           <Plus className="mr-2 h-4 w-4" />
           New Invoice
         </Button>
       </div>
 
-      <Card className="border-green-100">
+      <Card className="shadow-none">
         <CardHeader>
           <CardTitle>Invoice Summary</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
-            <div className="bg-green-50 p-4 rounded-lg">
+            <div className="bg-muted p-4 rounded-lg">
               <div className="text-sm text-muted-foreground">Total Invoiced</div>
-              <div className="text-2xl font-bold text-green-600">${totalRevenue.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-primary">${totalRevenue.toLocaleString()}</div>
               <div className="text-xs text-muted-foreground mt-1">{customer.invoices.length} invoices</div>
             </div>
-            <div className="bg-green-50 p-4 rounded-lg">
+            <div className="bg-muted p-4 rounded-lg">
               <div className="text-sm text-muted-foreground">Paid</div>
-              <div className="text-2xl font-bold text-green-600">${paidRevenue.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-primary">${paidRevenue.toLocaleString()}</div>
               <div className="text-xs text-muted-foreground mt-1">
-                {customer.invoices.filter((i) => i.status === INVOICE_STATUS.PAID).length} invoices
+                {paidInvoicesCount} invoices
               </div>
             </div>
-            <div className="bg-green-50 p-4 rounded-lg">
+            <div className="bg-muted p-4 rounded-lg">
               <div className="text-sm text-muted-foreground">Outstanding</div>
-              <div className="text-2xl font-bold text-yellow-600">${pendingRevenue.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-red-600">${pendingRevenue.toLocaleString()}</div>
               <div className="text-xs text-muted-foreground mt-1">
-                {customer.invoices.filter((i) => i.status !== INVOICE_STATUS.PAID).length} invoices
+                {customer.invoices.length - paidInvoicesCount} invoices
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      <div className="mt-6 rounded-lg border border-green-100 shadow-sm">
+      <div className="mt-6 rounded-lg border">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="min-w-[150px]">Invoice</TableHead>
-              <TableHead className="min-w-[200px]">Project</TableHead>
+              <TableHead className="min-w-[200px]">Subject</TableHead>
               <TableHead className="min-w-[100px]">Amount</TableHead>
               <TableHead className="min-w-[100px]">Status</TableHead>
               <TableHead className="min-w-[150px]">Issue Date</TableHead>
@@ -77,8 +79,8 @@ export default function InvoicesTab({ customer, totalRevenue, paidRevenue, pendi
               <TableRow key={invoice.id}>
                 <TableCell>
                   <Link
-                    href={`/dashboard/invoices/${invoice.id}`}
-                    className="font-medium hover:text-green-600 transition-colors"
+                    href={`/invoices/${invoice.id}`}
+                    className="font-medium hover:underline transition-colors"
                   >
                     {invoice.id}
                   </Link>
