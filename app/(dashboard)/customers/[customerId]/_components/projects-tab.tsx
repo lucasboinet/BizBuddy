@@ -4,27 +4,29 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { AppCustomer } from "@/types/customers";
 import { PROJECT_STATUS } from "@/types/projects";
+import { Tag } from "@prisma/client";
 import { format } from "date-fns";
 import { ArrowRight, Edit, Plus } from "lucide-react";
 import Link from "next/link";
 
 interface Props {
   customer: AppCustomer;
+  tags: Tag[];
   activeProjects: number;
   completedProjects: number;
 }
 
-export default function ProjectsTab({ customer, activeProjects, completedProjects }: Props) {
+export default function ProjectsTab({ customer, tags, activeProjects, completedProjects }: Props) {
   return (
     <>
       <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-xl font-bold">Projects</h2>
           <p className="text-sm text-muted-foreground">
-            {customer.projects.length} projects ({activeProjects} active, {completedProjects} completed)
+            {customer.projects?.length} projects ({activeProjects} active, {completedProjects} completed)
           </p>
         </div>
-        <CreateProjectModal selectedCustomer={customer}>
+        <CreateProjectModal selectedCustomer={customer} tags={tags}>
           <Button size="sm">
             <Plus className="mr-2 h-4 w-4" />
             New Project
@@ -33,7 +35,7 @@ export default function ProjectsTab({ customer, activeProjects, completedProject
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {customer.projects.map((project) => (
+        {customer.projects?.map((project) => (
           <Card key={project.id} className="shadow-none">
             <CardHeader className="pb-3">
               <div className="flex justify-between items-start">

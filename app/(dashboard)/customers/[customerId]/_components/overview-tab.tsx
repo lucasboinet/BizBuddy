@@ -6,11 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { AppCustomer, YearlyRevenue } from "@/types/customers";
 import { INVOICE_STATUS } from "@/types/invoices";
+import { Tag } from "@prisma/client";
 import { format } from "date-fns";
 import { Edit, FileText, Mail, MapPin, Phone, Plus } from "lucide-react";
 
 interface Props {
   customer: AppCustomer;
+  tags: Tag[];
   revenue: YearlyRevenue;
   totalRevenue: number;
   pendingRevenue: number;
@@ -18,8 +20,8 @@ interface Props {
   completedProjects: number;
 }
 
-export default function OverviewTab({ customer, revenue, totalRevenue, pendingRevenue, activeProjects, completedProjects }: Props) {
-  const totalProjects = customer.projects.length;
+export default function OverviewTab({ customer, tags, revenue, totalRevenue, pendingRevenue, activeProjects, completedProjects }: Props) {
+  const totalProjects = customer.projects?.length;
 
   return (
     <div className="grid gap-6 md:grid-cols-3">
@@ -172,9 +174,9 @@ export default function OverviewTab({ customer, revenue, totalRevenue, pendingRe
               </div>
               <div className="bg-secondary p-4 rounded-lg">
                 <div className="text-sm text-muted-foreground">Invoices</div>
-                <div className="text-2xl font-bold text-primary">{customer.invoices.length}</div>
+                <div className="text-2xl font-bold text-primary">{customer.invoices?.length}</div>
                 <div className="text-xs text-muted-foreground">
-                  {customer.invoices.filter((i) => i.status === INVOICE_STATUS.PAID).length} paid
+                  {customer.invoices?.filter((i) => i.status === INVOICE_STATUS.PAID).length} paid
                 </div>
               </div>
             </div>
@@ -182,7 +184,7 @@ export default function OverviewTab({ customer, revenue, totalRevenue, pendingRe
             <div>
               <h3 className="text-sm font-medium mb-2">Quick Actions</h3>
               <div className="grid grid-cols-1 gap-2">
-                <CreateProjectModal selectedCustomer={customer}>
+                <CreateProjectModal selectedCustomer={customer} tags={tags}>
                   <Button className="w-full">
                     <Plus className="h-4 w-4" />
                     New Project

@@ -15,6 +15,7 @@ import OverviewTab from "./overview-tab"
 import ProjectsTab from "./projects-tab"
 import InvoicesTab from "./invoices-tab"
 import ActivitiesTab from "./activities-tab"
+import { Tag } from "@prisma/client"
 
 // Sample activity data
 const activities = [
@@ -52,24 +53,26 @@ const activities = [
 
 interface Props {
   customer: AppCustomer;
+  tags: Tag[];
   revenue: YearlyRevenue;
 }
 
-export default function CustomerDetailsPage({ customer, revenue }: Props) {
+export default function CustomerDetailsPage({ customer, tags, revenue }: Props) {
   const [activeTab, setActiveTab] = useState("overview")
 
-  const totalRevenue = customer.invoices.reduce((sum, invoice) => sum + invoice.amount, 0)
+  const invoices = customer.invoices || [];
+  const projects = customer.projects || [];
 
-  const paidRevenue = customer.invoices
-    .filter((invoice) => invoice.status === INVOICE_STATUS.PAID)
+  const totalRevenue = invoices.reduce((sum, invoice) => sum + invoice.amount, 0)
+
+  const paidRevenue = invoices.filter((invoice) => invoice.status === INVOICE_STATUS.PAID)
     .reduce((sum, invoice) => sum + invoice.amount, 0)
 
-  const pendingRevenue = customer.invoices
-    .filter((invoice) => invoice.status === INVOICE_STATUS.SENT || invoice.status === INVOICE_STATUS.REFUSED)
+  const pendingRevenue = invoices.filter((invoice) => invoice.status === INVOICE_STATUS.SENT || invoice.status === INVOICE_STATUS.REFUSED)
     .reduce((sum, invoice) => sum + invoice.amount, 0)
 
-  const activeProjects = customer.projects.filter((project) => project.status === PROJECT_STATUS.IN_PROGRESS).length
-  const completedProjects = customer.projects.filter((project) => project.status === PROJECT_STATUS.COMPLETED).length
+  const activeProjects = projects.filter((project) => project.status === PROJECT_STATUS.IN_PROGRESS).length
+  const completedProjects = projects.filter((project) => project.status === PROJECT_STATUS.COMPLETED).length
 
   return (
     <>
@@ -120,6 +123,7 @@ export default function CustomerDetailsPage({ customer, revenue }: Props) {
         <TabsContent value="overview" className="pt-6">
           <OverviewTab
             customer={customer}
+            tags={tags}
             revenue={revenue}
             totalRevenue={totalRevenue}
             pendingRevenue={pendingRevenue}
@@ -132,6 +136,7 @@ export default function CustomerDetailsPage({ customer, revenue }: Props) {
         <TabsContent value="projects" className="pt-6">
           <ProjectsTab
             customer={customer}
+            tags={tags}
             activeProjects={activeProjects}
             completedProjects={completedProjects}
           />

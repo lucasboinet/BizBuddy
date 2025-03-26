@@ -17,12 +17,15 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { createProjectSchema, CreateProjectSchemaType } from "@/schema/projects";
 import { CreateProject } from "@/actions/projects/CreateUserProject";
+import { TagsInput } from "@/components/tags-input";
+import { Tag } from "@prisma/client";
 
-export default function CreateInvoiceForm({ customers, selectedCustomer }: { customers?: AppCustomer[], selectedCustomer?: AppCustomer }) {
+export default function CreateProjectForm({ customers, tags, selectedCustomer }: { customers?: AppCustomer[], tags?: Tag[], selectedCustomer?: AppCustomer }) {
   const form = useForm<CreateProjectSchemaType>({
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
       name: '',
+      tags: [],
       customer: selectedCustomer ?? undefined,
       dueAt: new Date(),
     },
@@ -47,27 +50,29 @@ export default function CreateInvoiceForm({ customers, selectedCustomer }: { cus
     <div className="w-full h-full">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-between h-full relative">
-          <div className="grid gap-8 px-1 overflow-y-auto flex-grow">
+          <div className="grid gap-8 px-1 pb-1 overflow-y-auto flex-grow">
             <div className={cn("grid gap-8", !!selectedCustomer ? "grid-cols-1" : "grid-cols-2")}>
-              {!selectedCustomer && <FormField
-                control={form.control}
-                name='customer'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className='flex gap-1 items-center'>
-                      Customer
-                    </FormLabel>
-                    <FormControl>
-                      <CustomerSelect
-                        onValueChange={field.onChange}
-                        value={field.value}
-                        items={customers || []}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />}
+              {!selectedCustomer && (
+                <FormField
+                  control={form.control}
+                  name='customer'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='flex gap-1 items-center'>
+                        Customer
+                      </FormLabel>
+                      <FormControl>
+                        <CustomerSelect
+                          onValueChange={field.onChange}
+                          value={field.value}
+                          items={customers || []}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
 
               <FormField
                 control={form.control}
@@ -126,6 +131,29 @@ export default function CreateInvoiceForm({ customers, selectedCustomer }: { cus
                       />
                     </PopoverContent>
                   </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+
+            <FormField
+              control={form.control}
+              name='tags'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className='flex gap-1 items-center'>
+                    Tags
+                  </FormLabel>
+                  <FormControl>
+                    <TagsInput
+                      placeholder="Add tags..."
+                      onChange={field.onChange}
+                      defaultTags={field.value}
+                      suggestedTags={tags}
+                      maxTags={5}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

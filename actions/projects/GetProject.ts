@@ -18,6 +18,7 @@ export async function GetProject(projectId: string): Promise<AppProject | null> 
     },
     include: {
       customer: true,
+      tags: true,
       board: {
         include: {
           tasks: true,

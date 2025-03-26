@@ -8,6 +8,8 @@ import ProjectsTimeline from "./_components/projects-timeline/projects-timeline"
 import { GetCustomers } from "@/actions/customers/GetCustomers";
 import { CreateProjectModal } from "./_components/create-project-modal";
 import { Button } from "@/components/ui/button";
+import { AppProject } from "@/types/projects";
+import { GetTags } from "@/actions/tags/GetTags";
 
 export default function ProjectsPage() {
   return (
@@ -33,8 +35,9 @@ function ProjectsSkeleton() {
 }
 
 async function Projects() {
-  const [projects, customers] = await Promise.all([
+  const [projects, tags, customers] = await Promise.all([
     GetProjects(),
+    GetTags(),
     GetCustomers()
   ]);
 
@@ -48,13 +51,13 @@ async function Projects() {
     )
   }
 
-  const timelineProjects = projects.filter((project) => !!project.completedAt || !!project.dueAt);
+  const timelineProjects = projects.filter((project: AppProject) => !!project.completedAt || !!project.dueAt);
 
   return (
     <div className="h-full space-y-6">
       <div className="flex items-center justify-start gap-5">
         <h1 className="text-3xl font-semibold">Projects</h1>
-        <CreateProjectModal customers={customers}>
+        <CreateProjectModal customers={customers} tags={tags}>
           <Button size="sm" className="text-xs">Create project</Button>
         </CreateProjectModal>
       </div>

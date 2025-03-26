@@ -5,8 +5,8 @@ import { AppInvoice } from "./invoices";
 
 export interface AppCustomer extends Customer {
   address: UserAddress,
-  invoices: AppInvoice[],
-  projects: AppProject[],
+  invoices?: AppInvoice[],
+  projects?: AppProject[],
 }
 
 export type MonthAbbreviation = "Jan" | "Feb" | "Mar" | "Apr" | "May" | "Jun" | "Jul" | "Aug" | "Sep" | "Oct" | "Nov" | "Dec";

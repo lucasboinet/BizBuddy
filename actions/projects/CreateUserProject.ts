@@ -19,6 +19,8 @@ export async function CreateProject(form: CreateProjectSchemaType) {
     throw new Error('Invalid form data');
   }
 
+  const tagsToAdd = data.tags.filter((tag) => !tag.userId);
+
   const project = await prisma.project.create({
     data: {
       name: data.name,
@@ -26,6 +28,9 @@ export async function CreateProject(form: CreateProjectSchemaType) {
       dueAt: data.dueAt,
       customerId: data.customer.id,
       status: PROJECT_STATUS.CREATED,
+      tags: {
+        create: tagsToAdd.map((tag) => ({ name: tag.name, userId: session.userId })),
+      }
     }
   });
 

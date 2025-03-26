@@ -55,8 +55,11 @@ model Project {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  board    Board?
+  tags Tag[] @relation("ProjectTags")
+
+  customer   Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  board      Board?
+  ProjectTag ProjectTag[]
   // files    File[]
 }
 
@@ -78,11 +81,21 @@ model Invoice {
 }
 
 model Tag {
-  id   String @id @default(cuid())
-  name String @unique
+  id     String @id @default(cuid())
+  name   String @unique
+  userId String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  projects   Project[]    @relation("ProjectTags")
+  ProjectTag ProjectTag[]
+}
+
+model ProjectTag {
+  tagId     String
+  projectId String
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@id([tagId, projectId])
 }
 
 model Session {

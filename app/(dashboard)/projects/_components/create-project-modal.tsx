@@ -10,8 +10,9 @@ import {
 } from "@/components/ui/dialog"
 import CreateProjectForm from "./create-project-form"
 import { AppCustomer } from "@/types/customers"
+import { Tag } from "@prisma/client"
 
-export function CreateProjectModal({ customers, selectedCustomer, children }: { customers?: AppCustomer[], selectedCustomer?: AppCustomer, children: React.ReactNode }) {
+export function CreateProjectModal({ customers, tags, selectedCustomer, children }: { customers?: AppCustomer[], tags?: Tag[], selectedCustomer?: AppCustomer, children: React.ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -25,7 +26,7 @@ export function CreateProjectModal({ customers, selectedCustomer, children }: { 
           </DialogDescription>
         </DialogHeader>
         <div className="p-4 overflow-auto">
-          <CreateProjectForm customers={customers} selectedCustomer={selectedCustomer} />
+          <CreateProjectForm customers={customers} tags={tags} selectedCustomer={selectedCustomer} />
         </div>
       </DialogContent>
     </Dialog>

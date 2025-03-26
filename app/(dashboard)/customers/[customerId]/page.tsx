@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import CustomerDetailsPage from "./_components/customer-details-page";
 import { endOfYear, startOfYear } from "date-fns";
 import { GetCustomerYearlyRevenue } from "@/actions/customers/GetCustomerYearlyRevenue";
+import { GetTags } from "@/actions/tags/GetTags";
 
 export default function CustomerPage({ params }: { params: { customerId: string } }) {
   return (
@@ -29,8 +30,9 @@ function CustomerSkeleton() {
 
 async function CustomerDetails({ customerId }: { customerId: string }) {
   const currentYearRange = { start: startOfYear(new Date()), end: endOfYear(new Date()) };
-  const [customer, revenue] = await Promise.all([
+  const [customer, tags, revenue] = await Promise.all([
     GetCustomer(customerId),
+    GetTags(),
     GetCustomerYearlyRevenue(customerId, currentYearRange)
   ]);
 
@@ -40,7 +42,7 @@ async function CustomerDetails({ customerId }: { customerId: string }) {
 
   return (
     <div className="h-full">
-      <CustomerDetailsPage customer={customer} revenue={revenue} />
+      <CustomerDetailsPage customer={customer} tags={tags} revenue={revenue} />
     </div>
   )
 }
