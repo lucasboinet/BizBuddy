@@ -15,7 +15,8 @@ interface Props {
 }
 
 export default function InvoicesTab({ customer, totalRevenue, paidRevenue, pendingRevenue }: Props) {
-  const paidInvoicesCount = customer.invoices.filter((i) => i.status === INVOICE_STATUS.PAID).length;
+  const invoices = customer.invoices || [];
+  const paidInvoicesCount = invoices.filter((i) => i.status === INVOICE_STATUS.PAID).length;
 
   return (
     <>
@@ -23,7 +24,7 @@ export default function InvoicesTab({ customer, totalRevenue, paidRevenue, pendi
         <div>
           <h2 className="text-xl font-bold">Invoices</h2>
           <p className="text-sm text-muted-foreground">
-            {customer.invoices.length} invoices ({customer.invoices.filter((i) => i.status === INVOICE_STATUS.PAID).length} paid)
+            {invoices.length} invoices ({invoices.filter((i) => i.status === INVOICE_STATUS.PAID).length} paid)
           </p>
         </div>
         <Button>
@@ -41,7 +42,7 @@ export default function InvoicesTab({ customer, totalRevenue, paidRevenue, pendi
             <div className="bg-muted p-4 rounded-lg">
               <div className="text-sm text-muted-foreground">Total Invoiced</div>
               <div className="text-2xl font-bold text-primary">${totalRevenue.toLocaleString()}</div>
-              <div className="text-xs text-muted-foreground mt-1">{customer.invoices.length} invoices</div>
+              <div className="text-xs text-muted-foreground mt-1">{invoices.length} invoices</div>
             </div>
             <div className="bg-muted p-4 rounded-lg">
               <div className="text-sm text-muted-foreground">Paid</div>
@@ -54,7 +55,7 @@ export default function InvoicesTab({ customer, totalRevenue, paidRevenue, pendi
               <div className="text-sm text-muted-foreground">Outstanding</div>
               <div className="text-2xl font-bold text-red-600">${pendingRevenue.toLocaleString()}</div>
               <div className="text-xs text-muted-foreground mt-1">
-                {customer.invoices.length - paidInvoicesCount} invoices
+                {invoices.length - paidInvoicesCount} invoices
               </div>
             </div>
           </div>
@@ -75,7 +76,7 @@ export default function InvoicesTab({ customer, totalRevenue, paidRevenue, pendi
             </TableRow>
           </TableHeader>
           <TableBody>
-            {customer.invoices.map((invoice) => (
+            {invoices.map((invoice) => (
               <TableRow key={invoice.id}>
                 <TableCell>
                   <Link
