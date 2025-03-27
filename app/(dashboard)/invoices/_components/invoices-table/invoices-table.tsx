@@ -22,9 +22,9 @@ import {
 } from "@/components/ui/table"
 
 import { X as XIcon } from 'lucide-react'
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { DataTableViewOptions } from "@/components/data-table-view-options"
-import { DataTablePagination } from "@/components/data-table-pagination"
+// import { DataTablePagination } from "@/components/data-table-pagination"
 import { filters } from "./filters"
 import DataTableFilterOptions from "@/components/data-table-filter-options"
 import { Button } from "@/components/ui/button"
@@ -72,7 +72,7 @@ export function InvoicesTable({
     table.getColumn("createdAt")?.setFilterValue([from, to]);
   };
 
-  const isFiltered = table.getState().columnFilters.length > 0;
+  const isFiltered = useMemo(() => table.getState().columnFilters.length > 0, [table]);
 
   useEffect(() => {
     table.getColumn("createdAt")?.setFilterValue([dateRange.from, dateRange.to]);
@@ -158,7 +158,7 @@ export function InvoicesTable({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      {/* <DataTablePagination table={table} /> */}
     </div>
   )
 }
