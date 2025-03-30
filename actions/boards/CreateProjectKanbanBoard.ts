@@ -1,6 +1,5 @@
 'use server'
 
-import { generateId } from "@/lib/boards";
 import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
 import { redirect } from "next/navigation";
@@ -17,12 +16,6 @@ export async function CreateProjectKanbanBoard(projectId: string) {
     data: {
       userId: authSession.userId,
       projectId,
-      columns: [
-        { id: generateId('column'), title: "Not started" },
-        { id: generateId('column'), title: "In progress" },
-        { id: generateId('column'), title: "Waiting validation" },
-        { id: generateId('column'), title: "Completed" },
-      ]
     }
   })
 

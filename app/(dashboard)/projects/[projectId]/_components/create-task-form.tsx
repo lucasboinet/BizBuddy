@@ -13,6 +13,7 @@ import { createTaskSchema, CreateTaskSchemaType } from "@/schema/tasks";
 import { CreateTask } from "@/actions/tasks/CreateTask";
 import { AppProject } from "@/types/projects";
 import { Textarea } from "@/components/ui/textarea";
+import { TASK_STATE } from "@/types/tasks";
 
 export default function CreateTaskForm({ project, handleSubmit }: { project: AppProject, handleSubmit: () => void }) {
   const form = useForm<CreateTaskSchemaType>({
@@ -20,7 +21,7 @@ export default function CreateTaskForm({ project, handleSubmit }: { project: App
     defaultValues: {
       projectId: project.id,
       boardId: project.board?.id,
-      columnId: project.board?.columns[0].id,
+      columnId: TASK_STATE.TODO,
       name: '',
       description: '',
     },

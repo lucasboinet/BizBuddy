@@ -1,107 +1,124 @@
-'use client'
+"use client"
 
-import { AppProject } from "@/types/projects"
-import ProjectStatus from "../../_components/project-status"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useState } from "react"
-import { Badge } from "@/components/ui/badge"
-import ProjectTabInfos from "./project-tab-infos"
-import KanbanBoard from "@/components/kanban/kanban-board"
+import { Calendar, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Loader2Icon } from "lucide-react"
-import { CreateProjectKanbanBoard } from "@/actions/boards/CreateProjectKanbanBoard"
-import { toast } from "sonner"
-import ProjectDetailsActions from "./project-details-actions"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Badge } from "@/components/ui/badge"
+import { AppProject, PROJECT_STATUS } from "@/types/projects"
+import { format } from "date-fns"
+import ProjectTabOverview from "./project-tab-overview"
+import ProjectTabFiles from "./project-tab-files"
+import ProjectTabFinancials from "./project-tab-financials"
+import ProjectTabActivities from "./project-tab-activities"
+import ProjectTabTasks from "./project-tab-tasks"
 
 interface Props {
   project: AppProject,
 }
 
 export default function ProjectPageDetails({ project }: Props) {
-  const [tab, setTab] = useState('infos');
-  const [isPending, setIsPending] = useState(false);
+  const [activeTab, setActiveTab] = useState("overview")
 
-  const tabs = [
-    { name: 'Infos', key: 'infos' },
-    { name: 'Tasks', key: 'tasks', count: project.board?.tasks?.length || 0 },
+  const files: any[] = []
+
+  const activities = [
+    { id: 1, type: "task_completed", description: "Wireframe Design completed", date: "Jan 30, 2023", time: "2:45 PM" },
+    {
+      id: 2,
+      type: "invoice_paid",
+      description: "Invoice INV-2023-001 paid by Acme Corporation",
+      date: "Feb 15, 2023",
+      time: "10:30 AM",
+    },
+    {
+      id: 3,
+      type: "file_uploaded",
+      description: "Brand Guidelines.pdf uploaded",
+      date: "Feb 15, 2023",
+      time: "11:15 AM",
+    },
+    { id: 4, type: "task_started", description: "Frontend Development started", date: "Feb 20, 2023", time: "9:00 AM" },
+    { id: 5, type: "task_started", description: "Content Migration started", date: "Mar 05, 2023", time: "1:30 PM" },
   ]
 
-  async function handleCreateBoard() {
-    try {
-      toast.loading("Creating project board...", { id: "create-project-board" })
-      setIsPending(true);
-      await CreateProjectKanbanBoard(project.id);
-      setIsPending(false);
-      toast.success("Project board created", { id: "create-project-board" })
-    } catch {
-      toast.error("Error when creating the board", { id: "create-project-board" })
-    }
-  }
-
   return (
-    <div className="h-full space-y-6">
-      <div className="flex justify-between gap-1">
-        <div className="flex gap-3 justify-start items-center">
-          <span className="size-20 bg-secondary border rounded-md"></span>
+    <div className="flex flex-col">
+      <main className="flex-1">
+        <div className="px-4">
+          {/* Project Header */}
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3">
+                <Badge variant="outline" className="px-3 py-1 text-sm font-normal">
+                  {project.id}
+                </Badge>
+                <Badge variant={project.status === PROJECT_STATUS.COMPLETED ? "default" : "secondary"} className="px-3 py-1">
+                  {project.status}
+                </Badge>
+              </div>
+              <div className="ml-auto flex items-center gap-2">
+                <Button size="sm" className="hidden md:flex">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Settings
+                </Button>
+              </div>
+            </div>
 
-          <div className="flex flex-col gap-2 justify-between items-start">
-            <h1 className="text-3xl font-semibold">{project.name}</h1>
-            <div className="flex items-center gap-2">
-              <ProjectStatus status={project.status} />
-              <span className="text-sm">{project.customer?.name}</span>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight">{project.name}</h1>
+                <div className="flex items-center gap-2 mt-2 text-muted-foreground">
+                  <span className="font-medium">{project.customer?.name}</span>
+                  <span>•</span>
+                  <div className="flex items-center gap-1">
+                    <Calendar className="h-4 w-4" />
+                    <span>
+                      Expected due at {format(project.dueAt, "dd/MM/yyyy")}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+
+          <Tabs className="space-y-6" value={activeTab} onValueChange={setActiveTab}>
+            <TabsList>
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="tasks">Tasks</TabsTrigger>
+              <TabsTrigger value="financials">Financials</TabsTrigger>
+              <TabsTrigger value="files">Files</TabsTrigger>
+              <TabsTrigger value="activity">Activity</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="overview" className="space-y-6">
+              <ProjectTabOverview
+                project={project}
+                activities={activities}
+                files={files}
+                setActiveTab={setActiveTab}
+              />
+            </TabsContent>
+
+            <TabsContent value="tasks" className="space-y-4">
+              <ProjectTabTasks project={project} />
+            </TabsContent>
+
+            <TabsContent value="financials" className="space-y-4">
+              <ProjectTabFinancials project={project} />
+            </TabsContent>
+
+            <TabsContent value="files" className="space-y-4">
+              <ProjectTabFiles files={files} />
+            </TabsContent>
+
+            <TabsContent value="activity" className="space-y-4">
+              <ProjectTabActivities activities={activities} />
+            </TabsContent>
+          </Tabs>
         </div>
-
-        <ProjectDetailsActions project={project} />
-      </div>
-
-      <Tabs
-        value={tab}
-        onValueChange={setTab}
-        className="h-full"
-      >
-        <TabsList className="w-full p-0 bg-background justify-start border-b rounded-none gap-1">
-          {tabs.map((tab) => (
-            <TabsTrigger
-              key={tab.key}
-              value={tab.key}
-              className="rounded-none bg-background h-full data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-primary"
-            >
-              {tab.name}{" "}
-              {!!tab.count && (
-                <Badge
-                  variant="secondary"
-                  className="ml-2 px-1 py-0 text-xs rounded-full"
-                >
-                  {tab.count}
-                </Badge>
-              )}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-        <TabsContent value="infos">
-          <ProjectTabInfos project={project} />
-        </TabsContent>
-        <TabsContent value="tasks" className="h-full">
-          {project.board && (
-            <KanbanBoard board={project.board} />
-          )}
-          {!project.board && (
-            <div className="flex justify-center items-center h-full">
-              <Button
-                type="button"
-                className="mt-6"
-                disabled={isPending}
-                onClick={handleCreateBoard}
-              >
-                {!isPending && "Create tasks board"}
-                {isPending && <Loader2Icon className='animate-spin' />}
-              </Button>
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
+      </main>
     </div>
   )
 }
+

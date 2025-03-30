@@ -26,7 +26,7 @@ function ProjectSkeleton() {
 }
 
 async function ProjectDetails({ projectId }: { projectId: string }) {
-  const project = await GetProject(projectId);
+  const project = await GetProject(projectId)
 
   if (!project) {
     redirect('/projects');

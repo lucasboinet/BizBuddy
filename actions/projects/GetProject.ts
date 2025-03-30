@@ -23,7 +23,8 @@ export async function GetProject(projectId: string): Promise<AppProject | null> 
         include: {
           tasks: true,
         }
-      }
+      },
+      invoices: true,
     }
   });
 
