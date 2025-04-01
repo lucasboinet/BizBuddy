@@ -16,40 +16,10 @@ import ProjectsTab from "./projects-tab"
 import InvoicesTab from "./invoices-tab"
 import ActivitiesTab from "./activities-tab"
 import { Tag } from "@prisma/client"
+import { AppActivity } from "@/types/activities"
 
 // Sample activity data
-const activities = [
-  {
-    id: "1",
-    type: "invoice_paid",
-    description: "Paid invoice #INV-2024-002",
-    date: new Date("2025-03-10"),
-  },
-  {
-    id: "2",
-    type: "project_update",
-    description: "Updated progress on 'E-commerce Website Redesign'",
-    date: new Date("2025-03-05"),
-  },
-  {
-    id: "3",
-    type: "invoice_sent",
-    description: "Sent invoice #INV-2025-006",
-    date: new Date("2025-02-20"),
-  },
-  {
-    id: "4",
-    type: "project_started",
-    description: "Started project 'Product Photography'",
-    date: new Date("2025-02-10"),
-  },
-  {
-    id: "5",
-    type: "customer_added",
-    description: "Added as a customer",
-    date: new Date("2024-10-15"),
-  },
-]
+const activities: AppActivity[] = []
 
 interface Props {
   customer: AppCustomer;
@@ -78,7 +48,7 @@ export default function CustomerDetailsPage({ customer, tags, revenue }: Props) 
     <>
       <div className="flex items-center gap-4 mb-6">
         <Button variant="outline" size="icon" asChild>
-          <Link href="/dashboard/customers">
+          <Link href="/customers">
             <ArrowLeft className="h-4 w-4" />
           </Link>
         </Button>

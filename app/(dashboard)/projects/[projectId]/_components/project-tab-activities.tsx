@@ -1,5 +1,4 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle2, Clock, FileText } from "lucide-react";
 import ActivityLine from "./activity-line";
 
 interface Props {
