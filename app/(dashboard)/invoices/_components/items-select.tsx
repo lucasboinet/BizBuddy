@@ -4,10 +4,11 @@ import { InvoiceItem } from "@/types/invoices";
 import { PlusIcon, XIcon } from "lucide-react";
 
 
-export default function ItemSelect({ value, onValueChange }:
+export default function ItemSelect({ value, onValueChange, disabled }:
   {
     value: InvoiceItem[],
     onValueChange: (...event: any[]) => void,
+    disabled?: boolean,
   }
 ) {
   const handleItemChange = <K extends keyof InvoiceItem>(key: K, newValue: InvoiceItem[K], index: number) => {
@@ -34,17 +35,20 @@ export default function ItemSelect({ value, onValueChange }:
           <Input
             className="col-span-3"
             value={item.label}
+            disabled={disabled}
             onChange={(e) => handleItemChange('label', e.target.value, index)}
             required
           />
           <Input
             value={item.quantity}
             type="number"
+            disabled={disabled}
             onChange={(e) => handleItemChange('quantity', parseInt(e.target.value), index)}
           />
           <Input
             value={item.amount}
             type="number"
+            disabled={disabled}
             onChange={(e) => handleItemChange('amount', parseFloat(e.target.value), index)}
           />
           {index !== 0 && (
@@ -52,6 +56,7 @@ export default function ItemSelect({ value, onValueChange }:
               type="button"
               variant="link"
               size="icon"
+              disabled={disabled}
               className="absolute -right-10"
               onClick={() => handleDeleteItem(index)}
             >
@@ -65,6 +70,7 @@ export default function ItemSelect({ value, onValueChange }:
         <Button
           variant="link"
           className="w-fit"
+          disabled={disabled}
           onClick={() => onValueChange([...value, { label: '', quantity: 1, amount: 0 }])}
         >
           <PlusIcon />

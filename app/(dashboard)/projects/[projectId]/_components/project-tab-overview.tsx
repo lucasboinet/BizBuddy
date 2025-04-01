@@ -4,10 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { INVOICE_STATUS } from "@/types/invoices";
 import { AppProject } from "@/types/projects";
 import { TASK_STATE } from "@/types/tasks";
-import { CheckCircle2, Clock, FileText } from "lucide-react";
 // import { Download, ImageIcon, Music, Video } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
+import ActivityLine from "./activity-line";
 
 interface Props {
   project: AppProject;
@@ -32,16 +32,22 @@ export default function ProjectTabOverview({ project, activities, setActiveTab }
     const start = project.startedAt?.getTime() || 0;
     const end = project.dueAt?.getTime() || 0;
 
-    if (!project.startedAt || !project.dueAt) return 0
-    if (start < today) return 0;
+    if (project.completedAt) return 100;
+    if (!project.startedAt || !project.dueAt) return 0;
     if (today > end) return 100;
 
-    return Math.min(100, ((today - start) / (end - start)) * 100)
+    return Math.min(100, Math.round(((today - start) / (end - start)) * 100))
   }, [project]);
 
-  const todoTasksCount = project.board?.tasks?.filter((task) => task.columnId === TASK_STATE.TODO).length;
-  const inProgressTasksCount = project.board?.tasks?.filter((task) => task.columnId === TASK_STATE.IN_PROGRESS).length;
-  const completedTasksCount = project.board?.tasks?.filter((task) => [TASK_STATE.IN_REVIEW, TASK_STATE.DONE].includes(task.columnId)).length;
+  const tasksCount = project.board?.tasks?.length || 0;
+  const todoTasksCount = project.board?.tasks?.filter((task) => task.columnId === TASK_STATE.TODO).length || 0;
+  const inProgressTasksCount = project.board?.tasks?.filter((task) => task.columnId === TASK_STATE.IN_PROGRESS).length || 0;
+  const completedTasksCount = project.board?.tasks?.filter((task) => [TASK_STATE.IN_REVIEW, TASK_STATE.DONE].includes(task.columnId)).length || 0;
+
+  const tasksProgress = useMemo(() => {
+    if (tasksCount === 0) return 0;
+    return Math.round(completedTasksCount / tasksCount * 100)
+  }, [tasksCount, completedTasksCount]);
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -135,8 +141,18 @@ export default function ProjectTabOverview({ project, activities, setActiveTab }
               <div className="flex justify-between text-sm">
                 <span>Tasks</span>
                 <span className="font-medium">
-                  {project.board?.tasks?.length}
+                  {tasksCount}
                 </span>
+              </div>
+
+              <div className="flex flex-row items-center gap-4">
+                <div className="relative w-full h-1 bg-muted rounded-full">
+                  <div
+                    className="absolute h-1 bg-primary rounded-full"
+                    style={{ width: `${tasksProgress}%` }}
+                  />
+                </div>
+                <span className="font-medium">{tasksProgress}%</span>
               </div>
             </div>
 
@@ -246,34 +262,9 @@ export default function ProjectTabOverview({ project, activities, setActiveTab }
           </Button>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {activities.slice(0, 4).map((activity, index) => (
-              <div key={activity.id} className="flex gap-3 relative">
-                {index !== 0 && (
-                  <div className="absolute top-0 left-[11px] h-full w-px bg-border -translate-y-4"></div>
-                )}
-                <div
-                  className={`rounded-full p-1.5 ${activity.type === "task_completed"
-                    ? "bg-green-100 text-green-600"
-                    : activity.type === "invoice_paid"
-                      ? "bg-blue-100 text-blue-600"
-                      : activity.type === "file_uploaded"
-                        ? "bg-amber-100 text-amber-600"
-                        : "bg-gray-100 text-gray-600"
-                    }`}
-                >
-                  {activity.type === "task_completed" && <CheckCircle2 className="h-4 w-4" />}
-                  {activity.type === "invoice_paid" && <FileText className="h-4 w-4" />}
-                  {activity.type === "file_uploaded" && <FileText className="h-4 w-4" />}
-                  {activity.type === "task_started" && <Clock className="h-4 w-4" />}
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm">{activity.description}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {activity.date} at {activity.time}
-                  </p>
-                </div>
-              </div>
+          <div className="space-y-4 mt-2">
+            {activities.slice(0, 4).map((activity) => (
+              <ActivityLine key={activity.id} activity={activity} />
             ))}
           </div>
         </CardContent>

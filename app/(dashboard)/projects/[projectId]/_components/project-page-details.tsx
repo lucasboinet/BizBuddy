@@ -12,6 +12,7 @@ import ProjectTabFiles from "./project-tab-files"
 import ProjectTabFinancials from "./project-tab-financials"
 import ProjectTabActivities from "./project-tab-activities"
 import ProjectTabTasks from "./project-tab-tasks"
+import { AppActivity } from "@/types/activities"
 
 interface Props {
   project: AppProject,
@@ -22,24 +23,47 @@ export default function ProjectPageDetails({ project }: Props) {
 
   const files: any[] = []
 
-  const activities = [
-    { id: 1, type: "task_completed", description: "Wireframe Design completed", date: "Jan 30, 2023", time: "2:45 PM" },
+  const activities: AppActivity[] = [
     {
-      id: 2,
+      id: '1',
+      type: "task_completed",
+      label: "Wireframe Design completed",
+      createdAt: new Date(),
+      projectId: project.id,
+      project,
+    },
+    {
+      id: '2',
       type: "invoice_paid",
-      description: "Invoice INV-2023-001 paid by Acme Corporation",
-      date: "Feb 15, 2023",
-      time: "10:30 AM",
+      label: "Invoice INV-2023-001 paid by Acme Corporation",
+      createdAt: new Date(),
+      projectId: project.id,
+      project,
     },
     {
-      id: 3,
+      id: '3',
       type: "file_uploaded",
-      description: "Brand Guidelines.pdf uploaded",
-      date: "Feb 15, 2023",
-      time: "11:15 AM",
+      label: "Brand Guidelines.pdf uploaded",
+      createdAt: new Date(),
+      projectId: project.id,
+      project,
     },
-    { id: 4, type: "task_started", description: "Frontend Development started", date: "Feb 20, 2023", time: "9:00 AM" },
-    { id: 5, type: "task_started", description: "Content Migration started", date: "Mar 05, 2023", time: "1:30 PM" },
+    {
+      id: '4',
+      type: "task_started",
+      label: "Frontend Development started",
+      createdAt: new Date(),
+      projectId: project.id,
+      project,
+    },
+    {
+      id: '5',
+      type: "task_started",
+      label: "Content Migration started",
+      createdAt: new Date(),
+      projectId: project.id,
+      project,
+    },
   ]
 
   return (

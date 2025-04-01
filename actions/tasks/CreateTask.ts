@@ -18,9 +18,21 @@ export async function CreateTask(form: CreateTaskSchemaType) {
     throw new Error('Invalid form data');
   }
 
+  let boardId = data.boardId;
+  if (!boardId) {
+    const board = await prisma.board.create({
+      data: {
+        userId: session.userId,
+        projectId: data.projectId,
+      }
+    })
+
+    boardId = board.id;
+  }
+
   await prisma.task.create({
     data: {
-      boardId: data.boardId,
+      boardId,
       name: data.name,
       description: data.description,
       columnId: data.columnId,

@@ -14,11 +14,13 @@ interface Props {
 
 export default function ProjectTabTasks({ project }: Props) {
   const [open, setOpen] = useState(false);
+  const tasksCount = project.board?.tasks?.length || 0;
+  const displayBoard = !!project.board && tasksCount > 0
 
   return (
     <>
-      {project.board && (project.board.tasks?.length || 0) > 0 && <KanbanBoard project={project} />}
-      {!project.board || (project.board.tasks?.length || 0) === 0 && (
+      {displayBoard && <KanbanBoard project={project} />}
+      {!displayBoard && (
         <>
           <CreateTaskModal project={project} open={open} handleOpenChange={setOpen} />
           <EmptyState

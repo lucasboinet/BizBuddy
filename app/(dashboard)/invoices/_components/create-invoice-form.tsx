@@ -21,14 +21,22 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { AppProject } from "@/types/projects";
 
-export default function CreateInvoiceForm({ customers, selectedCustomer }: { customers?: AppCustomer[], selectedCustomer?: AppCustomer }) {
+interface Props {
+  customers?: AppCustomer[],
+  selectedCustomer?: AppCustomer,
+  selectedProjectId?: AppProject["id"],
+}
+
+export default function CreateInvoiceForm({ customers, selectedCustomer, selectedProjectId }: Props) {
   const { user, loading } = useAuthSession();
 
   const form = useForm<CreateInvoiceSchemaType>({
     resolver: zodResolver(createInvoiceSchema),
     defaultValues: {
       customer: selectedCustomer ?? undefined,
+      projectId: selectedProjectId,
       name: '',
       items: [{ label: '', quantity: 1, amount: 0 }],
       dueDate: new Date(),

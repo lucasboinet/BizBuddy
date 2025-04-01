@@ -1,11 +1,14 @@
+import { CreateInvoiceModal } from "@/app/(dashboard)/invoices/_components/create-invoice-modal";
+import { EmptyState } from "@/components/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { AppCustomer } from "@/types/customers";
 import { INVOICE_STATUS } from "@/types/invoices";
 import { AppProject } from "@/types/projects";
 import { format } from "date-fns";
-import { FileText, MoreHorizontal } from "lucide-react";
+import { FileText, MoreHorizontal, Receipt } from "lucide-react";
 import { useMemo } from "react";
 
 interface Props {
@@ -70,6 +73,21 @@ export default function ProjectTabFinancials({ project }: Props) {
               </div>
             </div>
           ))}
+
+          {financials.length === 0 && (
+            <EmptyState
+              icon={Receipt}
+              title="No financial records"
+              description="Create quotations and invoices to track project finances"
+            >
+              <CreateInvoiceModal selectedCustomer={project.customer as AppCustomer} selectedProjectId={project.id}>
+                <Button variant="outline">
+                  <FileText className="mr-2 h-4 w-4" />
+                  Create Quotation
+                </Button>
+              </CreateInvoiceModal>
+            </EmptyState>
+          )}
         </div>
       </CardContent>
     </Card>

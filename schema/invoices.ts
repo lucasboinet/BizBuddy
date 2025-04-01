@@ -39,6 +39,7 @@ export type UpdateInvoiceSchemaType = z.infer<typeof updateInvoiceSchema>;
 
 export const createInvoiceSchema = z.object({
   name: z.string().max(100),
+  projectId: z.string().optional(),
   customer: z.object({
     name: z.string(),
     id: z.string(),
@@ -50,8 +51,8 @@ export const createInvoiceSchema = z.object({
       postalCode: z.string(),
       city: z.string(),
     }),
-    projects: z.array(z.any()),
-    invoices: z.array(z.any()),
+    projects: z.array(z.any()).optional(),
+    invoices: z.array(z.any()).optional(),
     siret: z.string(),
     accountId: z.string(),
     createdAt: z.date(),

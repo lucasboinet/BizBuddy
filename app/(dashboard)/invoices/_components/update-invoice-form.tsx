@@ -7,7 +7,7 @@ import { updateInvoiceSchema, UpdateInvoiceSchemaType } from "@/schema/invoices"
 import { AppInvoice, INVOICE_STATUS, INVOICE_STATUS_KEYS, InvoiceItem } from "@/types/invoices";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import CustomerSelect from "../../../../components/customer-select";
@@ -44,7 +44,8 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
     },
   });
 
-  const debounceFormValues = useDebounce(form.getValues(), 2000);
+  const formValues = useMemo(() => form.getValues(), [form])
+  const debounceFormValues = useDebounce(formValues, 2000);
 
   const { mutate, isPending } = useMutation({
     mutationFn: UpdateInvoice,
@@ -168,6 +169,7 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
                         <FormControl>
                           <Button
                             variant={"outline"}
+                            disabled={isDisabled}
                             className={cn(
                               "w-full pl-3 text-left font-normal",
                               !field.value && "text-muted-foreground"
@@ -227,6 +229,7 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
                       <ItemSelect
                         value={field.value}
                         onValueChange={field.onChange}
+                        disabled={isDisabled}
                       />
                     </FormControl>
                     <FormMessage />
@@ -256,7 +259,7 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
                 )}
               />
             </div>
-            <Button type="submit" className="w-full" disabled={isPending}>
+            <Button type="submit" className="w-full" disabled={isPending || isDisabled}>
               {!isPending && "Save"}
               {isPending && <Loader2Icon className='animate-spin' />}
             </Button>

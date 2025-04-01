@@ -27,11 +27,11 @@ export default function ActivitiesTab({ activities }: Props) {
                 </div>
                 <div className="flex flex-col gap-0.5">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm">{activity.description}</span>
-                    <span className="text-xs text-muted-foreground">{formatDistanceToNow(activity.date, { addSuffix: true })}</span>
+                    <span className="text-sm">{activity.label}</span>
+                    <span className="text-xs text-muted-foreground">{formatDistanceToNow(activity.createdAt, { addSuffix: true })}</span>
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    {format(activity.date, "MMMM d, yyyy 'at' h:mm a")}
+                    {format(activity.createdAt, "MMMM d, yyyy 'at' h:mm a")}
                   </div>
                 </div>
               </div>

@@ -41,7 +41,7 @@ export default function ProjectsTab({ customer, tags, activeProjects, completedP
               <div className="flex justify-between items-start">
                 <div>
                   <Link
-                    href={`/dashboard/projects/${project.id}`}
+                    href={`/projects/${project.id}`}
                     className="font-medium hover:underline transition-colors"
                   >
                     {project.name}
@@ -78,7 +78,7 @@ export default function ProjectsTab({ customer, tags, activeProjects, completedP
             </CardContent>
             <CardFooter>
               <Button className="w-full" asChild>
-                <Link href={`/dashboard/projects/${project.id}`}>
+                <Link href={`/projects/${project.id}`}>
                   View Project
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>

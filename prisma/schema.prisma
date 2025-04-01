@@ -63,6 +63,7 @@ model Project {
   projectTags ProjectTag[]
   // files    File[]
   invoices    Invoice[]
+  activities  Activity[]
 }
 
 model Invoice {
@@ -152,6 +153,17 @@ model Task {
   priority    String    @default("LOW")
 
   board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+}
+
+model Activity {
+  id        String @id @default(cuid())
+  projectId String
+
+  type      String
+  label     String
+  createdAt DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }
 
 // model File {

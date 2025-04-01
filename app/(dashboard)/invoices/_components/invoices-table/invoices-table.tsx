@@ -24,12 +24,12 @@ import {
 import { X as XIcon } from 'lucide-react'
 import { useEffect, useMemo, useState } from "react"
 import { DataTableViewOptions } from "@/components/data-table-view-options"
-// import { DataTablePagination } from "@/components/data-table-pagination"
+import { DataTablePagination } from "@/components/data-table-pagination"
 import { filters } from "./filters"
 import DataTableFilterOptions from "@/components/data-table-filter-options"
 import { Button } from "@/components/ui/button"
 import { CalendarDatePicker } from "../../../../../components/calendar-date-picker"
-import { startOfMonth } from "date-fns"
+import { startOfYear } from "date-fns"
 import { Input } from "@/components/ui/input"
 import { AppInvoice } from "@/types/invoices"
 
@@ -63,7 +63,7 @@ export function InvoicesTable({
   })
 
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
-    from: startOfMonth(new Date()),
+    from: startOfYear(new Date()),
     to: new Date()
   });
 
@@ -76,7 +76,7 @@ export function InvoicesTable({
 
   useEffect(() => {
     table.getColumn("createdAt")?.setFilterValue([dateRange.from, dateRange.to]);
-  });
+  }, [dateRange, table]);
 
   return (
     <div className="space-y-4">
@@ -158,7 +158,7 @@ export function InvoicesTable({
           </TableBody>
         </Table>
       </div>
-      {/* <DataTablePagination table={table} /> */}
+      <DataTablePagination table={table} />
     </div>
   )
 }

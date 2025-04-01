@@ -27,7 +27,7 @@ export default function CreateTaskForm({ project, handleSubmit }: { project: App
     },
   });
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending, error } = useMutation({
     mutationFn: CreateTask,
     onSuccess: () => {
       toast.success('Task created', { id: "create-task" });
@@ -46,6 +46,7 @@ export default function CreateTaskForm({ project, handleSubmit }: { project: App
 
   return (
     <div className="w-full h-full px-2">
+      {JSON.stringify(error)}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-between h-full relative">
           <div className="grid gap-8 overflow-y-auto flex-grow p-1">

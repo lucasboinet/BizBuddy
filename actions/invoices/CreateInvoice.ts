@@ -46,6 +46,7 @@ export async function CreateInvoice(form: CreateInvoiceSchemaType) {
   const invoice = await prisma.invoice.create({
     data: {
       id: invoiceId,
+      projectId: data.projectId,
       name: data.name,
       customerId: data.customer.id, 
       status: INVOICE_STATUS.CREATED,
