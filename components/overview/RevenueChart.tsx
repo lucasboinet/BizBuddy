@@ -1,28 +1,15 @@
 'use client'
 
+import { DashboardStats } from "@/actions/GetDashboardStats"
 import {
   ChartConfig,
   ChartTooltip,
   ChartTooltipContent,
   ChartContainer
-} from "@/components/ui/chart"  
+} from "@/components/ui/chart"
 import { CartesianGrid, XAxis, LineChart, Line } from "recharts"
 
-function RevenueChart({ className }: { className?: string }) {
-  const chartData = [
-    { month: "January", income: 186 },
-    { month: "February", income: 305 },
-    { month: "March", income: 237 },
-    { month: "April", income: 73 },
-    { month: "May", income: 209 },
-    { month: "June", income: 214 },
-    { month: "July", income: 300 },
-    { month: "August", income: 340 },
-    { month: "September", income: 250 },
-    { month: "October", income: 307 },
-    { month: "November", income: 500 },
-    { month: "December", income: 110 },
-  ]
+function RevenueChart({ className, chartData }: { className?: string, chartData: DashboardStats["revenuesByMonth"] }) {
   const chartConfig = {
     income: {
       label: "Income",
@@ -54,7 +41,7 @@ function RevenueChart({ className }: { className?: string }) {
         />
         <Line
           dataKey="income"
-          type="natural"
+          type="bump"
           stroke="hsl(var(--chart-1))"
           strokeWidth={2}
           dot={{
