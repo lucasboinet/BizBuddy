@@ -3,6 +3,7 @@
 import { retrieveSession } from "@/lib/sessions";
 import prisma from "@/lib/prisma";
 import { AuthSafeUser } from "@/types/auth";
+import { UserLogout } from "./UserLogout";
 
 export async function GetMe(): Promise<AuthSafeUser> {
   const authSession = await retrieveSession();
@@ -33,7 +34,7 @@ export async function GetMe(): Promise<AuthSafeUser> {
   }) as AuthSafeUser;
 
   if (!user) {
-    throw new Error('User do not exist');
+    await UserLogout();
   }
   
   return user;

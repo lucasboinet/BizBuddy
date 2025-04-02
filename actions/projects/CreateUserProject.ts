@@ -19,7 +19,8 @@ export async function CreateProject(form: CreateProjectSchemaType) {
     throw new Error('Invalid form data');
   }
 
-  const tagsToAdd = data.tags.filter((tag) => !tag.userId);
+  const tagsToCreate = data.tags.filter((tag) => !tag.userId);
+  const tagsToAdd = data.tags.filter((tag) => !!tag.userId);
 
   const project = await prisma.project.create({
     data: {
@@ -29,10 +30,14 @@ export async function CreateProject(form: CreateProjectSchemaType) {
       customerId: data.customer.id,
       status: PROJECT_STATUS.CREATED,
       tags: {
-        create: tagsToAdd.map((tag) => ({ name: tag.name, userId: session.userId })),
+        create: [
+          ...tagsToCreate.map((tag) => ({ tag: { create: { name: tag.name, userId: tag.userId } } })),
+          ...tagsToAdd.map((tag) => ({ tag: { connect: { id: tag.id } } })),
+        ]
       }
     }
   });
+  
 
   redirect(`/projects/${project.id}`);
 }

@@ -64,9 +64,9 @@ export default function ProjectTabOverview({ project, activities, setActiveTab }
                 <p className="text-sm">{project.description}</p>
                 <h3 className="text-sm font-medium text-muted-foreground">Tags</h3>
                 <div className="flex items-center gap-2">
-                  {project.tags.map((tag) => (
-                    <Badge key={tag.id} variant="secondary" className={`bg-primary text-secondary hover:bg-primary/80 hover:text-secondary flex items-center gap-1 px-2 py-1`}>
-                      {tag.name}
+                  {project.tags.map((projectTag) => (
+                    <Badge key={projectTag.tagId} variant="secondary" className={`bg-primary text-secondary hover:bg-primary/80 hover:text-secondary flex items-center gap-1 px-2 py-1`}>
+                      {projectTag.tag.name}
                     </Badge>
                   ))}
                 </div>

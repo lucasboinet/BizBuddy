@@ -1,6 +1,7 @@
-import { Customer, Project, Tag } from "@prisma/client";
+import { Customer, Project } from "@prisma/client";
 import { AppBoard } from "./board";
 import { AppInvoice } from "./invoices";
+import { AppTag } from "./tags";
 
 export enum PROJECT_STATUS {
   CREATED = 'CREATED',
@@ -14,7 +15,7 @@ export interface AppProject extends Project {
   customer?: Customer,
   status: PROJECT_STATUS,
   board?: AppBoard,
-  tags: Tag[],
+  tags: AppTag[],
   invoices: AppInvoice[],
 }
 

@@ -31,6 +31,7 @@ async function Dashboard() {
 
   return (
     <div>
+      {JSON.stringify(stats.popularProjectsTags)}
       <DashboardPage stats={stats} />
     </div>
   )
