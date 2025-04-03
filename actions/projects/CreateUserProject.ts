@@ -31,7 +31,7 @@ export async function CreateProject(form: CreateProjectSchemaType) {
       status: PROJECT_STATUS.CREATED,
       tags: {
         create: [
-          ...tagsToCreate.map((tag) => ({ tag: { create: { name: tag.name, userId: tag.userId } } })),
+          ...tagsToCreate.map((tag) => ({ tag: { create: { name: tag.name, userId: session.userId } } })),
           ...tagsToAdd.map((tag) => ({ tag: { connect: { id: tag.id } } })),
         ]
       }

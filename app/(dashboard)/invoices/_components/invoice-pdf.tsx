@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
 
 export default function InvoicePdf({ invoice, user }: { invoice: AppInvoice, user: AuthSafeUser | undefined }) {
   const invoiceSubtotal = roundNumber(invoice.items.reduce((acc, item) => acc + (item.quantity * item.amount), 0));
-  const invoiceVAT = roundNumber(invoiceSubtotal * 1.10);
+  const invoiceVAT = roundNumber(invoiceSubtotal * ((invoice.vat / 100) + 1));
 
   return (
     <Document>
@@ -169,7 +169,7 @@ export default function InvoicePdf({ invoice, user }: { invoice: AppInvoice, use
                   borderBottom: '1px solid #e4e4e7'
                 }}
               >
-                <Text>VAT (10%)</Text>
+                <Text>VAT ({invoice.vat}%)</Text>
                 <Text>€{roundNumber(invoiceVAT - invoiceSubtotal)}</Text>
               </View>
 

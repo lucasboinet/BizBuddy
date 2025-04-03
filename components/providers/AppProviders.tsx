@@ -11,7 +11,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <NextToploader color="#000" showSpinner={false} />
-      <ThemeProvider attribute='class' defaultTheme="system" enableSystem>
+      <ThemeProvider attribute='class' defaultTheme="light" enableSystem>
         {children}
       </ThemeProvider>
     </QueryClientProvider>

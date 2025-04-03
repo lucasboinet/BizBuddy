@@ -73,6 +73,7 @@ model Invoice {
   projectId  String?
   status     String
   amount     Float
+  vat        Int      @default(0)
   items      Json     @default("[]")
   dueDate    DateTime
   note       String?

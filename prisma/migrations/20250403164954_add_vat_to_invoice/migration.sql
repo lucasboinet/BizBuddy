@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Invoice" ADD COLUMN     "vat" INTEGER NOT NULL DEFAULT 0;

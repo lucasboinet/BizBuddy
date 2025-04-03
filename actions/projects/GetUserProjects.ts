@@ -17,6 +17,11 @@ export async function GetProjects(): Promise<AppProject[]> {
     },
     include: {
       customer: true,
+      tags: {
+        include: {
+          tag: true,
+        }
+      }
     },
     orderBy: {
       createdAt: 'asc'

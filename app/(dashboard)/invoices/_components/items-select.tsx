@@ -36,6 +36,7 @@ export default function ItemSelect({ value, onValueChange, disabled }:
             className="col-span-3"
             value={item.label}
             disabled={disabled}
+            placeholder="Invoice item name"
             onChange={(e) => handleItemChange('label', e.target.value, index)}
             required
           />
@@ -45,24 +46,29 @@ export default function ItemSelect({ value, onValueChange, disabled }:
             disabled={disabled}
             onChange={(e) => handleItemChange('quantity', parseInt(e.target.value), index)}
           />
-          <Input
-            value={item.amount}
-            type="number"
-            disabled={disabled}
-            onChange={(e) => handleItemChange('amount', parseFloat(e.target.value), index)}
-          />
-          {index !== 0 && (
-            <Button
-              type="button"
-              variant="link"
-              size="icon"
-              disabled={disabled}
-              className="absolute -right-10"
-              onClick={() => handleDeleteItem(index)}
-            >
-              <XIcon />
-            </Button>
-          )}
+          <div className="flex flex-row justify-between items-center gap-2">
+            <div className="relative">
+              <Input
+                value={item.amount}
+                type="number"
+                disabled={disabled}
+                className="pr-4"
+                onChange={(e) => handleItemChange('amount', parseFloat(e.target.value), index)}
+              />
+              <span className="absolute right-2 top-1/2 transform -translate-y-1/2 leading-none">€</span>
+            </div>
+            {index !== 0 && (
+              <Button
+                type="button"
+                variant="link"
+                size="icon"
+                disabled={disabled}
+                onClick={() => handleDeleteItem(index)}
+              >
+                <XIcon />
+              </Button>
+            )}
+          </div>
         </div>
       ))}
 

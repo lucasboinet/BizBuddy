@@ -3,6 +3,7 @@
 import { AppProject } from "@/types/projects"
 import { Calendar, CheckCircle, ChevronRight, Clock } from "lucide-react";
 import ProjectStatus from "./project-status";
+import { Badge } from "@/components/ui/badge";
 
 interface Props {
   project: AppProject;
@@ -19,7 +20,17 @@ export default function ProjectCard({ project }: Props) {
         <div>
           <h3 className="text-lg font-semibold text-gray-800">{project.name}</h3>
           <p className="text-sm text-gray-600">Client: {project.customer?.name}</p>
-          <p className="text-xs text-gray-500 mt-1">type_de_projet</p>
+          <div className="flex items-center gap-2 mt-1">
+            {project.tags.map((projectTag) => (
+              <Badge
+                key={projectTag.tagId}
+                variant="secondary"
+                className={`bg-primary text-secondary hover:bg-primary/80 hover:text-secondary flex items-center gap-1 px-2 py-1`}
+              >
+                {projectTag.tag.name}
+              </Badge>
+            ))}
+          </div>
         </div>
         <div className="flex items-center space-x-3">
           <ProjectStatus status={project.status} />

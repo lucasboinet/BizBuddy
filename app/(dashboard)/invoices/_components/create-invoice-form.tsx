@@ -22,6 +22,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { AppProject } from "@/types/projects";
+import Link from "next/link";
+import { Label } from "@/components/ui/label";
 
 interface Props {
   customers?: AppCustomer[],
@@ -41,6 +43,7 @@ export default function CreateInvoiceForm({ customers, selectedCustomer, selecte
       items: [{ label: '', quantity: 1, amount: 0 }],
       dueDate: new Date(),
       note: '',
+      vat: 0,
     },
   });
 
@@ -77,8 +80,11 @@ export default function CreateInvoiceForm({ customers, selectedCustomer, selecte
                       {user?.firstname} {user?.lastname}
                     </span>
                     <span>{user?.email}</span>
-                    <span>{user?.settings?.address?.line1}, {user?.settings?.address?.line2 && user?.settings?.address?.line2}</span>
-                    <span>{user?.settings?.address?.city}, {user?.settings?.address?.postalCode}</span>
+                    {user?.settings?.address && <span>{user?.settings?.address?.line1}{user?.settings?.address?.line2 && `, ${user?.settings?.address?.line2}`}</span>}
+                    {user?.settings?.address && <span>{user?.settings?.address?.city}, {user?.settings?.address?.postalCode}</span>}
+                    {!user?.settings?.address && (
+                      <p>Go to your <Link href="/settings?tab=company" className="font-bold underline">company settings</Link> to define company address</p>
+                    )}
                   </div>
                 )}
 
@@ -158,21 +164,46 @@ export default function CreateInvoiceForm({ customers, selectedCustomer, selecte
               )}
             />
 
-            <FormField
-              control={form.control}
-              name='name'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className='flex gap-1 items-center'>
-                    Subject
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-5 gap-4">
+              <div className="col-span-4">
+                <FormField
+                  control={form.control}
+                  name='name'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='flex gap-1 items-center'>
+                        Subject
+                      </FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="Enter invoice subject" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="col-span-1">
+                <FormField
+                  control={form.control}
+                  name='vat'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='flex gap-1 items-center'>
+                        VAT
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input {...field} type="number" placeholder="0" min={0} className="pr-6" />
+                          <span className="absolute right-2 top-1/2 transform -translate-y-1/2 leading-none">%</span>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
 
             <FormField
               control={form.control}
@@ -207,12 +238,30 @@ export default function CreateInvoiceForm({ customers, selectedCustomer, selecte
                       {...field}
                       value={field.value || undefined}
                       className="resize-none"
+                      placeholder="Additional note here"
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            <div className="flex flex-col gap-2">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-2">
+                  <Label>IBAN</Label>
+                  <Input value={user?.settings?.iban || ''} disabled placeholder="Your IBAN here" />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <Label>BIC</Label>
+                  <Input value={user?.settings?.bic || ''} disabled placeholder="Your BIC here" />
+                </div>
+              </div>
+              {!user?.settings?.iban && (
+                <p className="text-sm">Go to your <Link href="/settings?tab=billing" className="font-bold underline">billing settings</Link> to define billing informations</p>
+              )}
+            </div>
           </div>
           <Button type="submit" className="w-full mt-6" disabled={isPending}>
             {!isPending && "Save"}

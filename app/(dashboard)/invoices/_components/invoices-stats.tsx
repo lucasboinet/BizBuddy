@@ -10,8 +10,8 @@ export default function InvoicesStats({ invoices }: { invoices: AppInvoice[] }) 
     paidCount: invoices.filter(inv => inv.status === INVOICE_STATUS.PAID).length,
     pendingCount: invoices.filter(inv => inv.status === INVOICE_STATUS.SENT).length,
     overdueCount: invoices.filter(inv => inv.status === INVOICE_STATUS.REFUSED).length,
-    paidRate: (invoices.filter(inv => inv.status === INVOICE_STATUS.PAID).length / invoices.length) * 100,
-    avgInvoiceValue: invoices.reduce((sum, inv) => sum + inv.amount, 0) / invoices.length
+    paidRate: (invoices.filter(inv => inv.status === INVOICE_STATUS.PAID).length / (invoices.length || 1)) * 100,
+    avgInvoiceValue: invoices.reduce((sum, inv) => sum + inv.amount, 0) / (invoices.length || 1)
   }), [invoices]);
 
   return (
@@ -19,10 +19,10 @@ export default function InvoicesStats({ invoices }: { invoices: AppInvoice[] }) 
       <InvoiceStat
         icon={DollarSign}
         title="Total Value"
-        value={`$${stats.totalValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+        value={`$${stats.totalValue.toLocaleString()}`}
         subtitle={
           <>
-            <span className="text-green-600 font-medium">${stats.avgInvoiceValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> average
+            <span className="text-green-600 font-medium">${stats.avgInvoiceValue.toLocaleString()}</span> average
           </>
         }
       />
@@ -30,7 +30,7 @@ export default function InvoicesStats({ invoices }: { invoices: AppInvoice[] }) 
       <InvoiceStat
         icon={CreditCard}
         title="Total Revenue"
-        value={`$${stats.totalRevenue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+        value={`$${stats.totalRevenue.toLocaleString()}`}
         subtitle={
           <>
             <span className="text-green-600 font-medium">{stats.paidCount}</span> paid of <span>{invoices.length}</span> invoices
@@ -41,7 +41,7 @@ export default function InvoicesStats({ invoices }: { invoices: AppInvoice[] }) 
       <InvoiceStat
         icon={Clock}
         title="Pending Value"
-        value={`$${(stats.totalValue - stats.totalRevenue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+        value={`$${(stats.totalValue - stats.totalRevenue).toLocaleString()}`}
         subtitle={
           <>
             Across <span className="text-primary/10 font-medium">{invoices.length}</span> total invoices

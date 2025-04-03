@@ -65,7 +65,7 @@ async function Projects() {
         <div className="col-span-4 pr-6 border-r">
           <ProjectsList projects={projects} />
         </div>
-        <div className="col-span-8 pl-6 flex flex-grow">
+        <div className="col-span-8 pl-6">
           <ProjectsTimeline projects={timelineProjects} />
         </div>
       </div>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Calendar, Settings } from "lucide-react"
+import { ArrowLeft, Calendar, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
@@ -13,6 +13,7 @@ import ProjectTabFinancials from "./project-tab-financials"
 import ProjectTabActivities from "./project-tab-activities"
 import ProjectTabTasks from "./project-tab-tasks"
 import { AppActivity } from "@/types/activities"
+import Link from "next/link"
 
 interface Props {
   project: AppProject,
@@ -69,10 +70,15 @@ export default function ProjectPageDetails({ project }: Props) {
   return (
     <div className="flex flex-col">
       <main className="flex-1">
-        <div className="px-4">
+        <div>
           {/* Project Header */}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">
+              <Button variant="ghost" size="icon" asChild>
+                <Link href="/projects">
+                  <ArrowLeft className="h-4 w-4" />
+                </Link>
+              </Button>
               <div className="flex items-center gap-3">
                 <Badge variant="outline" className="px-3 py-1 text-sm font-normal">
                   {project.id}

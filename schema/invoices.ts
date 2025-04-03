@@ -22,8 +22,8 @@ export const updateInvoiceSchema = z.object({
       postalCode: z.string(),
       city: z.string(),
     }),
-    projects: z.array(z.any()),
-    invoices: z.array(z.any()),
+    projects: z.array(z.any()).optional(),
+    invoices: z.array(z.any()).optional(),
     siret: z.string(),
     accountId: z.string(),
     createdAt: z.date(),
@@ -32,6 +32,7 @@ export const updateInvoiceSchema = z.object({
   status: z.nativeEnum(INVOICE_STATUS),
   items: z.array(invoiceItemsSchema),
   dueDate: z.date(),
+  vat: z.number().min(0),
   note: z.string().nullable(),
 })
 
@@ -60,6 +61,7 @@ export const createInvoiceSchema = z.object({
   }),
   items: z.array(invoiceItemsSchema),
   dueDate: z.date(),
+  vat: z.number().min(0),
   note: z.string().nullable(),
 })
 

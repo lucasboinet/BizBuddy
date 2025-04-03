@@ -40,6 +40,7 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
       status: invoice.status,
       items: invoice.items as InvoiceItem[],
       dueDate: invoice.dueDate,
+      vat: invoice.vat,
       note: invoice.note,
     },
   });
@@ -201,21 +202,46 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name='name'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className='flex gap-1 items-center'>
-                      Subject
-                    </FormLabel>
-                    <FormControl>
-                      <Input {...field} disabled={isDisabled} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-5 gap-4">
+                <div className="col-span-4">
+                  <FormField
+                    control={form.control}
+                    name='name'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className='flex gap-1 items-center'>
+                          Subject
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Enter invoice subject" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="col-span-1">
+                  <FormField
+                    control={form.control}
+                    name='vat'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className='flex gap-1 items-center'>
+                          VAT
+                        </FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input {...field} type="number" placeholder="0" min={0} className="pr-6" />
+                            <span className="absolute right-2 top-1/2 transform -translate-y-1/2 leading-none">%</span>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
 
               <FormField
                 control={form.control}

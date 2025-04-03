@@ -47,7 +47,7 @@ export default function CustomerDetailsPage({ customer, tags, revenue }: Props) 
   return (
     <>
       <div className="flex items-center gap-4 mb-6">
-        <Button variant="outline" size="icon" asChild>
+        <Button variant="ghost" size="icon" asChild>
           <Link href="/customers">
             <ArrowLeft className="h-4 w-4" />
           </Link>
