@@ -8,6 +8,7 @@ export const updateAccountSettingsSchema = z.object({
 export type UpdateAccountSettingsSchemaType = z.infer<typeof updateAccountSettingsSchema>;
 
 export const updateCompanySettingsSchema = z.object({
+  siret: z.string(),
   address: z.object({
     line1: z.string(),
     line2: z.string().optional(),

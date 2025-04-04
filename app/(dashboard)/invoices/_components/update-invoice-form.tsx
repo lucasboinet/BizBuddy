@@ -232,7 +232,15 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
                         </FormLabel>
                         <FormControl>
                           <div className="relative">
-                            <Input {...field} type="number" placeholder="0" min={0} className="pr-6" />
+                            <Input
+                              {...field}
+                              value={field.value || 0}
+                              onChange={(e) => form.setValue('vat', parseInt(e.target.value))}
+                              type="number"
+                              placeholder="0"
+                              min={0}
+                              className="pr-6"
+                            />
                             <span className="absolute right-2 top-1/2 transform -translate-y-1/2 leading-none">%</span>
                           </div>
                         </FormControl>
@@ -294,7 +302,7 @@ export default function UpdateInvoiceForm({ invoice, customers }: { invoice: App
       </div>
 
       <div className="w-full xl:w-3/5 flex items-start justify-center bg-primary-foreground p-6">
-        <InvoicePdfViewer invoice={debounceFormValues as AppInvoice} />
+        <InvoicePdfViewer invoice={debounceFormValues as Partial<AppInvoice>} />
       </div>
     </div>
   )

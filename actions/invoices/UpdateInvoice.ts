@@ -1,5 +1,6 @@
 'use server'
 
+import { roundNumber } from "@/lib/helper/number";
 import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
 import { updateInvoiceSchema, UpdateInvoiceSchemaType } from "@/schema/invoices";
@@ -18,6 +19,9 @@ export async function UpdateInvoice(form: UpdateInvoiceSchemaType) {
     throw new Error('Invalid form data');
   }
 
+  const invoiceSubtotal = roundNumber(data.items.reduce((acc, item) => acc + (item.quantity * item.amount), 0));
+  const invoiceVAT = roundNumber(invoiceSubtotal * ((data.vat / 100) + 1));
+
   await prisma.invoice.update({
     where: {
       id: data.id,
@@ -25,11 +29,13 @@ export async function UpdateInvoice(form: UpdateInvoiceSchemaType) {
     data: {
       name: data.name,
       customerId: data.customer.id, 
+      projectId: data.project.id,
       status: data.status,
-      amount: data.items.reduce((acc, item) => acc + (item.quantity * item.amount), 0),
+      amount: invoiceVAT,
       items: data.items,
       dueDate: data.dueDate,
       note: data.note,
+      vat: data.vat,
     }
   });
 

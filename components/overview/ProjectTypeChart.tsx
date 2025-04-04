@@ -7,18 +7,17 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import { DashboardStatTag } from "@/actions/GetDashboardStats"
+import { useMemo } from "react"
 
-export function ProjectTypeChart({ className }: { className?: string }) {
-  const chartData = [
-    { category: "Long-term", amount: 186 },
-    { category: "Short-term", amount: 305 },
-    { category: "Logo", amount: 237 },
-    { category: "Web design", amount: 209 },
-    { category: "React", amount: 214 },
-    { category: "Vue", amount: 214 },
-    { category: "Node", amount: 214 },
-    { category: "Typescript", amount: 214 },
-  ]
+export function ProjectTypeChart({ className, tags }: { className?: string, tags: DashboardStatTag[] }) {
+  // const chartData = useMemo(() => tags.map((tag) => ({ category: tag.name, amount: tag._count.ProjectTag })), [tags])
+  const chartData = useMemo(() => {
+    const availableTags = Array(8).fill({ category: '', amount: 0 })
+    tags.forEach((tag, index) => availableTags[index] = { category: tag.name, amount: tag._count.ProjectTag })
+    return availableTags;
+  }, [tags])
+
   const chartConfig = {
     amount: {
       label: "Amount",

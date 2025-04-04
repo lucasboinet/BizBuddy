@@ -5,14 +5,17 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { AppInvoice } from '@/types/invoices'
 import { CircleDollarSign, FileText, Home, TrendingUp, Users } from 'lucide-react'
+import Link from 'next/link'
 import { useMemo } from 'react'
 
 interface Props {
   stats: DashboardStats,
+  lastInvoices: AppInvoice[],
 }
 
-export default function DashboardPage({ stats }: Props) {
+export default function DashboardPage({ stats, lastInvoices }: Props) {
   const revenueDiffThisYear = useMemo(() => {
     if (stats.currentYearRevenue === 0) return `-${stats.lastYearRevenue}%`;
     if (stats.lastYearRevenue === 0) return `+${stats.currentYearRevenue}%`;
@@ -94,16 +97,16 @@ export default function DashboardPage({ stats }: Props) {
             <CardDescription>Repartition of projects by category</CardDescription>
           </CardHeader>
           <CardContent>
-            <ProjectTypeChart className="h-96 w-full" />
+            <ProjectTypeChart tags={stats.popularProjectsTags} className="h-96 w-full" />
           </CardContent>
           <CardFooter>
             <div className="flex w-full items-start gap-2 text-sm">
               <div className="grid gap-2">
                 <div className="flex items-center gap-2 font-medium leading-none">
-                  Last 5 most used categories
+                  Last 8 most used tags
                 </div>
                 <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                  Over the year
+                  Overall
                 </div>
               </div>
             </div>
@@ -115,51 +118,33 @@ export default function DashboardPage({ stats }: Props) {
         <Card className="col-span-1 md:col-span-4 lg:col-span-5">
           <CardHeader>
             <CardTitle>Recent Invoices</CardTitle>
-            <CardDescription>Latest transactions and invoices</CardDescription>
+            <CardDescription>Last 5 quotations and invoices</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>ID</TableHead>
+                  <TableHead>Name</TableHead>
                   <TableHead>Client</TableHead>
                   <TableHead>Amount</TableHead>
-                  <TableHead>Link</TableHead>
                   <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow>
-                  <TableCell>Tech Corp</TableCell>
-                  <TableCell>$2,400</TableCell>
-                  <TableCell>https://</TableCell>
-                  <TableCell>
-                    <Badge variant='danger'>Refused</Badge>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Tech Corp</TableCell>
-                  <TableCell>$2,300</TableCell>
-                  <TableCell>https://</TableCell>
-                  <TableCell>
-                    <Badge variant='disabled'>Cancelled</Badge>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Design Studio</TableCell>
-                  <TableCell>$1,800</TableCell>
-                  <TableCell>https://</TableCell>
-                  <TableCell>
-                    <Badge variant='warning'>Pending</Badge>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Marketing Inc</TableCell>
-                  <TableCell>$3,200</TableCell>
-                  <TableCell>https://</TableCell>
-                  <TableCell>
-                    <Badge variant='success'>Paid</Badge>
-                  </TableCell>
-                </TableRow>
+                {lastInvoices.map((invoice) => (
+                  <TableRow key={invoice.id}>
+                    <TableCell className='hover:underline font-semibold'>
+                      <Link href={`/invoices/${invoice.id}`}>{invoice.id}</Link>
+                    </TableCell>
+                    <TableCell>{invoice.name}</TableCell>
+                    <TableCell>{invoice.customer.name}</TableCell>
+                    <TableCell>€{invoice.amount.toLocaleString()}</TableCell>
+                    <TableCell>
+                      <Badge>{invoice.status}</Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </CardContent>

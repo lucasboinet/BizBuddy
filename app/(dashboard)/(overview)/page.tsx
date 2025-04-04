@@ -2,6 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 import DashboardPage from "./_components/dashboard-page";
 import { GetDashboardStats } from "@/actions/GetDashboardStats";
+import { GetLastInvoices } from "@/actions/invoices/GetLastInvoices";
 
 export default function DashboardPageLoader() {
   return (
@@ -28,11 +29,9 @@ function DashboardSkeleton() {
 
 async function Dashboard() {
   const stats = await GetDashboardStats();
+  const lastInvoices = await GetLastInvoices();
 
   return (
-    <div>
-      {JSON.stringify(stats.popularProjectsTags)}
-      <DashboardPage stats={stats} />
-    </div>
+    <DashboardPage stats={stats} lastInvoices={lastInvoices} />
   )
 }

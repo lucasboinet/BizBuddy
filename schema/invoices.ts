@@ -1,6 +1,8 @@
 import { ZodFloatSchema } from '@/lib/zod';
 import { INVOICE_STATUS } from '@/types/invoices';
 import { z } from 'zod';
+import { appCustomerSchema } from './customers';
+import { appProjectSchema } from './projects';
 
 export const invoiceItemsSchema = z.object({
   label: z.string(),
@@ -11,24 +13,8 @@ export const invoiceItemsSchema = z.object({
 export const updateInvoiceSchema = z.object({
   id: z.string(),
   name: z.string().max(100),
-  customer: z.object({
-    name: z.string(),
-    id: z.string(),
-    email: z.string(),
-    phone: z.string().nullable(),
-    address: z.object({
-      line1: z.string(),
-      line2: z.string().optional(),
-      postalCode: z.string(),
-      city: z.string(),
-    }),
-    projects: z.array(z.any()).optional(),
-    invoices: z.array(z.any()).optional(),
-    siret: z.string(),
-    accountId: z.string(),
-    createdAt: z.date(),
-    updatedAt: z.date()
-  }),
+  project: appProjectSchema.optional(),
+  customer: appCustomerSchema,
   status: z.nativeEnum(INVOICE_STATUS),
   items: z.array(invoiceItemsSchema),
   dueDate: z.date(),
@@ -40,25 +26,8 @@ export type UpdateInvoiceSchemaType = z.infer<typeof updateInvoiceSchema>;
 
 export const createInvoiceSchema = z.object({
   name: z.string().max(100),
-  projectId: z.string().optional(),
-  customer: z.object({
-    name: z.string(),
-    id: z.string(),
-    email: z.string(),
-    phone: z.string().nullable(),
-    address: z.object({
-      line1: z.string(),
-      line2: z.string().optional(),
-      postalCode: z.string(),
-      city: z.string(),
-    }),
-    projects: z.array(z.any()).optional(),
-    invoices: z.array(z.any()).optional(),
-    siret: z.string(),
-    accountId: z.string(),
-    createdAt: z.date(),
-    updatedAt: z.date()
-  }),
+  project: appProjectSchema.optional(),
+  customer: appCustomerSchema,
   items: z.array(invoiceItemsSchema),
   dueDate: z.date(),
   vat: z.number().min(0),

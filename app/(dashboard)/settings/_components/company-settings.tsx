@@ -22,6 +22,7 @@ export default function CompanySettings({ settings }: { settings: AppSettings | 
   const form = useForm<UpdateCompanySettingsSchemaType>({
     resolver: zodResolver(updateCompanySettingsSchema),
     defaultValues: {
+      siret: settings?.siret ?? '',
       address: settings?.address ?? defaultAddress,
     },
   });
@@ -45,6 +46,22 @@ export default function CompanySettings({ settings }: { settings: AppSettings | 
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6 mt-10">
         <div className="flex flex-col gap-6">
+          <FormField
+            control={form.control}
+            name='siret'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className='flex gap-1 items-center'>
+                  Siret
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="Company siret" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name='address.line1'

@@ -9,6 +9,7 @@ import { CreateInvoiceModal } from "./_components/create-invoice-modal";
 import { GetCustomers } from "@/actions/customers/GetCustomers";
 import InvoicesStats from "./_components/invoices-stats";
 import { Button } from "@/components/ui/button";
+import { GetProjects } from "@/actions/projects/GetUserProjects";
 
 export default function InvoicesPage() {
   return (
@@ -34,9 +35,10 @@ function InvoicesSkeleton() {
 }
 
 async function Invoices() {
-  const [invoices, customers] = await Promise.all([
+  const [invoices, customers, projects] = await Promise.all([
     GetInvoices(),
-    GetCustomers()
+    GetCustomers(),
+    GetProjects(),
   ]);
 
   if (!invoices) {
@@ -61,7 +63,7 @@ async function Invoices() {
     <div className="h-full space-y-6">
       <div className="flex items-center justify-start gap-5">
         <h1 className="text-3xl font-semibold">Invoices</h1>
-        <CreateInvoiceModal customers={customers}>
+        <CreateInvoiceModal customers={customers} projects={projects}>
           <Button size="sm" className="text-xs">Create invoice</Button>
         </CreateInvoiceModal>
       </div>

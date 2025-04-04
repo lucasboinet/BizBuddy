@@ -12,12 +12,13 @@ import { AppProject } from "@/types/projects"
 
 interface Props {
   customers?: AppCustomer[],
+  projects?: AppProject[],
   selectedCustomer?: AppCustomer,
-  selectedProjectId?: AppProject["id"],
+  selectedProject?: AppProject,
   children: React.ReactNode,
 }
 
-export function CreateInvoiceModal({ customers, selectedCustomer, selectedProjectId, children }: Props) {
+export function CreateInvoiceModal({ customers, projects, selectedCustomer, selectedProject, children }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -32,8 +33,9 @@ export function CreateInvoiceModal({ customers, selectedCustomer, selectedProjec
         </DialogHeader>
         <CreateInvoiceForm
           customers={customers}
+          projects={projects}
           selectedCustomer={selectedCustomer}
-          selectedProjectId={selectedProjectId}
+          selectedProject={selectedProject}
         />
       </DialogContent>
     </Dialog>

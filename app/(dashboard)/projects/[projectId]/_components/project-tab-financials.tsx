@@ -80,7 +80,10 @@ export default function ProjectTabFinancials({ project }: Props) {
               title="No financial records"
               description="Create quotations and invoices to track project finances"
             >
-              <CreateInvoiceModal selectedCustomer={project.customer as AppCustomer} selectedProjectId={project.id}>
+              <CreateInvoiceModal
+                selectedCustomer={project.customer as AppCustomer}
+                selectedProject={project as AppProject}
+              >
                 <Button variant="outline">
                   <FileText className="mr-2 h-4 w-4" />
                   Create Quotation

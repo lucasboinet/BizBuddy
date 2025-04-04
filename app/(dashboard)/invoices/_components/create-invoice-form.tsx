@@ -24,21 +24,23 @@ import { cn } from "@/lib/utils";
 import { AppProject } from "@/types/projects";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
+import ProjectSelect from "@/components/project-select";
 
 interface Props {
   customers?: AppCustomer[],
+  projects?: AppProject[],
   selectedCustomer?: AppCustomer,
-  selectedProjectId?: AppProject["id"],
+  selectedProject?: AppProject,
 }
 
-export default function CreateInvoiceForm({ customers, selectedCustomer, selectedProjectId }: Props) {
+export default function CreateInvoiceForm({ customers, projects, selectedCustomer, selectedProject }: Props) {
   const { user, loading } = useAuthSession();
 
   const form = useForm<CreateInvoiceSchemaType>({
     resolver: zodResolver(createInvoiceSchema),
     defaultValues: {
       customer: selectedCustomer ?? undefined,
-      projectId: selectedProjectId,
+      project: selectedProject ?? undefined,
       name: '',
       items: [{ label: '', quantity: 1, amount: 0 }],
       dueDate: new Date(),
@@ -67,6 +69,7 @@ export default function CreateInvoiceForm({ customers, selectedCustomer, selecte
     <div className="w-full">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-between overflow-hidden h-[70vh]">
+          {JSON.stringify(form.formState.errors)}
           <div className="space-y-8 overflow-y-auto p-4">
             <div className="bg-primary-foreground p-4 rounded-md border">
               <span className="text-sm mb-2 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex gap-1 items-center">
@@ -113,6 +116,26 @@ export default function CreateInvoiceForm({ customers, selectedCustomer, selecte
                       onValueChange={field.onChange}
                       value={field.value}
                       items={customers || []}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />}
+
+            {!selectedProject && <FormField
+              control={form.control}
+              name='project'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className='flex gap-1 items-center'>
+                    Link to project
+                  </FormLabel>
+                  <FormControl>
+                    <ProjectSelect
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      items={projects || []}
                     />
                   </FormControl>
                   <FormMessage />
@@ -194,7 +217,15 @@ export default function CreateInvoiceForm({ customers, selectedCustomer, selecte
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Input {...field} type="number" placeholder="0" min={0} className="pr-6" />
+                          <Input
+                            {...field}
+                            value={field.value || 0}
+                            onChange={(e) => form.setValue('vat', parseInt(e.target.value))}
+                            type="number"
+                            placeholder="0"
+                            min={0}
+                            className="pr-6"
+                          />
                           <span className="absolute right-2 top-1/2 transform -translate-y-1/2 leading-none">%</span>
                         </div>
                       </FormControl>

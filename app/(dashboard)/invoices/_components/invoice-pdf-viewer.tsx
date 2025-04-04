@@ -11,7 +11,7 @@ import { AppInvoice } from '@/types/invoices';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
-export default function InvoicePdfViewer({ invoice }: { invoice: AppInvoice }) {
+export default function InvoicePdfViewer({ invoice }: { invoice: Partial<AppInvoice> }) {
   const [containerRef, setContainerRef] = useState<HTMLElement | null>(null);
   const [containerWidth, setContainerWidth] = useState<number>();
   const { user, loading } = useAuthSession();

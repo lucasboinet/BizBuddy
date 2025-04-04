@@ -67,9 +67,9 @@ const styles = StyleSheet.create({
   }
 });
 
-export default function InvoicePdf({ invoice, user }: { invoice: AppInvoice, user: AuthSafeUser | undefined }) {
-  const invoiceSubtotal = roundNumber(invoice.items.reduce((acc, item) => acc + (item.quantity * item.amount), 0));
-  const invoiceVAT = roundNumber(invoiceSubtotal * ((invoice.vat / 100) + 1));
+export default function InvoicePdf({ invoice, user }: { invoice: Partial<AppInvoice>, user: AuthSafeUser | undefined }) {
+  const invoiceSubtotal = roundNumber(invoice.items!.reduce((acc, item) => acc + (item.quantity * item.amount), 0));
+  const invoiceVAT = roundNumber(invoiceSubtotal * ((invoice.vat! / 100) + 1));
 
   return (
     <Document>
@@ -137,7 +137,7 @@ export default function InvoicePdf({ invoice, user }: { invoice: AppInvoice, use
               <Text style={{ ...styles.itemCell, textAlign: 'right' }}>Total</Text>
             </View>
 
-            {invoice.items.map((item, index) => (
+            {invoice.items!.map((item, index) => (
               <View key={index} style={styles.itemLine}>
                 <Text style={{ width: '40%' }}>{capitalize(item.label)}</Text>
                 <Text style={styles.itemCell}>{item.quantity}</Text>

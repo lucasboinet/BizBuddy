@@ -4,8 +4,9 @@ import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
 import { INVOICE_STATUS } from "@/types/invoices";
 import { PROJECT_STATUS } from "@/types/projects";
-import { Tag } from "@prisma/client";
 import { endOfWeek, endOfYear, startOfMonth, startOfWeek, startOfYear, subDays } from "date-fns";
+
+export type DashboardStatTag = { id: string, name: string, _count: { ProjectTag: number }}
 
 export type DashboardStats = {
   totalCustomers: number,
@@ -17,7 +18,7 @@ export type DashboardStats = {
   currentYearRevenue: number,
   lastYearRevenue: number,
   revenuesByMonth: { month: string, income: number }[],
-  popularProjectsTags: Tag[]
+  popularProjectsTags: DashboardStatTag[],
 }
 
 export async function GetDashboardStats(): Promise<DashboardStats> {
@@ -65,7 +66,8 @@ export async function GetDashboardStats(): Promise<DashboardStats> {
       dueDate: {
         gte: startOfYear(new Date()),
         lte: new Date(),
-      }
+      },
+      status: INVOICE_STATUS.PAID,
     },
     _sum: {
       amount: true,
@@ -78,7 +80,8 @@ export async function GetDashboardStats(): Promise<DashboardStats> {
       dueDate: {
         gte: startOfYear(lastYearEnd),
         lte: endOfYear(lastYearEnd),
-      }
+      },
+      status: INVOICE_STATUS.PAID,
     },
     _sum: {
       amount: true,
@@ -92,6 +95,7 @@ export async function GetDashboardStats(): Promise<DashboardStats> {
         gte: startOfYear(new Date()),
         lte: endOfYear(new Date()),
       },
+      status: INVOICE_STATUS.PAID,
     },
     _sum: {
       amount: true,
@@ -111,23 +115,23 @@ export async function GetDashboardStats(): Promise<DashboardStats> {
     return { month, income: monthData };
   });
 
-  // const popularProjectsTags = await prisma.tag.findMany({
-  //   select: {
-  //     id: true,
-  //     name: true,
-  //     _count: {
-  //       select: {
-  //         projects: true,
-  //       },
-  //     },
-  //   },
-  //   orderBy: {
-  //     projects: {
-  //       _count: 'desc',
-  //     },
-  //   },
-  //   take: 8,
-  // });
+  const popularProjectsTags = await prisma.tag.findMany({
+    select: {
+      id: true,
+      name: true,
+      _count: {
+        select: {
+          ProjectTag: true
+        }
+      },
+    },
+    orderBy: {
+      ProjectTag: {
+        _count: 'desc'
+      }
+    },
+    take: 8
+  });
 
   return {
     totalCustomers,
@@ -139,6 +143,6 @@ export async function GetDashboardStats(): Promise<DashboardStats> {
     currentYearRevenue: currentYearRevenue._sum.amount || 0,
     lastYearRevenue: lastYearRevenue._sum.amount || 0,
     revenuesByMonth,
-    popularProjectsTags: [],
+    popularProjectsTags,
   }
 }
