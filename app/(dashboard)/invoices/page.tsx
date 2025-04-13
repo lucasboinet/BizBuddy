@@ -9,7 +9,7 @@ import { CreateInvoiceModal } from "./_components/create-invoice-modal";
 import { GetCustomers } from "@/actions/customers/GetCustomers";
 import InvoicesStats from "./_components/invoices-stats";
 import { Button } from "@/components/ui/button";
-import { GetProjects } from "@/actions/projects/GetUserProjects";
+import { GetProjects } from "@/actions/projects/GetProjects";
 
 export default function InvoicesPage() {
   return (

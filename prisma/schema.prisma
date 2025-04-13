@@ -53,8 +53,8 @@ model Project {
   completedAt DateTime?
   dueAt       DateTime  @default(now())
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
   tags ProjectTag[]

@@ -4,10 +4,11 @@ import { AppProject } from "@/types/projects"
 import { Calendar, CheckCircle, ChevronRight, Clock, Archive } from "lucide-react";
 import ProjectStatus from "./project-status";
 import { Badge } from "@/components/ui/badge";
-import { IconButton } from "@/components/ui/button";
-import { archiveProject } from "@/actions/projects/ArchiveProject";
-import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { ArchiveProject } from "@/actions/projects/ArchiveProject";
 import { useState } from "react";
+import { toast } from "sonner";
+import Link from "next/link";
 
 interface Props {
   project: AppProject;
@@ -20,29 +21,20 @@ const formatDate = (date: Date) => {
 };
 
 export default function ProjectCard({ project, archived, onArchive }: Props) {
-  const { toast } = useToast();
   const [isArchived, setIsArchived] = useState(archived || false);
 
   const handleArchive = async () => {
     if (isArchived) return;
-    const archivedProject = await archiveProject(project.id);
-
-    if (archivedProject) {
+    try {
+      await ArchiveProject(project.id);
       setIsArchived(true);
-      toast({
-        title: "Success",
-        description: "Project archived successfully.",
-        type: "success",
-      });
+      toast.success("Project archived successfully.");
+
       if (onArchive) {
         onArchive(project.id);
       }
-    } else {
-      toast({
-        title: "Error",
-        description: "Failed to archive project.",
-        type: "error",
-      });
+    } catch {
+      toast.error("Failed to archive project.");
     }
   };
 
@@ -59,7 +51,10 @@ export default function ProjectCard({ project, archived, onArchive }: Props) {
       <div className="flex justify-between items-start">
         <div className="flex-1">
           <div className="mb-3">
-            <h3 className="text-lg font-semibold text-gray-800">{project.name}</h3>
+            <Link href={`/projects/${project.id}`} className="hover:underline">
+              <h3 className="text-lg font-semibold text-gray-800">{project.name}</h3>
+              {project.deletedAt?.toLocaleString()}
+            </Link>
             <p className="text-sm text-gray-600">Client: {project.customer?.name}</p>
             <div className="flex items-center gap-2 mt-1">
               {project.tags.map((projectTag) => (
@@ -92,12 +87,14 @@ export default function ProjectCard({ project, archived, onArchive }: Props) {
             )}
           </div>
         </div>
-        <div className="flex items-start space-x-2">
-          <IconButton disabled={isArchived} onClick={handleArchive} variant="ghost" size="icon" className="text-gray-500 hover:text-gray-700">
+        <div className="flex items-center space-x-2">
+          <Button disabled={isArchived} onClick={handleArchive} variant="ghost" size="icon" className="text-gray-500 hover:text-gray-700">
             <Archive className="w-5 h-5" />
-          </IconButton>
+          </Button>
           <ProjectStatus status={project.status} />
-          <ChevronRight className="w-5 h-5 text-gray-400 mt-1" />
+          <Link href={`/projects/${project.id}`}>
+            <ChevronRight className="w-5 h-5 text-gray-400 mt-1" />
+          </Link>
         </div>
       </div>
     </div>

@@ -1,19 +1,17 @@
-import { revalidatePath } from 'next/cache';
-import { prisma } from '@/lib/prisma';
+'use server'
 
-export async function archiveProject(projectId: string) {
-  try {
-    const project = await prisma.project.update({
-      where: {
-        id: projectId,
-      },
-      data: {
-        deletedAt: new Date(),
-      },
-    });
-    revalidatePath('/');
-    return project;
-  } catch (error) {
-    return null;
-  }
+import prisma from '@/lib/prisma';
+import { revalidatePath } from 'next/cache';
+
+export async function ArchiveProject(projectId: string) {
+  await prisma.project.update({
+    where: {
+      id: projectId,
+    },
+    data: {
+      deletedAt: new Date(),
+    },
+  });
+
+  revalidatePath('/projects');
 }

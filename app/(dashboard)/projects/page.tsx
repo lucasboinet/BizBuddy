@@ -1,4 +1,4 @@
-import { GetProjects } from "@/actions/projects/GetUserProjects";
+import { GetProjects } from "@/actions/projects/GetProjects";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle } from "lucide-react";

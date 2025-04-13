@@ -2,7 +2,6 @@
 
 import { AppProject, PROJECT_STATUS, projectStatusLabels } from "@/types/projects";
 import ProjectCard from "./project-card";
-import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { useMemo, useState } from "react";
 import { Select } from "@/components/ui/select";
@@ -49,9 +48,7 @@ export default function ProjectsList({ projects }: Props) {
       />
       <div className="flex flex-col gap-4 w-full">
         {filteredProjects.map((project) => (
-          <Link key={project.id} href={`/projects/${project.id}`}>
-            <ProjectCard project={project} />
-          </Link>
+          <ProjectCard key={project.id} project={project} />
         ))}
       </div>
     </div>

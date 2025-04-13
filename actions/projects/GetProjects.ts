@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
 import { AppProject } from "@/types/projects";
 
-export async function GetUserProjects(): Promise<AppProject[]> {
+export async function GetProjects(): Promise<AppProject[]> {
   const session = await retrieveSession();
 
   if (!session?.sessionId) {
