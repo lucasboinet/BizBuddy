@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { retrieveSession } from "@/lib/sessions";
 import { AppProject } from "@/types/projects";
 
-export async function GetProjects(): Promise<AppProject[]> {
+export async function GetUserProjects(): Promise<AppProject[]> {
   const session = await retrieveSession();
 
   if (!session?.sessionId) {
@@ -13,7 +13,8 @@ export async function GetProjects(): Promise<AppProject[]> {
 
   const projects = await prisma.project.findMany({
     where: {
-      userId: session.userId
+      userId: session.userId,
+      deletedAt: null,
     },
     include: {
       customer: true,
